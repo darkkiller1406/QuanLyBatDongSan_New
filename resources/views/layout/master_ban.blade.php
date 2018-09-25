@@ -1,219 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<title>Bán đất Thành phố Hồ Chí Minh</title>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<link rel="stylesheet" href="{{asset('bootstrap/css/bootstrap.css')}}" />
-	<link rel="stylesheet" href="{{asset('css/style_ban.css')}}"/>
-	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script src="{{asset('bootstrap/js/bootstrap.js')}}"></script>
-	<script src="{{asset('js/script.js')}}"></script>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
+    <!-- Title  -->
+    <title>Bán đất Thành phố Hồ Chí Minh</title>
 
-	<!-- Owl stylesheet -->
-	<link rel="stylesheet" href="{{asset('owl-carousel/owl.carousel.css')}}">
-	<link rel="stylesheet" href="{{asset('owl-carousel/owl.theme.css')}}">
-	<script src="{{asset('owl-carousel/owl.carousel.js')}}"></script>
-	<!-- Owl stylesheet -->
+    <!-- Favicon  -->
+    <link rel="icon" href="img/core-img/favicon.ico">
 
-	
-	<!-- slitslider -->
-	<link rel="stylesheet" type="text/css" href="{{asset('slitslider/css/style.css')}}" />
-	<link rel="stylesheet" type="text/css" href="{{asset('slitslider/css/custom.css')}}" />
-	<script type="text/javascript" src="{{asset('slitslider/js/modernizr.custom.79639.js')}}"></script>
-	<script type="text/javascript" src="{{asset('slitslider/js/jquery.ba-cond.min.js')}}"></script>
-	<script type="text/javascript" src="{{asset('slitslider/js/jquery.slitslider.js')}}"></script>
-	<!-- slitslider -->
-	<title>@yield('title')</title>
-	@yield('css')
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="{{asset('css/style_ban.css')}}">
+
 </head>
 
 <body>
-
-
-	<!-- Header Starts -->
-	<div class="container-fluid Header">
-		<div class="container Header-content">
-
-			<nav class="navbar navbar-default" role="navigation">
-				<div class="container-fluid">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-						<div class="logo1"><img src="{{asset('img/logo.png')}}" alt=""><span class="logo2"><a href="{{route('view_trangchu')}}">LightZ</a></span><br>
-							<span class="logo3"><a>Real Estate</a></span></div> 
-
-					</div>
-
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div class="collapse navbar-collapse" id="myNavbar">
-						<ul class="nav navbar-nav navbar-right">
-							<li><a href="{{route('view_trangchu')}}" class="{{ (\Request::route()->getName() == 'view_trangchu') ? 'active' : '' }}">TRANG CHỦ</a></li>
-							<li><a href="{{route('view_dsDat')}}" class="{{ (\Request::route()->getName() == 'view_dsDat') ? 'active' : '' }}">ĐẤT BÁN</a>
-							
-							</li>
-							<li><a href="{{route('view_dsPhong')}}" class="{{ (\Request::route()->getName() == 'view_dsPhong') ? 'active' : '' }}">PHÒNG CHO THUÊ</a>
-							<ul class="sub-menu">
-								<li style="margin-top: 10px;padding-left: 10px;"><a href="{{route('view_dsPhong_map')}}">XEM TRÊN MAP</li></a>
-							</ul>
-							</li>
-							<li><a href="{{route('view_vechungtoi')}}" class="{{ (\Request::route()->getName() == 'view_vechungtoi') ? 'active' : '' }}">VỀ CHÚNG TÔI</a>
-							</li>
-							<li><a href="{{route('view_lienlac')}}" class="{{ (\Request::route()->getName() == 'view_lienlac') ? 'active' : '' }}">LIÊN HỆ</a>
-							</li>
-							</li>
-							<?php if(Auth::check()) { ?>
-									<li><a>XIN CHÀO {{Auth::user()->Ten}}</a>
-										<ul class="sub-menu">
-											<li style="margin-top: 10px;padding-left: 10px;">TIỀN: {{number_format(Auth::user()->Tien)}} VNĐ</li>
-											<hr>
-											<li><a href="{{route('view_trangcanhan')}}" style="padding-bottom: 20px;padding-left: 35px;">TÀI KHOẢN</a></li>
-											<hr>
-											<li><a href="{{route('view_dangtin')}}" class="{{ (\Request::route()->getName() == 'view_dangtin') ? 'active' : '' }}" style="padding-left: 40px;">ĐĂNG TIN</a>
-												<hr>
-											<li><a href="./dangxuat" style="padding-top: 20px;padding-left: 35px">ĐĂNG XUẤT</a></li>
-										</li>
-									</ul>
-									</li>
-							<?php }else	{ ?>
-							<li><a data-toggle="modal" data-target="#myModal">ĐĂNG NHẬP</a></li>
-							<?php } ?>
-						</ul>
-					</div><!-- /.navbar-collapse -->
-				</div>
-			</nav>
-
-		</div>
-
-	</div>
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" style="text-align: center;font-weight: bold;">ĐĂNG NHẬP</h4>
-      </div>
-      <div class="modal-body">
-				<div class="form-group">
-					<label style="font-size: 16px;">ID</label>
-					<input type="text" class="form-control col-sm-3" name="id" id="id" placeholder="Nhập ID">
-					<div id="ktid" class="sub"></div>
-				</div>
-				<div class="form-group">
-					<label style="font-size: 16px;">Password</label>
-					<input type="password" class="form-control" name="pass" id="pass" placeholder="Nhập Password">
-					<div id="ktpass" class="sub"></div>
-				</div>
-				<button type="button" class="btn btn-detail" style="font-size: 18px;" onclick="dangnhap()">Đăng nhập</button>
-				<div class="checkbox center">
-					<label>
-						<a href="{{route('DangKy')}}" style="font-size: 16px;color: #DAA520;margin-left: -20px;text-decoration: underline;">Đăng ký ngay</a>
-					</label>
-					<div id="ktdn" style="margin-top: 10px;font-size:20px;color: red"></div>
-				</div>	
-      </div>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="south-load"></div>
     </div>
 
-  </div>
-</div>
-	@yield('content')
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- ##### Header Area Start ##### -->
+    <header class="header-area">
 
+        <!-- Main Header Area -->
+        <div class="main-header-area" id="stickyHeader">
+            <div class="classy-nav-container breakpoint-off">
+                <!-- Classy Menu -->
+                <nav class="classy-navbar justify-content-between" id="southNav">
 
-	@yield('script')
-	<!-- footer -->
-	<div class="footer">
+                    <!-- Logo -->
+                    <a class="nav-brand" href="index.html"><img src="{{asset('img/logo.png')}}" alt="" style="margin-left: 40px;"><p>LIGHTZ REAL ESTATE</p></a>
 
-		<div class="container">
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
 
+                    <!-- Menu -->
+                    <div class="classy-menu">
 
+                        <!-- close btn -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
 
-			<div class="row">
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                            <ul>
+                                <li><a href="{{route('view_trangchu')}}" class="{{ (\Request::route()->getName() == 'view_trangchu') ? 'active' : '' }}">Trang chủ</a></li>
+                                <li><a href="{{route('view_dsDat')}}" class="{{ (\Request::route()->getName() == 'view_dsDat') ? 'active' : '' }}">Đất bán</a>
+                                    <ul class="dropdown">
+                                        <li><a href="index.html">Xem trên bản đồ</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="{{route('view_dsPhong')}}" class="{{ (\Request::route()->getName() == 'view_dsPhong') ? 'active' : '' }}">Phòng cho thuê</a>
+                                    <ul class="dropdown">
+                                        <li><a href="{{route('view_dsPhong_map')}}">Xem trên bản đồ</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="{{route('view_vechungtoi')}}" class="{{ (\Request::route()->getName() == 'view_vechungtoi') ? 'active' : '' }}">Về chúng tôi</a></li>
+                                <li><a href="{{route('view_lienlac')}}" class="{{ (\Request::route()->getName() == 'view_lienlac') ? 'active' : '' }}">Liên hệ</a></li>
+                                <?php if(Auth::check()) { ?>
+                                <li><a>XIN CHÀO {{Auth::user()->Ten}}</a>
+                                    <ul class="dropdown">
+                                        <li><a href="index.html">TIỀN: {{number_format(Auth::user()->Tien)}} VNĐ</a></li>
+                                        <li><a href="{{route('view_trangcanhan')}}">TÀI KHOẢN</a></li>
+                                        <li><a href="{{route('view_dangtin')}}">ĐĂNG TIN</a></li>
+                                        <li><a href="./dangxuat">ĐĂNG XUẤT</a></li>
+                                    </ul>
+                                </li>
+                                <?php }else { ?>
+                                <li><a data-toggle="modal" data-target="#myModal">ĐĂNG NHẬP</a></li>
+                                <?php } ?>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ##### Header Area End ##### -->
 
-				<div class="col-lg-3 col-sm-3">
-				</div>
+    <!-- ##### BODY ##### -->
+    @yield('content')
+    <!-- ##### BODY End ##### -->
 
+    <!-- ##### Footer Area Start ##### -->
+    <footer class="footer-area section-padding-100-0 bg-img gradient-background-overlay" style="background-image: url(img/bg-shawdow.jpg);">
+        <!-- Main Footer Area -->
+        <div class="main-footer-area">
+            <div class="container">
+                <div class="row">
 
-				<div class="col-lg-6 col-sm-6" style="text-align: center;padding-top: 10px;">	
-					<span class="glyphicon glyphicon-map-marker"></span> 163 Tô Hiến Thành, Quận 10, Hồ Chí Minh </br>
-					<span class="glyphicon glyphicon-envelope"></span> minh.1406.nt@lightestate.com </br>
-					<span class="glyphicon glyphicon-earphone"></span> 01869885811 <br></br>
-				</div>
+                    <!-- Single Footer Widget -->
+                    <div class="col-12 col-sm-6 col-xl-6">
+                        <div class="footer-widget-area mb-100">
+                            <!-- Widget Title -->
+                            <div class="widget-title">
+                                <h6>VỀ CHÚNG TÔI</h6>
+                            </div>
+                            <p>Với hơn 15 năm kinh nghiệm làm nghề ký gửi nhà đất, Công ty cổ phần bất động sản LightZ RealEstate đã có hơn 2.375 khách hàng đã và đang sữ dụng dịch vụ ký gửi của chúng tôi và tất cả khách hàng điều hài lòng về phong cách phục vụ cũng như sự hiệu quả của việc ký gửi mang lại.
+                            </p>
+                            <p>Nhằm cung ứng một giải pháp hiệu quả cho nhu cầu này, LightZ Real Estate đã phát triển dịch vụ KÝ GỬI NHÀ ĐẤT để giúp người bán nhà, cho thuê bất động sản một cách NHANH CHÓNG và HIỆU QUẢ NHẤT.</p>
+                        </div>
+                    </div>
 
-			</div>
+                    <!-- Single Footer Widget -->
+                    <div class="col-12 col-sm-6 col-xl-6">
+                        <div class="footer-widget-area mb-100">
+                            <!-- Widget Title -->
+                            <div class="widget-title">
+                                <h6>Giờ làm việc</h6>
+                            </div>
+                            <!-- Office Hours -->
+                            <div class="weekly-office-hours">
+                                <ul>
+                                    <li class="d-flex align-items-center justify-content-between"><span>Thứ hai - Thứ sáu</span> <span>08 AM - 19 PM</span></li>
+                                    <li class="d-flex align-items-center justify-content-between"><span>Thứ bảy</span> <span>08 AM - 14 PM</span></li>
+                                    <li class="d-flex align-items-center justify-content-between"><span>Chủ nhật</span> <span>Đóng cửa</span></li>
+                                </ul>
+                            </div>
+                            <!-- Address -->
+                            <div class="address">
+                                <h6><img src="img/icons/phone-call.png" alt="">0569 885 811</h6>
+                                <h6><img src="img/icons/envelope.png" alt=""> lightz.realestate@gmail.com</h6>
+                                <h6><img src="img/icons/location.png" alt=""> 169 Tô Hiến Thành, Phường 13, Quận 10, TP.HCM</h6>
+                            </div>
+                        </div>
+                    </div>
 
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- ##### Footer Area End ##### -->
 
-		</div>
-	</div>
-<script type="text/javascript">
-	$.ajaxSetup({
-                headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-          });
-	function dangnhap()
-	{
-		var id = $('#id').val();
-    	var pass = $('#pass').val();
-    	var check = 0;
-    	if(id == '')
-            {
-              document.getElementById("id").style.marginBottom = "0";
-              $('#ktid').html('*Vui lòng nhập tên đăng nhập');
-              check++;
-              return false;
-            }
-            else
-            {
-            	document.getElementById("id").style.marginBottom = "20px";
-                $('#ktid').html('');
-            }
-        if(pass == '')
-            {
-              document.getElementById("pass").style.marginBottom = "0";
-              $('#ktpass').html('*Vui lòng nhập mật khẩu');
-              check++;
-            }
-            else
-            {
-            	document.getElementById("pass").style.marginBottom = "20px;";
-              $('#ktpass').html('');
-            }
-        if(check == 0)
-        {
-        	$.ajax({
-                type:'post',
-                url:'{{url("dangnhap")}}',
-                data: {
-                	id: id,
-                	pass: pass
-                },
-                async: true,
-                success:function(html){
-               	if (html == 1)
-               	{
-                 $('#ktdn').html('Đăng nhập không thành công');
-               	}
-               	else
-               	{
-               		$('#myModal').modal('toggle');
-               		window.location='{{url("trangchu")}}';
+    <!-- jQuery (Necessary for All JavaScript Plugins) -->
+    <script src="{{asset('js/jquery/jquery-2.2.4.min.js')}}"></script>
+    <!-- Popper js -->
+    <script src="{{asset('js/popper.min.js')}}"></script>
+    <!-- Bootstrap js -->
+    <script src="{{asset('js/bootstrap.min.js')}}"></script>
+    <!-- Plugins js -->
+    <script src="{{asset('js/plugins.js')}}"></script>
+    <script src="{{asset('js/classy-nav.min.js')}}"></script>
+    <script src="{{asset('js/jquery-ui.min.js')}}"></script>
+    <!-- Active js -->
+    <script src="{{asset('js/active.js')}}"></script>
 
-               	}
-               }
-             });
-        }
-	}
+    <!-- ##### Scip single page ##### -->
+    @yield('script')
+    <!-- ##### End scip ##### -->
 
-</script>
+</body>
 
-
-
+</html>
