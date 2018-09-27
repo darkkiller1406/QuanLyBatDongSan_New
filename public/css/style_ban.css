@@ -38,6 +38,7 @@
 
 /* :: 1.0 Import Fonts */
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+@import url('https://fonts.googleapis.com/css?family=Bai+Jamjuree');
 /* :: 2.0 Import All CSS */
 @import url(bootstrap.min.css);
 @import url(animate.css);
@@ -54,7 +55,7 @@
   padding: 0; }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Bai Jamjuree', sans-serif;
   overflow: scroll;
   overflow-x: hidden;
 }

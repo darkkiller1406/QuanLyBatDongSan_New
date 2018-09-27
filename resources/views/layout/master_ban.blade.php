@@ -12,7 +12,7 @@
     <title>Bán đất Thành phố Hồ Chí Minh</title>
 
     <!-- Favicon  -->
-    <link rel="icon" href="img/core-img/favicon.ico">
+    <link rel="icon" href="{{asset('img/core-img/favicon.ico')}}">
 
     <!-- Style CSS -->
     <link rel="stylesheet" href="{{asset('css/style_ban.css')}}">
@@ -130,9 +130,9 @@
                             </div>
                             <!-- Address -->
                             <div class="address">
-                                <h6><img src="img/icons/phone-call.png" alt="">0569 885 811</h6>
-                                <h6><img src="img/icons/envelope.png" alt=""> lightz.realestate@gmail.com</h6>
-                                <h6><img src="img/icons/location.png" alt=""> 169 Tô Hiến Thành, Phường 13, Quận 10, TP.HCM</h6>
+                                <h6><img src="{{asset('img/icons/phone-call.png')}}" alt="">0569 885 811</h6>
+                                <h6><img src="{{asset('img/icons/envelope.png')}}" alt=""> lightz.realestate@gmail.com</h6>
+                                <h6><img src="{{asset('img/icons/location.png')}}" alt="" style="margin-top: -5px;"> 169 Tô Hiến Thành, Phường 13, Quận 10, TP.HCM</h6>
                             </div>
                         </div>
                     </div>

@@ -135,19 +135,19 @@ https://github.com/imakewebthings/jquery-waypoints/blob/master/licenses.txt
             scrollDis = $(document).height() - $(window).height() - o.scrollDistance;
         }
         // Scroll function
-        scrollEvent = $(window).scroll(function () {
-            if ($(window).scrollTop() > scrollDis) {
-                if (!triggerVisible) {
-                    $self[animIn](animSpeed);
-                    triggerVisible = true;
-                }
-            } else {
-                if (triggerVisible) {
-                    $self[animOut](animSpeed);
-                    triggerVisible = false;
-                }
-            }
-        });
+        // scrollEvent = $(window).scroll(function () {
+        //     if ($(window).scrollTop() > scrollDis) {
+        //         if (!triggerVisible) {
+        //             $self[animIn](animSpeed);
+        //             triggerVisible = true;
+        //         }
+        //     } else {
+        //         if (triggerVisible) {
+        //             $self[animOut](animSpeed);
+        //             triggerVisible = false;
+        //         }
+        //     }
+        // });
         if (o.scrollTarget) {
             if (typeof o.scrollTarget === 'number') {
                 scrollTarget = o.scrollTarget;
