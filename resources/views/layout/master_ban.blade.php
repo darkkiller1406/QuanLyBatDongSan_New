@@ -35,7 +35,7 @@
                 <nav class="classy-navbar justify-content-between" id="southNav">
 
                     <!-- Logo -->
-                    <a class="nav-brand" href="index.html"><img src="{{asset('img/logo.png')}}" alt="" style="margin-left: 40px;"><p>LIGHTZ REAL ESTATE</p></a>
+                    <a class="nav-brand" href="index.html"><img src="{{asset('img/logo.png')}}" alt="" style="margin-left: 40px;margin-top: 20px;"><p>LIGHTZ REAL ESTATE</p></a>
 
                     <!-- Navbar Toggler -->
                     <div class="classy-navbar-toggler">
