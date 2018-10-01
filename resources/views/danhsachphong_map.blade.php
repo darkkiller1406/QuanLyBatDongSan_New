@@ -1,43 +1,28 @@
-	@section('title','Danh sách đất')
-	@extends('layout.master_ban')
-	@section('content')
-	<div id="myCarousel" class="carousel slide" data-ride="carousel">
-		<!-- Indicators -->
-		<ol class="carousel-indicators">
-			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-			<li data-target="#myCarousel" data-slide-to="1"></li>
-		</ol>
-
-		<!-- Wrapper for slides -->
-		<div class="carousel-inner">
-
-			<div class="item active">
-				<img src="{{asset('img/banner-2.jpg')}}" alt="Los Angeles" style="width:100%;">
-				<div class="carousel-caption">
-				</div>
-			</div>
-
-			<div class="item">
-				<img src="{{asset('img/banner-3.jpg')}}" alt="Chicago" style="width:100%;">
-				<div class="carousel-caption">
+@section('title','Danh sách đất')
+@extends('layout.master_ban')
+@section('content')
+<!-- ##### Breadcumb Area Start ##### -->
+<section class="breadcumb-area bg-img" style="background-image: url(img/bg-img/hero1.jpg);">
+	<div class="container h-100">
+		<div class="row h-100 align-items-center">
+			<div class="col-12">
+				<div class="breadcumb-content">
+					<h3 class="breadcumb-title">DANH SÁCH ĐẤT</h3>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="inside-banner">
-		<div class="container"> 
-			<h2>Danh sách các lô đất</h2>
-		</div>
-	</div>
-	<div class="container">
-		<div class="properties-listing spacer">
-			<div class="row">
-				<div class="col-lg-12">
-				<div id="map" style="width: auto; height: 800px;margin-bottom: 20px;padding-left: 30px;border: 1px solid black;"></div>
-				</div>
+</section>
+<!-- ##### Breadcumb Area End ##### -->
+<div class="container">
+	<div class="properties-listing spacer">
+		<div class="row">
+			<div class="col-lg-12">
+				<div id="map" style="width: auto; height: 800px;margin-bottom: 50px;padding-left: 30px;border: 1px solid black; margin-top: 50px;"></div>
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 @endsection
 @section('script')
@@ -54,7 +39,7 @@
 			zoom: 13,
 			draggable: true
 		});
-	
+
 		/* Get latlng list phòng trọ */
 		<?php
 		$arrmergeLatln = array();
@@ -107,5 +92,5 @@
 			// });
 		</script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzlVX517mZWArHv4Dt3_JVG0aPmbSE5mE&callback=initMap"
-	async defer></script>
+		async defer></script>
 		@endsection

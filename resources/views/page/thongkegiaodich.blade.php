@@ -1,4 +1,4 @@
-@section('title','Thống kê doanh thu')
+@section('title','Thống kê giao dịch')
 @extends('layout.master')
 @section('content')
 <section id="main-content">

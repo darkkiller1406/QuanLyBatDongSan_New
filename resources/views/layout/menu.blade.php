@@ -70,6 +70,7 @@
                       <ul class="sub">
                           <li><a  href="{{route('TKDT')}}">Thống kê doanh thu</a></li>
                           <li><a  href="{{route('TKGD')}}">Thống kê giao dịch</a></li>
+                          <li><a  href="{{route('TKTK')}}">Thống kê tìm kiếm</a></li>
                       </ul>
                   </li>
 

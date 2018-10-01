@@ -57,9 +57,9 @@
                             <ul>
                                 <li><a href="{{route('view_trangchu')}}" class="{{ (\Request::route()->getName() == 'view_trangchu') ? 'active' : '' }}">Trang chủ</a></li>
                                 <li><a href="{{route('view_dsDat')}}" class="{{ (\Request::route()->getName() == 'view_dsDat') ? 'active' : '' }}">Đất bán</a>
-                                    <ul class="dropdown">
+                                    <!-- <ul class="dropdown">
                                         <li><a href="index.html">Xem trên bản đồ</a></li>
-                                    </ul>
+                                    </ul> -->
                                 </li>
                                 <li><a href="{{route('view_dsPhong')}}" class="{{ (\Request::route()->getName() == 'view_dsPhong') ? 'active' : '' }}">Phòng cho thuê</a>
                                     <ul class="dropdown">

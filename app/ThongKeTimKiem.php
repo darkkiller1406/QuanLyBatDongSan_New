@@ -24,4 +24,19 @@ class ThongKeTimKiem extends Model
     		}
     	}
     }
+    public function gettimkiem($thang, $nam) 
+    {
+        if(isset($thang)&&isset($nam)){
+            if($thang == 13)
+            {
+                $thang =  "MONTH(thongketimkiem.created_at) > 0";
+            }
+            else
+            {
+                $thang = "MONTH(thongketimkiem.created_at) = ".$thang;
+            }
+            return DB::select("SELECT *,thongketimkiem.created_at as ngaylap  FROM thongketimkiem, quan WHERE $thang and  YEAR(thongketimkiem.created_at) = '$nam' and thongketimkiem.Quan = Quan.id  ORDER BY thongketimkiem.id DESC");
+        }
+        return DB::select("SELECT *,thongketimkiem.created_at as ngaylap  FROM thongketimkiem, quan WHERE MONTH(thongketimkiem.created_at) = MONTH(now()) and  YEAR(thongketimkiem.created_at) = YEAR(now()) and thongketimkiem.Quan = Quan.id  ORDER BY thongketimkiem.id DESC");
+    }
 }
