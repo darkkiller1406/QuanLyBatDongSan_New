@@ -90,14 +90,18 @@ a {
   text-decoration: none;
   outline: none;
   font-size: 14px;
-  font-weight: 600; }
+  font-weight: 600; 
+  color:#624a38;
+}
   a:hover, a:focus {
     -webkit-transition-duration: 500ms;
     transition-duration: 500ms;
     text-decoration: none;
     outline: none;
     font-size: 14px;
-    font-weight: 600; }
+    font-weight: 600; 
+    color: #ccb6a5;
+}
 
 ul,
 ol {
@@ -871,7 +875,8 @@ img {
       margin-bottom: 0;
       line-height: 1;
       -webkit-transition-duration: 500ms;
-      transition-duration: 500ms; }
+      transition-duration: 500ms;
+      font-size: 15px; }
   .single-featured-property .property-content {
     padding: 30px;
     border: 1px solid #e1dddd; }
@@ -905,7 +910,7 @@ img {
     .single-featured-property:hover .tag span, .single-featured-property:focus .tag span {
       background-color: #000000;
       color: #ffffff; }
-    .single-featured-property:hover .list-price p, .single-featured-property:focus .list-price p {
+    .single-featured-property:hover .list-price p , .single-featured-property:focus .list-price p {
       background-color: #947054;
       color: #ffffff; }
 
@@ -1664,7 +1669,7 @@ img {
 
 /* :: 21.0 Contact Area CSS */
 .contact-heading {
-  margin-bottom: 90px; }
+  margin-bottom: 30px; }
   .contact-heading h6 {
     border-bottom: 2px solid #947054;
     display: inline-block;
@@ -1804,3 +1809,35 @@ img {
   color: #7d7d7d; }
 
 /*# sourceMappingURL=style.css.map */
+
+.sub
+{
+  margin-bottom: 10px;
+  color: red;
+}
+.size-body {
+  font-size: 13px;
+}
+.size-detail {
+  font-size: 16px;
+}
+
+.table-gia{
+    width:100%;
+}
+.table-gia th,td{
+    padding:7px 15px;
+     border:1px solid gray;
+    border-collapse: collapse;
+    text-align: center;
+}
+.table-gia th{
+    background-color: #3c3c3c;
+    color:#FFD700
+}
+.table-gia tr:nth-child(even){
+   background-color: #F0F0F0;
+}
+.table-gia tr:hover{
+    background-color: #ddd;
+}

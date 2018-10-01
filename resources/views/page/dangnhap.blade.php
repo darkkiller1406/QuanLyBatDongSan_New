@@ -7,8 +7,6 @@
 
 	<!-- Bootstrap core CSS -->
 	<link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
-	<!--external css-->
-	<link href="{{asset('css/font-awesome.css')}}" rel="stylesheet" />
 
 	<!-- Custom styles for this template -->
 	<link href="{{asset('css/style.css')}}" rel="stylesheet">

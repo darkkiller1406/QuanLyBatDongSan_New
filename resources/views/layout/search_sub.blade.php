@@ -9,10 +9,17 @@
                         <p>Tìm kiếm</p>
                     </div>
                     <!-- Search Form -->
-                    <form action="{{route('timDat_ban')}}" method="post" id="advanceSearch">
+                    <form action="{{route('timPhong')}}" method="post">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row">
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-2 col-lg-2">
+                                <select class="form-control" name="loaichothue">
+                                    @foreach ($loaichothue as $tp)
+                                    <option value="{{$tp->id}}">{{$tp->LoaiChoThue}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-2 col-lg-2">
                                 <div class="form-group">
                                     <select class="form-control" id="quan" name="quan">
                                         <option>Tất cả quận</option>
@@ -22,8 +29,14 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-2 col-lg-2">
+                                <div class="form-group" id="select">
+                                    <select class="form-control" name="phuong" id="phuong">
+                                        <option value="0">Phường</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 col-lg-2">
                                 <div class="form-group">
                                     <select class="form-control" id="dt" name="dt">
                                         <option value="0">Diện tích</option>
@@ -35,7 +48,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-2 col-lg-2">
                                 <div class="form-group">
                                     <select class="form-control" id="gia" name="gia">
                                         <option value="0">Khoảng giá</option>
@@ -47,27 +60,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <div class="form-group">
-                                    <select class="form-control" id="huong" name="huong">
-                                        <option value="A">Hướng đất</option>
-                                        <option value="Đ">Đông</option>
-                                        <option value="T">Tây</option>
-                                        <option value="N">Nam</option>
-                                        <option value="B">Bắc</option>
-                                        <option value="ĐN">Đông-Nam</option>
-                                        <option value="ĐB">Đông-Bắc</option>
-                                        <option value="TN">Tây-Nam</option>
-                                        <option value="TB">Tây-Bắc</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-7 d-flex justify-content-between align-items-end">
-                                <!-- More Filter -->
-                                <div class="col-md-4">
-                                </div>
-                                <!-- Submit -->
+                            <div class="col-12 col-md-2 col-lg-2">
                                 <div class="form-group">
                                     <button type="submit" class="btn south-btn">Search</button>
                                 </div>

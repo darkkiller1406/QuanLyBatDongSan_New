@@ -34,6 +34,7 @@
               <div class="col-md-2">
                 <div class="form-group">
                   <select class="form-control" name="thang">
+                    <option value="13">Tất cả tháng</option>
                     <?php for($i=1;$i<=12;$i++)
                     {?>
                       <option value="{{$i}}" <?php if ($i==$month) echo 'selected' ?>>Tháng {{$i}}</option>

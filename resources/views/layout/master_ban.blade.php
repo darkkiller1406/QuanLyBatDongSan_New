@@ -17,6 +17,8 @@
     <!-- Style CSS -->
     <link rel="stylesheet" href="{{asset('css/style_ban.css')}}">
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    
 </head>
 
 <body>
@@ -86,6 +88,41 @@
                 </nav>
             </div>
         </div>
+
+        <div id="myModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                    <h4 class="modal-title" style="font-weight: bold;">ĐĂNG NHẬP</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <label style="font-size: 16px;">ID</label>
+                    <input type="text" class="form-control" name="id" id="id" placeholder="Nhập ID">
+                    <div id="ktid" class="sub" style="color: red"></div>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 16px;">Password</label>
+                    <input type="password" class="form-control" name="pass" id="pass" placeholder="Nhập Password">
+                    <div id="ktpass" class="sub" style="color: red"></div>
+                    <div id="ktdn" style="font-size:15px;color: red"></div>
+                </div>
+                <div class="row">
+                    <diV class="col-md-4"></diV>
+                    <button type="button" class="btn south-btn" style="font-size: 13px;" onclick="dangnhap()">Đăng nhập</button>
+                </div>
+                <div class="row">
+                    <diV class="col-md-4"></diV>
+                    <label>
+                        <a href="{{route('DangKy')}}" style="font-size: 16px;color: #DAA520;margin-left: 30px;text-decoration: underline;">Đăng ký ngay</a>
+                    </label>
+                </div>
+               </div>
+            </div>
+          </div>
+        </div>
     </header>
     <!-- ##### Header Area End ##### -->
 
@@ -94,7 +131,7 @@
     <!-- ##### BODY End ##### -->
 
     <!-- ##### Footer Area Start ##### -->
-    <footer class="footer-area section-padding-100-0 bg-img gradient-background-overlay" style="background-image: url(img/bg-shawdow.jpg);">
+    <footer class="footer-area section-padding-100-0 bg-img gradient-background-overlay" style="background-image: url({{asset('img/bg-shawdow.jpg)')}};">
         <!-- Main Footer Area -->
         <div class="main-footer-area">
             <div class="container">
@@ -141,8 +178,7 @@
             </div>
         </div>
     </footer>
-    <!-- ##### Footer Area End ##### -->
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
     <script src="{{asset('js/jquery/jquery-2.2.4.min.js')}}"></script>
     <!-- Popper js -->
@@ -155,7 +191,70 @@
     <script src="{{asset('js/jquery-ui.min.js')}}"></script>
     <!-- Active js -->
     <script src="{{asset('js/active.js')}}"></script>
+    
+    <script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    function dangnhap()
+    {
+        var id = $('#id').val();
+        var pass = $('#pass').val();
+        var check = 0;
+        if(id == '')
+            {
+              document.getElementById("id").style.marginBottom = "0";
+              $('#ktid').html('*Vui lòng nhập tên đăng nhập');
+              check++;
+              return false;
+            }
+            else
+            {
+                document.getElementById("id").style.marginBottom = "20px";
+                $('#ktid').html('');
+            }
+        if(pass == '')
+            {
+              document.getElementById("pass").style.marginBottom = "0";
+              $('#ktpass').html('*Vui lòng nhập mật khẩu');
+              check++;
+            }
+            else
+            {
+                document.getElementById("pass").style.marginBottom = "20px";
+              $('#ktpass').html('');
+            }
+        if(check == 0)
+        {
+            $.ajax({
+                type:'post',
+                url:'{{url("dangnhap")}}',
+                data: {
+                    id: id,
+                    pass: pass
+                },
+                async: true,
+                success:function(html){
+                if (html == 1)
+                {
+                    document.getElementById("ktdn").style.marginTop = "-20px";
+                    $('#ktdn').html('Đăng nhập không thành công');
+                }
+                else
+                {
+                    document.getElementById("ktdn").style.marginTop = "0";
+                    $('#myModal').modal('toggle');
+                    window.location='{{url("trangchu")}}';
 
+                }
+               }
+             });
+        }
+    }
+
+    </script>
     <!-- ##### Scip single page ##### -->
     @yield('script')
     <!-- ##### End scip ##### -->

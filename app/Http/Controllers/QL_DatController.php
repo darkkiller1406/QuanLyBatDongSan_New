@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Quan;
 use App\Phuong;
+use App\ThongKeTimKiem;
 class QL_DatController extends Controller
 {
     //
@@ -140,10 +141,22 @@ class QL_DatController extends Controller
         $dt = $r->dt;
         $gia = $r->gia;
         $huong = $r->huong;
-        $tp = $r->tp;
+        //$tp = $r->tp; || truong hop lam them nhieu thanh pho
+        $tp = 1;
         $quan = $r->quan;
+        //search dat
         $a = new Dat();
         $kq =  $a->timdat_ban($quan,$tp,$gia,$dt,$huong);
+        // update db thongketimkiem
+        if($quan != 0 || $huong != "A")
+        {
+            $thongketimkiem = new ThongKeTimKiem();
+            $thongketimkiem->Quan = $quan;
+            $thongketimkiem->Huong = $huong;
+            $thongketimkiem->save();
+            $thongketimkiem->deleteAfterOneYear();
+        }
+        //return view
         return view('danhsachdat_kqtim')->with('kq',$kq);
     }
     public function timQuan(Request $r)
@@ -155,5 +168,11 @@ class QL_DatController extends Controller
     {
         $phuong = new Phuong;
         echo $phuong -> timphuong($r->quan);
+    }
+    public function getLoc(Request $r)
+    {
+        $dat = new Dat();
+        $dat = $dat->locdat($r->quan,$r->giatien,$r->trangthai,$r->thang);
+        return view('page/quanlydat_loc')->with('dat_loc',$dat);
     }
 }

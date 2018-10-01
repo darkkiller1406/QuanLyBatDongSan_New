@@ -20,6 +20,7 @@ use App\Phuong;
 use App\LoaiChoThue;
 use App\LoaiTin;
 use App\LichSuGiaoDich;
+use App\ThongKeTimKiem;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -38,6 +39,7 @@ class Controller extends BaseController
         $loaichothue = LoaiChoThue::all();
         $loaitin = LoaiTin::all();
         $lichsugiaodich = LichSuGiaoDich::all();
+        $thongketimkiem = ThongKeTimKiem::all();
     	view()->share('khachhang',$khachhang);
         view()->share('taikhoan',$taikhoan);
         view()->share('dat',$dat);
@@ -50,6 +52,7 @@ class Controller extends BaseController
         view()->share('loaichothue',$loaichothue);
         view()->share('loaitin',$loaitin);
         view()->share('lichsugiaodich',$lichsugiaodich);
+        view()->share('thongketimkiem',$thongketimkiem);
     }
     function capnhat()
     {

@@ -45,88 +45,7 @@
 </section>
 <!-- ##### Hero Area End ##### -->
 
-<!-- ##### Advance Search Area Start ##### -->
-<div class="south-search-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="advanced-search-form">
-                    <!-- Search Title -->
-                    <div class="search-title">
-                        <p>Tìm kiếm</p>
-                    </div>
-                    <!-- Search Form -->
-                    <form action="#" method="post" id="advanceSearch">
-                        <div class="row">
-
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <div class="form-group">
-                                    <select class="form-control" id="cities">
-                                        <option>Tất cả quận</option>
-                                        @foreach ($quan as $q)
-                                        <option value="{{$q->id}}">{{$q->TenQuan}}</option>
-                                        @endforeach 
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <div class="form-group">
-                                    <select class="form-control" id="dt" name="dt">
-                                        <option value="0">Diện tích</option>
-                                        <option value="1">Dưới 50m2</option>
-                                        <option value="2">50 - 80m2</option>
-                                        <option value="3">80 - 120m2</option>
-                                        <option value="4">120 - 160m2</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <div class="form-group">
-                                    <select class="form-control" id="dt" name="gia">
-                                        <option value="0">Khoảng giá</option>
-                                        <option value="1">Dưới 800 triệu</option>
-                                        <option value="2">800 triệu - 1,5 tỷ</option>
-                                        <option value="3">1,5 tỷ - 2,5 tỷ</option>
-                                        <option value="4">2,5 tỷ - 4 tỷ</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <div class="form-group">
-                                    <select class="form-control" id="dt" name="gia">
-                                        <option value="0">Hướng đất</option>
-                                        <option value="1">Đông</option>
-                                        <option value="2">Tây</option>
-                                        <option value="3">Nam</option>
-                                        <option value="4">Bắc</option>
-                                        <option value="5">Đông-Nam</option>
-                                        <option value="6">Đông-Bắc</option>
-                                        <option value="7">Tây-Nam</option>
-                                        <option value="8">Tây-Bắc</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-7 d-flex justify-content-between align-items-end">
-                                <!-- More Filter -->
-                                <div class="col-md-4">
-                                </div>
-                                <!-- Submit -->
-                                <div class="form-group">
-                                    <button type="submit" class="btn south-btn">Search</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ##### Advance Search Area End ##### -->
+@include('layout.search')
 
 <!-- ##### Featured Properties Area Start ##### -->
 <section class="featured-properties-area section-padding-100-50">
@@ -154,13 +73,13 @@
                             <?php if ($d->TrangThai === 1) { ?> <span>Đang giao dịch</span> <?php } else {?><span>Đang bán</span> <?php } ?>
                         </div>
                         <div class="list-price">
-                            <p style="font-size: 15px;">{{number_format(($d->DienTich)*($d->DonGia))}} VNĐ</p>
+                            <a href="chitiet/{{$d->id}}"><p>{{number_format(($d->DienTich)*($d->DonGia))}} VNĐ</p></a>
                         </div>
                     </div>
                     <!-- Property Content -->
                     <div class="property-content">
                         <h5>Đất quận {{$d->quan->TenQuan}}</h5>
-                        <p class="location"><img src="img/icons/location.png" alt="">{{$d->quan->TenQuan}}</p>
+                        <p class="location"><img src="img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->quan->TenQuan}}</p>
                         <p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}</p>
                     </div>
                 </div>
@@ -212,13 +131,13 @@
                             <span>TIN VIP</span>
                             </div>
                             <div class="list-price">
-                                <p style="font-size: 15px;">{{$d->Gia}} Triệu/Tháng</p>
+                                <p style="font-size: 15px;"><a href="chitietphong/{{$d->id}}">{{$d->Gia}} Triệu/Tháng</a></p>
                             </div>
                         </div>
                         <!-- Property Content -->
                         <div class="property-content">
-                            <h6 style="font-size: 14px; text-align: center;"><a href="">{{$d->TieuDe}}</a></h6>
-                            <p class="location"><img src="img/icons/location.png" alt="">
+                            <h6 style="font-size: 14px; text-align: center;">{{$d->TieuDe}}</h6>
+                            <p class="location"><img src="img/icons/location.png" alt="" style="margin-top: -10px;">
                                 @foreach ($quan as $q)
                                 <?php if ($q->id == $d->phuong->ThuocQuan) {
                                     echo $q->TenQuan.', ';

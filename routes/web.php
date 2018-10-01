@@ -99,6 +99,7 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::post('suadat','QL_DatController@postSua')->name('post_SuaDAT');;
     Route::get('xoadat/{id}','QL_DatController@getXoa');
     Route::any('timdat', 'QL_DatController@getTim');
+    Route::any('locdat' , 'QL_DatController@getLoc')->name('post_Loc');
     //quản lý hợp đồng
     Route::get('quanlyhopdong','QL_HopDongController@getView')->name('view_QLHD');
     Route::post('themhd','QL_HopDongController@postThem')->name('post_ThemHD');

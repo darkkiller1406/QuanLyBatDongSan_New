@@ -23,32 +23,32 @@
 <section class="listings-content-wrapper section-padding-100">
 	<div class="container">
 		<div class="row">
-				@foreach ($dat as $d)
-				<!-- Single Featured Property -->
-				<?php if ($d->TrangThai != 2) { ?>
-					<div class="col-12 col-md-6 col-xl-4">
-						<div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
-							<!-- Property Thumbnail -->
-							<div class="property-thumb">
-								<?php $array =  (explode(';', $d->HinhAnh)); $hinh = $array[0]; ?>
-								<img src="<?php echo asset('img/'.$hinh) ?>" alt="" style="height: 250px; width: 100%">
-								<div class="tag">
-									<?php if ($d->TrangThai === 1) { ?> <span>Đang giao dịch</span> <?php } else {?><span>Đang bán</span> <?php } ?>
-								</div>
-								<div class="list-price">
-									<p>{{number_format(($d->DienTich)*($d->DonGia))}} VNĐ</p>
-								</div>
+			@foreach ($dat as $d)
+			<!-- Single Featured Property -->
+			<?php if ($d->TrangThai != 2) { ?>
+				<div class="col-12 col-md-6 col-xl-4">
+					<div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
+						<!-- Property Thumbnail -->
+						<div class="property-thumb">
+							<?php $array =  (explode(';', $d->HinhAnh)); $hinh = $array[0]; ?>
+							<img src="<?php echo asset('img/'.$hinh) ?>" alt="" style="height: 250px; width: 100%">
+							<div class="tag">
+								<?php if ($d->TrangThai === 1) { ?> <span>Đang giao dịch</span> <?php } else {?><span>Đang bán</span> <?php } ?>
 							</div>
-							<!-- Property Content -->
-							<div class="property-content">
-								<h5>Đất quận {{$d->quan->TenQuan}}</h5>
-								<p class="location"><img src="img/icons/location.png" alt="">{{$d->quan->TenQuan}}</p>
-								<p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}</p>
+							<div class="list-price">
+								<a href="chitiet/{{$d->id}}"><p>{{number_format(($d->DienTich)*($d->DonGia))}} VNĐ</p></a>
 							</div>
 						</div>
+						<!-- Property Content -->
+						<div class="property-content">
+							<h5>Đất quận {{$d->quan->TenQuan}}</h5>
+							<p class="location"><img src="img/icons/location.png" alt="">{{$d->quan->TenQuan}}</p>
+							<p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}</p>
+						</div>
 					</div>
-				<?php } ?>
-				@endforeach
+				</div>
+			<?php } ?>
+			@endforeach
 		</div>
 
 		<div class="row">

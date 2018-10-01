@@ -7,7 +7,7 @@
     <div class="row h-100 align-items-center">
       <div class="col-12">
         <div class="breadcumb-content">
-          <h3 class="breadcumb-title">Property</h3>
+          <h3 class="breadcumb-title">Chi tiết lô đất</h3>
         </div>
       </div>
     </div>

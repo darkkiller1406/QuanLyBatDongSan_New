@@ -1,13 +1,18 @@
 @section('title','Đăng ký')
 @extends('layout.master_ban')
 @section('content')
-<div class="inside-banner">
-  <div class="container"> 
-    <h2>Đăng tin</h2>
+<section class="breadcumb-area bg-img" style="background-image: url({{asset('img/bg-img/hero1.jpg')}});">
+  <div class="container h-100">
+    <div class="row h-100 align-items-center">
+      <div class="col-12">
+        <div class="breadcumb-content">
+          <h3 class="breadcumb-title">ĐĂNG TIN</h3>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 <!-- banner -->
-
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="container">
   <div class="spacer">
@@ -51,14 +56,16 @@
   $lat = $array[0];
   $lng = $array[1];   
   ?>
-  <div class="col-lg-12 col-sm-12 col-xs-12 ">
-    <input type="hidden" name="idnguoitao" id="nguoidang" value="{{ Auth::user()->id }}">
-    <div class="panel panel-default">
-      <div class="panel-heading" style="font-size: 20px;font-weight: bold;">THÔNG TIN CƠ BẢN</div>
-      <input type="hidden" name="idtin" value="{{$kq->id}}" id="idtin" required>
-      <input type="hidden" value="{{$kq->TrangThai}}" id="trangthai" >
-      <div class="panel-body">
-       <div class="col-lg-12">
+  <section class="south-contact-area section-padding-100">
+    <div class="container">
+      <div class="row">
+        <div class="contact-heading">
+          <h6>Thông tin cơ bản</h6>
+        </div>
+        <input type="hidden" name="idnguoitao" id="nguoidang" value="{{ Auth::user()->id }}">
+        <input type="hidden" name="idtin" value="{{$kq->id}}" id="idtin" required>
+        <input type="hidden" value="{{$kq->TrangThai}}" id="trangthai" >
+        <div class="col-lg-12">
          <label class="col-lg-2 lease-label margin-lable">Tiêu đề</label>
          <input type="text" name="tieude" class="lease-input form-control" value="{{$kq->TieuDe}}" id="tieude" required>
          <div class="class="col-lg-2"></div>
@@ -66,7 +73,7 @@
        </div>
        <div class="col-lg-6">
          <label class="col-lg-4 lease-label">Loại cho thuê</label>
-         <select class="form-control lease-select" name="loaichothue" id="loaichothue">
+         <select class="form-control" name="loaichothue" id="loaichothue">
           @foreach ($loaichothue as $l)
           <?php if($l->id == $kq->LoaiChoThue) { ?>
             <option value="{{$l->id}}" selected>{{$l->LoaiChoThue}}</option>
@@ -121,8 +128,8 @@
     <input type="hidden" id="txtlat" value="{{$lat}}" name="txtlat"  class="form-control"  />
     <input type="hidden" id="txtlng"  value="{{$lng}}" name="txtlng" class="form-control" />
   </div>
-  <div class="col-md-11" style="margin-left: 40px">
-   <p><i class="far fa-bell"></i> Nếu địa chỉ hiển thị bên bản đồ không đúng bạn có thể điều chỉnh bằng cách kéo điểm màu xanh trên bản đồ tới vị trí chính xác.</p>
+  <div class="col-md-12">
+   <p><i class="fas fa-bell"></i> Nếu địa chỉ hiển thị bên bản đồ không đúng bạn có thể điều chỉnh bằng cách kéo điểm màu xanh trên bản đồ tới vị trí chính xác.</p>
    <div id="map-canvas" style="width: auto; height: 400px;margin-bottom: 20px;padding-left: 30px;border: 1px solid black;"></div>
  </div>
  <div class="col-lg-6">
@@ -139,16 +146,21 @@
    <label class="col-lg-2 lease-label margin-lable">Hình ảnh</label>
    <input type="file" id='file' class="lease-input form-control" name="image[]" accept="image/*" multiple>
  </div>
-
  <div class="col-lg-12">
    <label class="col-lg-2 lease-label margin-lable" >Mô tả</label>
-   <textarea class="lease-input form-control" name="mota" id="mota">{{$kq->MoTa}}</textarea>
+   <div class="contact-form">
+     <div class="form-group">
+       <textarea class="lease-input form-control" name="mota" id="mota" cols="30" rows="10" >{{$kq->MoTa}}</textarea>
+     </div>
+   </div>
  </div>
 </div>
 </div>
-<div class="panel panel-default">
-  <div class="panel-heading" style="font-size: 20px;font-weight: bold;">LIÊN HỆ</div>
-  <div class="panel-body">
+<div class="container">
+  <div class="row">
+    <div class="contact-heading" style="margin-top: 50px;">
+      <h6>Thông tin liên hệ</h6>
+    </div>
     <div class="col-lg-12">
      <label class="col-lg-2 lease-label margin-lable">Tên liên hệ</label>
      <input type="text" class="lease-input form-control" value="{{$kq->TenLienHe}}" name="lienhe" id="tenlienhe" >
@@ -175,16 +187,18 @@
    </div>
  </div>
 </div>
-<div class="panel panel-default">
-  <div class="panel-heading" style="font-size: 20px;font-weight: bold;">LOẠI TIN</div>
-  <div class="panel-body">
-    <div class="col-lg-12">
-      <div class="col-lg-4">
-       <label class=" lease-label">Loại tin</label>
-       <select class="form-control " style="height: 50px;" name="loaitin" id="loaitin">
-        <option value="0">Loại tin</option>
-        @foreach ($loaitin as $l)
-        <?php if($kq->LoaiTin == $l->id){ $gia = $l->Gia;
+<div class="row">
+  <div class="contact-heading" style="margin-top: 50px;">
+    <h6>Thông tin liên hệ</h6>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-4">
+   <label class=" lease-label">Loại tin</label>
+   <select class="form-control " style="height: 50px;" name="loaitin" id="loaitin">
+    <option value="0">Loại tin</option>
+    @foreach ($loaitin as $l)
+    <?php if($kq->LoaiTin == $l->id){ $gia = $l->Gia;
                       $date = new DateTime($kq->NgayBatDau); //
                       $date1 = $date->format('Y-m-d');
                       $date2 = new DateTime($kq->NgayKetThuc);//date(‘Y-m-d’);
@@ -223,28 +237,30 @@
                  </div>
                <?php } ?>
              </div>
-             <div class="col-lg-12">
+             <div class="row">
                <label class="col-lg-4 lease-label" id="dongia">Đơn giá: {{number_format($gia)}} VNĐ</label>
                <label class="col-lg-4 lease-label" id="songaydang">Số ngày đăng: {{number_format($songaydang)}}</label>
                <label class="col-lg-4 lease-label" id="tongtien">Tổng tiền: {{number_format($kq->TongTien)}}</label>
                <input type="hidden" name="tongtien" value="{{$kq->TongTien}}" id="tongtiencu" required>
                <input type="hidden" name="giacu" value="{{$gia}}" id="giacu" required>
              </div>
+             <div class="row">
+               <div class="col-lg-5"></div>
+               <button class="btn south-btn" name="Submit" onClick="SuaTin()" style="width: 20%;font-size: 15px;margin-top:50px">Cập nhật</button>
+             </div>
            </div>
-         </div>
-         <div class="col-lg-12">
-           <div class="col-lg-5"></div>
-           <button class="btn btn-detail" name="Submit" onClick="SuaTin()" style="width: 20%;font-size: 18px">CẬP NHẬT</button>
          </div>
        </div>
      <?php  } else { ?>
       <!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
-      <div class="col-lg-12 col-sm-12 col-xs-12 ">
-        <input type="hidden" name="idnguoitao" id="nguoidang" value="{{ Auth::user()->id }}">
-        <div class="panel panel-default">
-          <div class="panel-heading" style="font-size: 20px;font-weight: bold;">THÔNG TIN CƠ BẢN</div>
-          <div class="panel-body">
-           <div class="col-lg-12">
+      <section class="south-contact-area section-padding-100">
+        <div class="container">
+          <div class="row">
+            <div class="contact-heading">
+              <h6>Thông tin cơ bản</h6>
+            </div>
+            <input type="hidden" name="idnguoitao" id="nguoidang" value="{{ Auth::user()->id }}">
+            <div class="col-lg-12">
              <label class="col-lg-2 lease-label margin-lable">Tiêu đề</label>
              <input type="text" name="tieude" class="lease-input form-control" placeholder="Tên đầy đủ" id="tieude" required>
              <div class="class="col-lg-2"></div>
@@ -252,7 +268,7 @@
            </div>
            <div class="col-lg-6">
              <label class="col-lg-4 lease-label">Loại cho thuê</label>
-             <select class="form-control lease-select" name="loaichothue" id="loaichothue">
+             <select class="form-control" name="loaichothue" id="loaichothue">
               @foreach ($loaichothue as $l)
               <option value="{{$l->id}}">{{$l->LoaiChoThue}}</option>
               @endforeach
@@ -260,7 +276,7 @@
           </div>
           <div class="col-lg-6">
             <label class="col-lg-4 lease-label">Thành phố</label>
-            <select class="form-control lease-select" name="tp" id="tp">
+            <select class="form-control" name="tp" id="tp">
               <option value="0">Chọn Thành phố</option>
               @foreach ($thanhpho as $tp)
               <option value="{{$tp->id}}">{{$tp->TenThanhPho}}</option>
@@ -270,7 +286,7 @@
           </div>
           <div class="col-lg-6">
             <label class="col-lg-4 lease-label">Quận/Huyện</label>
-            <select class="form-control lease-select" name="quan" id="quan">
+            <select class="form-control" name="quan" id="quan">
               <option value="0">Chọn Quận/Huyện</option>
             </select>
             <div id="ktquan" class="sub"></div>
@@ -291,34 +307,39 @@
           <input type="hidden" id="txtlat" value="" name="txtlat"  class="form-control"  />
           <input type="hidden" id="txtlng"  value="" name="txtlng" class="form-control" />
         </div>
-        <div class="col-md-11" style="margin-left: 40px">
+        <div class="col-md-12">
          <p><i class="far fa-bell"></i> Nếu địa chỉ hiển thị bên bản đồ không đúng bạn có thể điều chỉnh bằng cách kéo điểm màu xanh trên bản đồ tới vị trí chính xác.</p>
          <div id="map-canvas" style="width: auto; height: 400px;margin-bottom: 20px;padding-left: 30px;border: 1px solid black;"></div>
        </div>
        <div class="col-lg-6">
-         <label class="col-lg-4 lease-label">Diện tích</label>
+         <label class="col-lg-4">Diện tích</label>
          <input type="number" min="0" class="form-control lease-select" placeholder="Diện tích (m2)" name="dientich" id="dientich">
          <div id="ktdt" class="sub"></div>
        </div>
        <div class="col-lg-6">
-         <label class="col-lg-4 lease-label">Giá tiền</label>
+         <label class="col-lg-4">Giá tiền</label>
          <input type="number" min="0" class="lease-select form-control" placeholder="Giá tiền (triệu/tháng)" name="gia" id="gia">
          <div id="ktgia" class="sub"></div>
        </div>
        <div class="col-lg-12">
-         <label class="col-lg-2 lease-label margin-lable">Hình ảnh</label>
+         <label class="col-lg-2">Hình ảnh</label>
          <input type="file" id='file' class="lease-input form-control" name="image[]" accept="image/*" multiple>
        </div>
-
        <div class="col-lg-12">
          <label class="col-lg-2 lease-label margin-lable" >Mô tả</label>
-         <textarea class="lease-input form-control" name="mota" id="mota"></textarea>
+         <div class="contact-form">
+           <div class="form-group">
+             <textarea class="lease-input form-control" name="mota" id="mota" cols="30" rows="10" ></textarea>
+           </div>
+         </div>
        </div>
      </div>
    </div>
-   <div class="panel panel-default">
-    <div class="panel-heading" style="font-size: 20px;font-weight: bold;">LIÊN HỆ</div>
-    <div class="panel-body">
+   <div class="container">
+    <div class="row">
+      <div class="contact-heading" style="margin-top: 50px">
+        <h6>Thông tin liên hệ</h6>
+      </div>
       <div class="col-lg-12">
        <label class="col-lg-2 lease-label margin-lable">Tên liên hệ</label>
        <input type="text" class="lease-input form-control" placeholder="Liên hệ" name="lienhe" id="tenlienhe" >
@@ -345,42 +366,45 @@
      </div>
    </div>
  </div>
- <div class="panel panel-default">
-  <div class="panel-heading" style="font-size: 20px;font-weight: bold;">LOẠI TIN</div>
-  <div class="panel-body">
-    <div class="col-lg-12">
-      <div class="col-lg-4">
-       <label class=" lease-label">Loại tin</label>
-       <select class="form-control " style="height: 50px;" name="loaitin" id="loaitin">
-        <option value="0">Loại tin</option>
-        @foreach ($loaitin as $l)
-        <option value="{{$l->id}};{{$l->Gia}}">{{$l->LoaiTin}}</option>
-        @endforeach
-      </select>
-      <div id="ktloaitin" class="sub"></div>
+ <div class="container">
+  <div class="row">
+    <div class="contact-heading" style="margin-top: 50px">
+      <h6>Thông tin liên hệ</h6>
     </div>
+  </div>
+  <div class="row">
     <div class="col-lg-4">
-     <label class="lease-label">Ngày bắt đầu</label>
-     <input type="date" class=" form-control" name="ngaybatdau" id="ngaybatdau">
-   </div>
-   <div class="col-lg-4">
-     <label class="lease-label">Ngày kết thúc</label>
-     <input type="date" class=" form-control" name="ngayketthuc" id="ngayketthuc">
-     <div id="ktngayketthuc" class="sub"></div>
-   </div>
+     <label class="lease-label">Loại tin</label>
+     <select class="form-control " style="height: 50px;" name="loaitin" id="loaitin">
+      <option value="0">Loại tin</option>
+      @foreach ($loaitin as $l)
+      <option value="{{$l->id}};{{$l->Gia}}">{{$l->LoaiTin}}</option>
+      @endforeach
+    </select>
+    <div id="ktloaitin" class="sub"></div>
+  </div>
+  <div class="col-lg-4">
+   <label class="lease-label">Ngày bắt đầu</label>
+   <input type="date" class=" form-control" name="ngaybatdau" id="ngaybatdau">
  </div>
- <div class="col-lg-12">
-   <label class="col-lg-4 lease-label" id="dongia">Đơn giá</label>
-   <label class="col-lg-4 lease-label" id="songaydang">Số ngày đăng</label>
-   <label class="col-lg-4 lease-label" id="tongtien">Tổng tiền</label>
+ <div class="col-lg-4">
+   <label class="lease-label">Ngày kết thúc</label>
+   <input type="date" class=" form-control" name="ngayketthuc" id="ngayketthuc">
+   <div id="ktngayketthuc" class="sub"></div>
  </div>
 </div>
+<div class="row">
+  <div class="col-lg-4"><label class="lease-label" id="dongia">Đơn giá</label></div>
+  <div class="col-lg-4"><label class="lease-label" id="songaydang">Số ngày đăng</label></div>
+  <div class="col-lg-4"><label class="lease-label" id="tongtien">Tổng tiền</label></div>
 </div>
-<div class="col-lg-12">
+<div class="row">
  <div class="col-lg-5"></div>
- <button class="btn btn-detail" name="Submit" onClick="DangTin()" style="width: 20%;font-size: 18px">ĐĂNG TIN</button>
+ <button class="btn south-btn" name="Submit" onClick="DangTin()" style="width: 20%;font-size: 15px;margin-top:50px">ĐĂNG TIN</button>
 </div>
 </div>
+</div>
+</section>
 <?php  } ?>
 <!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 </div>
@@ -572,20 +596,16 @@
     }
   });
   function checkPhoneNumber() {
-      var flag = false;
-    var phone = $('#dt').val().trim(); // ID của trường Số điện thoại
+    var flag = false;
+    var phone = $('#dienthoai').val().trim(); // ID của trường Số điện thoại
     phone = phone.replace('(+84)', '0');
     phone = phone.replace('+84', '0');
     phone = phone.replace('0084', '0');
     phone = phone.replace(/ /g, '');
     if (phone != '') {
       var firstNumber = phone.substring(0, 2);
-      if ((firstNumber == '09' || firstNumber == '08') && phone.length == 10) {
+      if ((firstNumber == '09' || firstNumber == '08' || firstNumber == '03' || firstNumber == '07' || firstNumber == '05'   ) && phone.length == 10) {
         if (phone.match(/^\d{10}/)) {
-          flag = true;
-        }
-      } else if (firstNumber == '01' && phone.length == 11) {
-        if (phone.match(/^\d{11}/)) {
           flag = true;
         }
       }
@@ -642,9 +662,10 @@
     else
     {
       var sdt = document.getElementById('dienthoai').value;
-      if (!checkPhoneNumber()) {
+      if (this.checkPhoneNumber() == false) {
         document.getElementById("dienthoai").style.marginBottom = "0";
         $('#ktdtdd').html('*Vui lòng nhập đúng định dạng điện thoại');
+        check++;
       }
       else
       {
@@ -812,11 +833,22 @@
           }
           else
           {
+            // var sdt = document.getElementById('dienthoai').value;
+            // var filter = /^[0-9-+]+$/;
+            // if (!filter.test(sdt)) {
+            //   document.getElementById("dienthoai").style.marginBottom = "0";
+            //   $('#ktdtdd').html('*Vui lòng nhập đúng định dạng điện thoại');
+            // }
+            // else
+            // {
+            //   document.getElementById("dienthoai").style.marginBottom = "20px";
+            //   $('#ktdtdd').html('');
+            // }
             var sdt = document.getElementById('dienthoai').value;
-            var filter = /^[0-9-+]+$/;
-            if (!filter.test(sdt)) {
+            if (this.checkPhoneNumber() == false) {
               document.getElementById("dienthoai").style.marginBottom = "0";
               $('#ktdtdd').html('*Vui lòng nhập đúng định dạng điện thoại');
+              check++;
             }
             else
             {
@@ -879,8 +911,8 @@
           var totalDays;
           var kt;
            // xac dinh tong tien neu tang gia loai tin, tang ngay,      
-          if($('#loaitin').val() != 0)
-          {
+           if($('#loaitin').val() != 0)
+           {
             if($('#trangthai').val() == 1)
             {
               var today = new Date();
@@ -1250,31 +1282,31 @@
                   }
                   else
                   {
-                     tgconlai = d2.getTime() - d1.getTime();
-                  } 
-                  var tongngayconlai = Math.round(tgconlai / 1000 / 60 / 60 / 24);
-                  var giacu = $('#giacu').val();
-                  var offset = d2.getTime() - d1.getTime();
-                  total = Math.round(offset / 1000 / 60 / 60 / 24);
-                  if(changeday2 == false && loaitindau != loaitinsau && $('#trangthai').val() != 2 )
-                  {
-                    giatien = gia*tongngayconlai;
-                    tienthem = giatien - (giacu*tongngayconlai);
-                    tienthaydoi = true;
-                    tongtien = format_number(tienthem,0,'.','.');
-                    $('#tongtien').html('Tổng tiền thêm: ' +tongtien+' VND');
-                  }
-                  else
-                  {
-                    $('#songaydang').html("Số ngày đăng: " + total + " ngày");
-                    var tongtien = gia*total;
-                    tongtienin = format_number(tongtien,0,'.','.');
-                    $('#tongtien').html('Tổng tiền: ' +tongtienin+' VND');
-                  }
+                   tgconlai = d2.getTime() - d1.getTime();
+                 } 
+                 var tongngayconlai = Math.round(tgconlai / 1000 / 60 / 60 / 24);
+                 var giacu = $('#giacu').val();
+                 var offset = d2.getTime() - d1.getTime();
+                 total = Math.round(offset / 1000 / 60 / 60 / 24);
+                 if(changeday2 == false && loaitindau != loaitinsau && $('#trangthai').val() != 2 )
+                 {
+                  giatien = gia*tongngayconlai;
+                  tienthem = giatien - (giacu*tongngayconlai);
+                  tienthaydoi = true;
+                  tongtien = format_number(tienthem,0,'.','.');
+                  $('#tongtien').html('Tổng tiền thêm: ' +tongtien+' VND');
+                }
+                else
+                {
+                  $('#songaydang').html("Số ngày đăng: " + total + " ngày");
+                  var tongtien = gia*total;
+                  tongtienin = format_number(tongtien,0,'.','.');
+                  $('#tongtien').html('Tổng tiền: ' +tongtienin+' VND');
                 }
               }
             }
-          });
+          }
+        });
           
         });
       </script>

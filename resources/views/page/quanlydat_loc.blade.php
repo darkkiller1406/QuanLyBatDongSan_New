@@ -98,11 +98,11 @@
    </thead>
    <tbody>
     <?php $i=0;$idtam; $tentam ?>
-    @foreach($dat as $d)
+    @foreach($dat_loc as $d)
     <!--  -->
     @foreach ($thanhpho as $tp)
     <?php
-    if($tp->id == $d->quan->ThuocThanhPho){
+    if($tp->id == $d->ThuocThanhPho){
      $idtam = $tp->id;
      $tentam = $tp->TenThanhPho;
    }
@@ -114,7 +114,7 @@
      <td>{{$d->KyHieuLoDat}}</td>
      <td>{{number_format($d->DonGia)}} VND/m2</td>
      <td>{{number_format($d->Gia)}} VND</td>
-     <td>{{$d->DiaChi}},{{$d->quan->TenQuan}},{{$tentam}}</td>
+     <td>{{$d->DiaChi}},{{$d->TenQuan}},{{$tentam}}</td>
      <td><?php 
      if ($d->TrangThai == 0){echo 'Hiện có';}
      if ($d->TrangThai == 1){echo 'Đang giao dịch';}
@@ -132,12 +132,12 @@
       data-dai="{{$d->Dai}}"
       data-nohau="{{$d->NoHau}}"
       data-huong="{{$d->Huong}}"
-      data-sohuu="{{$d->khachhang->HoVaTenDem}} {{$d->khachhang->Ten}}"
+      data-sohuu="{{$d->HoVaTenDem}} {{$d->Ten}}"
       data-hinh="{{$d->HinhAnh}}"
       data-trangthai="{{$d->TrangThai}}"
       data-ghichu="{{$d->GhiChu}}"
       data-luotxem="{{$d->LuotXem}}"
-      data-vitri="{{$d->DiaChi}},{{$d->quan->TenQuan}},{{$tentam}}"
+      data-vitri="{{$d->DiaChi}},{{$d->TenQuan}},{{$tentam}}"
       data-ngaytao='
       <?php $date=date_create($d->created_at);
       echo date_format($date,"d/m/Y H:i:s") ?>'

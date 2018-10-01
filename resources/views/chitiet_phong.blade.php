@@ -60,7 +60,11 @@
           @endforeach
           <!-- Listings Btn Groups -->
           <div class="listings-btn-groups">
-          <p><b>Mô tả:</b> {{$chitiet->MoTa}}</p>
+          <p><?php $array_mota =  (explode('.', $chitiet->MoTa));?>
+          - <b>Mô tả:</b><br>
+          @foreach ($array_mota as $a)
+          {{$a}}.<br>
+          @endforeach</p>
         </div>
       </div>
     </div>
@@ -106,12 +110,12 @@ type="text/javascript"></script>
   $( "#change-map" ).click(function() {
     if (checkMap === false) {
       checkMap = true;
-      $( "#change-map" ).html('<img src="<?php echo asset('img/icons/location.png') ?>" alt=""> Tìm đường');
+      $( "#change-map" ).html('<img src="<?php echo asset('img/icons/location.png') ?>" alt="" style="margin-top: -10px"> Tìm đường');
       initMap();
     }
     else {
       checkMap = false;
-      $( "#change-map" ).html('<img src="<?php echo asset('img/icons/location.png') ?>" alt=""> Địa điểm');
+      $( "#change-map" ).html('<img src="<?php echo asset('img/icons/location.png') ?>" alt="" style="margin-top: -10px"> Địa điểm');
       initMap();
     }
   });

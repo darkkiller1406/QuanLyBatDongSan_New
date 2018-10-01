@@ -1,16 +1,22 @@
 @section('title','Lịch sử giao dịch')
 @extends('layout.master_ban')
 @section('content')
-<div class="inside-banner">
-  <div class="container"> 
-    <h2>Lịch sử giao dịch</h2>
+<section class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/hero1.jpg);">
+  <div class="container h-100">
+    <div class="row h-100 align-items-center">
+      <div class="col-12">
+        <div class="breadcumb-content">
+          <h3 class="breadcumb-title">Lịch sử giao dịch</h3>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="container">
-  <div class="properties-listing spacer">
+</section>
+<section class="south-contact-area section-padding-100">
+  <div class="container">
     <div class="row">
-      <div class="col-lg-12">
-        <table id="dtable" class="table-gia table-responsive">
+      <div class="col-lg-12 col-md-12">
+        <table id="dtable" class="table-gia" style="margin-top: -30px;">
          <thead>
           <tr>
            <th style="text-align: center;">STT</th>
@@ -37,7 +43,7 @@
 
 </div>
 </div>
-</div>
+</section>
 @endsection
 @section('script')
 

@@ -27,13 +27,14 @@
           </div>
           @endif
           <div class="col-md-10">
-            <form method="post" action="{{route('TKDT')}}">
+            <form method="post" action="{{route('TKGD')}}">
             {{csrf_field()}}
             <div class="form-group">
               <div class="col-md-4 col-sm-4 control-label"></div>
               <div class="col-md-2">
                 <div class="form-group">
                   <select class="form-control" name="thang">
+                    <option value="13">Tất cả tháng</option>
                     <?php for($i=1;$i<=12;$i++)
                     {?>
                       <option value="{{$i}}" <?php if ($i==$month) echo 'selected' ?>>Tháng {{$i}}</option>

@@ -18,7 +18,7 @@ class Dat extends Model
     }
     public function timdat($id)
     {
-        $k = DB::select('SELECT *, dat.id as iddat FROM dat,khachhang,quan,thanhpho WHERE KyHieuLoDat LIKE "%'.$id.'%" and dat.SoHuu = khachhang.id and dat.Quan = quan.id and dat.ThanhPho = thanhpho.id ORDER BY dat.id');
+        $k = DB::select('SELECT *, dat.id as iddat, thanhpho.id as idtp FROM dat,khachhang,quan,thanhpho WHERE KyHieuLoDat LIKE "%'.$id.'%" and dat.SoHuu = khachhang.id and dat.Quan = quan.id and quan.ThuocThanhPho = thanhpho.id ORDER BY dat.id');
         $string = '
         <thead>
         <tr>
@@ -94,7 +94,7 @@ class Dat extends Model
             $string.= 'data-luotxem="'.$dat->LuotXem.'"';
             $string.= 'data-diachi="'.$dat->DiaChi.'"';
             $string.= 'data-quan="'.$dat->Quan.'"';
-            $string.= 'data-thanhpho="'.$dat->ThanhPho.'"';
+            $string.= 'data-thanhpho="'.$dat->idtp.'"';
             $string.= 'data-ngaytao="'
             .date_format(date_create($dat->created_at),"d/m/Y H:i:s").'"';
             $string.= 'data-ngaycapnhat="'
@@ -110,29 +110,30 @@ class Dat extends Model
     }
     public function timdat_ban($quan,$tp,$gia,$dt,$huong)
     {
+        //
         switch ($huong) {
-            case '1':
+            case 'Đ':
                 $huong = 'Đông';
                 break;
-            case '2':
+            case 'T':
                 $huong = 'Tây';
                 break;
-            case '3':
+            case 'N':
                 $huong = 'Nam';
                 break;
-            case '4':
+            case 'B':
                 $huong = 'Bắc';
                 break;
-            case '5':
+            case 'ĐN':
                 $huong = 'Đông-Nam';
                 break;
-            case '6':
+            case 'ĐB':
                 $huong = 'Đông-Bắc';
                 break;
-            case '7':
+            case 'TN':
                 $huong = 'Tây-Nam';
                 break;
-            case '8':
+            case 'TB':
                 $huong = 'Tây-Bắc';
                 break;
             default:
@@ -188,7 +189,6 @@ class Dat extends Model
             $k = DB::select('select *, dat.id as iddat from Dat,ThanhPho,Quan where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = dat.Quan and quan.ThuocThanhPho = ThanhPho.id and dat.quan= '.$quan);
             return $k;
         }
-        
     }
     public function tangluotxem($id)
     {
@@ -214,5 +214,50 @@ class Dat extends Model
             ORDER BY `dat`.`LuotXem`  DESC LIMIT 5");
         return $k;
     }
-
+    public function locdat($quan,$gia,$trangthai,$thang)
+    {
+        switch ($gia) {
+            case '1':
+                $gia = 'Gia<800000000';
+                break;
+            case '2':
+                $gia = 'Gia>=800000000 and Gia<=1500000000';
+                break;
+            case '3':
+                $gia = 'Gia>=1500000000 and Gia<=2500000000';
+                break;
+            case '4':
+                $gia = 'Gia>=2500000000 and Gia<=4000000000';
+                break;
+            default:
+                $gia = 'Gia>0';
+                break;
+        }
+        if($trangthai == 3)
+        {
+            $trangthai = 'trangthai >= 0';
+        }
+        else
+        {
+            $trangthai = 'trangthai = '.$trangthai;
+        }
+        if($thang == 13)
+        {
+            $thang =  "MONTH(dat.created_at) > 0";
+        }
+        else
+        {
+            $thang = "MONTH(dat.created_at) = ".$thang;
+        }
+        if($quan == 0)
+        {
+            $k = DB::select('select *, dat.id as iddat from Dat,ThanhPho,Quan,KhachHang where '.$gia.' and quan.id = dat.Quan and quan.ThuocThanhPho = 1 and dat.SoHuu = khachhang.id and '.$trangthai.' and '.$thang);
+            return $k;
+        }
+        else
+        {
+            $k = DB::select('select *, dat.id as iddat from Dat,ThanhPho,Quan,KhachHang where '.$gia.' and quan.id = dat.Quan and dat.SoHuu = khachhang.id and quan.ThuocThanhPho = 1 and '.$trangthai.' and dat.quan= '.$quan.' and '.$thang);
+            return $k;
+        }
+    }
 }

@@ -38,7 +38,7 @@
 		<div class="row">
 			<div class="col-12 col-lg-12">
 					<h3>Bảng Giá Đăng Tin</h3>
-					<table class="table table-striped">
+					<table class="table-gia">
 						<tr>
 							<th>Loại tin</th>
 							<th>Thông tin</th>

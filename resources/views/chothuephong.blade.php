@@ -15,11 +15,12 @@
 </section>
 <!-- ##### Breadcumb Area End ##### -->
 
-<!-- ##### Advance Search Area Start ##### -->
-@include('layout.search')
+@include('layout.search_sub')
+
 <!-- ##### Advance Search Area End ##### -->
 
 <!-- ##### Listing Content Wrapper Area Start ##### -->
+
 <section class="listings-content-wrapper section-padding-100">
 	<div class="container">
 		<div class="row">
@@ -41,7 +42,7 @@
 						</div>
 						<!-- Property Content -->
 						<div class="property-content">
-							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->id}}">{{$p->TieuDe}}</a></h6>
+							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->id}}">{{_substr($p->TieuDe, 90)}}</a></h6>
 							<p class="location"><img src="img/icons/location.png" alt="">
 								@foreach ($quan as $q)
 								<?php if ($q->id == $p->phuong->ThuocQuan) {
@@ -82,7 +83,7 @@
 						</div>
 						<!-- Property Content -->
 						<div class="property-content">
-							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->id}}">{{$p->TieuDe}}</a></h6>
+							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->id}}">{{_substr($p->TieuDe, 90)}}</a></h6>
 							<p class="location"><img src="img/icons/location.png" alt="">
 								@foreach ($quan as $q)
 								<?php if ($q->id == $p->phuong->ThuocQuan) {
@@ -123,7 +124,7 @@
 						</div>
 						<!-- Property Content -->
 						<div class="property-content">
-							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->id}}">{{$p->TieuDe}}</a></h6>
+							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->id}}">{{_substr($p->TieuDe, 90)}}</a></h6>
 							<p class="location"><img src="img/icons/location.png" alt="">
 								@foreach ($quan as $q)
 								<?php if ($q->id == $p->phuong->ThuocQuan) {
@@ -148,7 +149,7 @@
 			@endforeach
 		</div>
 
-		<div class="row">
+<!-- 		<div class="row">
 			<div class="col-12">
 				<div class="south-pagination d-flex justify-content-end">
 					<nav aria-label="Page navigation">
@@ -160,7 +161,7 @@
 					</nav>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </section>
 <!-- ##### Listing Content Wrapper Area End ##### -->
@@ -184,26 +185,27 @@ function _substr($str, $length, $minword = 3)
 ?>
 @endsection
 @section('script')
+
 <script type="text/javascript">
 	$.ajaxSetup({
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
-	$(document).ready(function(){
-		$('#tp').on('change',function(){
-			if(tp){
+	$( document ).ready(function() {
+		$('#quan').on('change',function(){
+			if(quan){
 				$.ajax({
 					type:'get',
-					url:'{{ url("timquan") }}',
-					data:{tp:$(this).val()},
+					url:'{{ url("timphuong") }}',
+					data:{quan:$(this).val()},
 					async: true,
 					success:function(html){
-						$('#quan').html(html);
+						$('#select').html(html);
 					}
 				}); 
 			}else{
-				$('#quan').html('<option value="0">Chọn thành phố</option>');
+				$('#phuong').html('<option value="0">Chọn quận/huyện</option>');
 			}
 		});
 	});
