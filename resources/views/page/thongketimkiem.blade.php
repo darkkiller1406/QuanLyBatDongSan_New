@@ -1,6 +1,16 @@
 @section('title','Thống kê tìm kiếm')
 @extends('layout.master')
 @section('content')
+<?php
+// percent
+$array = array();
+$i = 0;
+foreach ($thongketimkiem as $key_timkiem) {
+  array_push($array, $key_timkiem->Quan);
+  $i++;
+}
+$array_count = array_count_values($array);
+?>
 <section id="main-content">
   <section class="wrapper">
     <h3>THỐNG KÊ TÌM KIẾM</h3>
@@ -58,31 +68,20 @@
           </div>
           <div class="col-md-2">
             <div class="col-md-8"></div>
-            <div class="form-group">
-              <form method="post" action="{{route('inGD')}}">
-                {{csrf_field()}}
-                <input type="hidden" name="thangin" value="{{$month}}">
-                <input type="hidden" name="namin" value="{{$year}}">
-                <div class="col-md-1 col-sm-1 control-label"><button type="submit" class="btn btn-theme"><i class="fas fa-print"></i></button></div>
-
-              </form>
-            </div>
+              <div class="form-group">
+                <form method="post" action="{{route('inGD')}}">
+                  {{csrf_field()}}
+                  <input type="hidden" name="thangin" value="{{$month}}">
+                  <input type="hidden" name="namin" value="{{$year}}">
+                  <div class="col-md-1 col-sm-1 control-label"><button type="submit" class="btn btn-theme"><i class="fas fa-print"></i></button></div>
+                </form>
+              </div>
           </div>
-          <div id="container-chart"></div>
-          <div id="container-chart"></div>
+          <?php if($thongketimkiem != null) { ?><div id="container-chart"></div><?php } else { ?>
+          Hiện tại vẫn chưa có cơ sở dữ liệu tìm kiếm<?php } ?>
         </div><!-- /content-panel -->
       </div><!-- /col-md-12 -->
     </div><!-- /row -->
-    
-    <?php
-    $array = array();
-    $i = 0;
-    foreach ($thongketimkiem as $key_timkiem) {
-      array_push($array, $key_timkiem->Quan);
-      $i++;
-    }
-    $array_count = array_count_values($array);
-    ?>
   </section>
 </section>
 
