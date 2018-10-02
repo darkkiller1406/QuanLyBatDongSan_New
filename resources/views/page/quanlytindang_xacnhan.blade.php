@@ -58,145 +58,147 @@
             ?>
             @foreach($kq as $p)
             <?php if(($p->TrangThai) == 0) { ?>
-            <tr>
-             <td>{{++$i}}</td>
-             <td>{{$p->name}}</td>
-             <td>{{$p->DiaChi}}, {{$p->TenPhuong}}, {{$p->TenQuan}}, {{$p->TenThanhPho}}</td>
-             <td>{{$p->loaitin}}</td>
-             <td>{{$p->loaichothue}}</td>
-             <td><?php $date=date_create($p->ngaydang);
-             echo date_format($date,"d/m/Y H:i:s") ?></td>
-             <th><?php if(($p->TrangThai) == 1) {echo "Đang đăng";}else{echo "Đã ngừng đăng";} ?></th>
-             <td></td>
-             <td>
-              <button class="btn btn-info btn-xs" 
-              data-idphong="{{$p->id}}"
-              data-tieude="{{$p->TieuDe}}"
-              data-diachi="{{$p->DiaChi}}, {{$p->TenPhuong}}, {{$p->TenQuan}}, {{$p->TenThanhPho}}"
-              data-dientich="{{$p->DienTich}}"
-              data-gia="{{$p->Gia}}"
-              data-mota="{{$p->MoTa}}"
-              data-hinhanh="{{$p->HinhAnh}}"
-              data-loaitin="{{$p->loaitin}}"
-              data-loaichothue="{{$p->loaichothue}}"
-              data-nguoidang="{{$p->name}}"
-              data-trangthai="{{$p->TrangThai}}"
-              data-tongtien="{{$p->TongTien}}"
-              data-ngaybatdau='
-              <?php $date=date_create($p->NgayBatDau);
-              echo date_format($date,"d/m/Y H:i:s") ?>'
-              data-ngayketthuc='
-              <?php $date=date_create($p->NgayKetThuc);
-              echo date_format($date,"d/m/Y H:i:s") ?>'
-              data-tenlienhe="{{$p->TenLienHe}}"
-              data-diachilienlac="{{$p->DiaChiLienLac}}"
-              data-dienthoai="{{$p->DienThoaiLienLac}}"
-              data-email="{{$p->Email}}"
-              data-ngaytao='
-              <?php $date=date_create($p->ngaydang);
-              echo date_format($date,"d/m/Y H:i:s") ?>'
-              data-ngaycapnhat='
-              <?php $date=date_create($p->ngaycapnhat);
-              echo date_format($date,"d/m/Y H:i:s") ?>'
-              data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
-              <button class="btn btn-danger btn-xs classXoa"  id="{{$p->id}}" onClick="del_click(this.id)"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      <?php } ?>
-      @endforeach
-    </table>
-  <?php } else { ?>
-   <table id="dtable" class="table table-striped table-advance table-hover table-ed">
-     <hr>
-     <thead>
-      <tr>
-       <th>STT</th>
-       <th>Nguời đăng tin</th>
-       <th>Địa chỉ</th>
-       <th>Loại tin</th>
-       <th>Loại cho thuê</th>
-       <th>Thời gian gửi</th>
-       <th>Trạng thái</th>
-       <th></th>
-     </tr>
-   </thead>
-   <tbody>
-    <?php $i=0;
-    ?>
-    @foreach($phong as $p)
-    <?php if(($p->TrangThai) > 0) { ?>
-      <tr>
-       <td>{{++$i}}</td>
-       <td>{{$p->nguoidang->name}}</td>
-       <td>{{$p->DiaChi}}, {{$p->phuong->TenPhuong}},
-         @foreach ($quan as $q)
-         <?php if ($q->id == $p->phuong->ThuocQuan){
-          echo $q->TenQuan.', ';
-          $tam = $q->ThuocThanhPho;
-        } ?>
+              <tr>
+               <td>{{++$i}}</td>
+               <td>{{$p->name}}</td>
+               <td>{{$p->DiaChi}}, {{$p->TenPhuong}}, {{$p->TenQuan}}, {{$p->TenThanhPho}}</td>
+               <td>{{$p->loaitin}}</td>
+               <td>{{$p->loaichothue}}</td>
+               <td><?php $date=date_create($p->ngaydang);
+               echo date_format($date,"d/m/Y H:i:s") ?></td>
+               <th>Đang đợi xác nhận</th>
+               <td></td>
+               <td>
+                <button class="btn btn-info btn-xs" 
+                data-idphong="{{$p->id}}"
+                data-tieude="{{$p->TieuDe}}"
+                data-diachi="{{$p->DiaChi}}, {{$p->TenPhuong}}, {{$p->TenQuan}}, {{$p->TenThanhPho}}"
+                data-dientich="{{$p->DienTich}}"
+                data-gia="{{$p->Gia}}"
+                data-mota="{{$p->MoTa}}"
+                data-hinhanh="{{$p->HinhAnh}}"
+                data-loaitin="{{$p->loaitin}}"
+                data-loaichothue="{{$p->loaichothue}}"
+                data-nguoidang="{{$p->name}}"
+                data-trangthai="{{$p->TrangThai}}"
+                data-tongtien="{{$p->TongTien}}"
+                data-ngaybatdau='
+                <?php $date=date_create($p->NgayBatDau);
+                echo date_format($date,"d/m/Y H:i:s") ?>'
+                data-ngayketthuc='
+                <?php $date=date_create($p->NgayKetThuc);
+                echo date_format($date,"d/m/Y H:i:s") ?>'
+                data-tenlienhe="{{$p->TenLienHe}}"
+                data-diachilienlac="{{$p->DiaChiLienLac}}"
+                data-dienthoai="{{$p->DienThoaiLienLac}}"
+                data-email="{{$p->Email}}"
+                data-ngaytao='
+                <?php $date=date_create($p->ngaydang);
+                echo date_format($date,"d/m/Y H:i:s") ?>'
+                data-ngaycapnhat='
+                <?php $date=date_create($p->ngaycapnhat);
+                echo date_format($date,"d/m/Y H:i:s") ?>'
+                data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
+                <button class="btn btn-success btn-xs classXoa"  id="{{$p->id}}" onClick="confirm_click(this.id)"><i class="fas fa-check-square"></i></button>
+                <button class="btn btn-danger btn-xs classXoa"  id="{{$p->id}}" onClick="del_click(this.id)"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        <?php } ?>
         @endforeach
-        @foreach ($thanhpho as $tp)
-        <?php
-        if($tp->id == $tam){
-          echo $tp->TenThanhPho;
-        }
-        ?>
-      @endforeach</td>
-      <td>{{$p->loaitin->LoaiTin}}</td>
-      <td>{{$p->loaichothue->LoaiChoThue}}</td>
-      <td><?php $date=date_create($p->created_at);
-      echo date_format($date,"d/m/Y H:i:s") ?></td>
-      <th><?php if(($p->TrangThai) == 1) {echo "Đang đăng";}else{echo "Đã ngừng đăng";} ?></th>
-      <td></td>
-      <td>
-        <button class="btn btn-info btn-xs" 
-        data-idphong="{{$p->id}}"
-        data-tieude="{{$p->TieuDe}}"
-        data-diachi="{{$p->DiaChi}}, {{$p->phuong->TenPhuong}},
-        @foreach ($quan as $q)
-        <?php if ($q->id == $p->phuong->ThuocQuan){
-          echo $q->TenQuan.', ';
-          $tam = $q->ThuocThanhPho;
-        } ?>
-        @endforeach
-        @foreach ($thanhpho as $tp)
-        <?php
-        if($tp->id == $tam){
-          echo $tp->TenThanhPho;
-        }
-        ?>
-        @endforeach"
-        data-dientich="{{$p->DienTich}}"
-        data-gia="{{$p->Gia}}"
-        data-mota="{{$p->MoTa}}"
-        data-hinhanh="{{$p->HinhAnh}}"
-        data-loaitin="{{$p->loaitin->LoaiTin}}"
-        data-loaichothue="{{$p->loaichothue->LoaiChoThue}}"
-        data-nguoidang="{{$p->nguoidang->name}}"
-        data-trangthai="{{$p->TrangThai}}"
-        data-tongtien="{{$p->TongTien}}"
-        data-ngaybatdau='
-        <?php $date=date_create($p->NgayBatDau);
-        echo date_format($date,"d/m/Y H:i:s") ?>'
-        data-ngayketthuc='
-        <?php $date=date_create($p->NgayKetThuc);
-        echo date_format($date,"d/m/Y H:i:s") ?>'
-        data-tenlienhe="{{$p->TenLienHe}}"
-        data-diachilienlac="{{$p->DiaChiLienLac}}"
-        data-dienthoai="{{$p->DienThoaiLienLac}}"
-        data-email="{{$p->Email}}"
-        data-ngaytao='
-        <?php $date=date_create($p->created_at);
-        echo date_format($date,"d/m/Y H:i:s") ?>'
-        data-ngaycapnhat='
-        <?php $date=date_create($p->updated_at);
-        echo date_format($date,"d/m/Y H:i:s") ?>'
-        data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
-        <button class="btn btn-danger btn-xs classXoa"  id="{{$p->id}}" onClick="del_click(this.id)"><i class="fas fa-trash"></i></button>
-      </td>
-    </tr>
-  </tbody>
+      </table>
+    <?php } else { ?>
+     <table id="dtable" class="table table-striped table-advance table-hover table-ed">
+       <hr>
+       <thead>
+        <tr>
+         <th>STT</th>
+         <th>Nguời đăng tin</th>
+         <th>Địa chỉ</th>
+         <th>Loại tin</th>
+         <th>Loại cho thuê</th>
+         <th>Thời gian gửi</th>
+         <th>Trạng thái</th>
+         <th></th>
+       </tr>
+     </thead>
+     <tbody>
+      <?php $i=0;
+      ?>
+      @foreach($phong as $p)
+      <?php if(($p->TrangThai) == 0) { ?>
+        <tr>
+         <td>{{++$i}}</td>
+         <td>{{$p->nguoidang->name}}</td>
+         <td>{{$p->DiaChi}}, {{$p->phuong->TenPhuong}},
+           @foreach ($quan as $q)
+           <?php if ($q->id == $p->phuong->ThuocQuan){
+            echo $q->TenQuan.', ';
+            $tam = $q->ThuocThanhPho;
+          } ?>
+          @endforeach
+          @foreach ($thanhpho as $tp)
+          <?php
+          if($tp->id == $tam){
+            echo $tp->TenThanhPho;
+          }
+          ?>
+        @endforeach</td>
+        <td>{{$p->loaitin->LoaiTin}}</td>
+        <td>{{$p->loaichothue->LoaiChoThue}}</td>
+        <td><?php $date=date_create($p->created_at);
+        echo date_format($date,"d/m/Y H:i:s") ?></td>
+        <th>Đang chờ xác nhận</th>
+        <td></td>
+        <td>
+          <button class="btn btn-info btn-xs" 
+          data-idphong="{{$p->id}}"
+          data-tieude="{{$p->TieuDe}}"
+          data-diachi="{{$p->DiaChi}}, {{$p->phuong->TenPhuong}},
+          @foreach ($quan as $q)
+          <?php if ($q->id == $p->phuong->ThuocQuan){
+            echo $q->TenQuan.', ';
+            $tam = $q->ThuocThanhPho;
+          } ?>
+          @endforeach
+          @foreach ($thanhpho as $tp)
+          <?php
+          if($tp->id == $tam){
+            echo $tp->TenThanhPho;
+          }
+          ?>
+          @endforeach"
+          data-dientich="{{$p->DienTich}}"
+          data-gia="{{$p->Gia}}"
+          data-mota="{{$p->MoTa}}"
+          data-hinhanh="{{$p->HinhAnh}}"
+          data-loaitin="{{$p->loaitin->LoaiTin}}"
+          data-loaichothue="{{$p->loaichothue->LoaiChoThue}}"
+          data-nguoidang="{{$p->nguoidang->name}}"
+          data-trangthai="{{$p->TrangThai}}"
+          data-tongtien="{{$p->TongTien}}"
+          data-ngaybatdau='
+          <?php $date=date_create($p->NgayBatDau);
+          echo date_format($date,"d/m/Y H:i:s") ?>'
+          data-ngayketthuc='
+          <?php $date=date_create($p->NgayKetThuc);
+          echo date_format($date,"d/m/Y H:i:s") ?>'
+          data-tenlienhe="{{$p->TenLienHe}}"
+          data-diachilienlac="{{$p->DiaChiLienLac}}"
+          data-dienthoai="{{$p->DienThoaiLienLac}}"
+          data-email="{{$p->Email}}"
+          data-ngaytao='
+          <?php $date=date_create($p->created_at);
+          echo date_format($date,"d/m/Y H:i:s") ?>'
+          data-ngaycapnhat='
+          <?php $date=date_create($p->updated_at);
+          echo date_format($date,"d/m/Y H:i:s") ?>'
+          data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
+          <button class="btn btn-success btn-xs classXoa"  id="{{$p->id}}" onClick="confirm_click(this.id)"><i class="fas fa-check-square"></i></button>
+          <button class="btn btn-danger btn-xs classXoa"  id="{{$p->id}}" onClick="del_click(this.id)"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    </tbody>
   <?php } ?>
   @endforeach
 </table>
@@ -426,6 +428,14 @@
           if(kq==true){
             var id = clicked_id;
             location.href='xoatd/'+id;
+          }
+        }
+        function confirm_click(clicked_id)
+        {
+          var kq=  confirm('Xác nhận tin đăng ?');
+          if(kq==true){
+            var id = clicked_id;
+            location.href='xacnhan/'+id;
           }
         }
       </script>

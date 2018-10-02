@@ -117,13 +117,17 @@ class PhongChoThue extends Model
     }
     public function capnhat()
     {
-        $k1 = DB::select('SELECT * FROM `phongthue` WHERE NOW() > NgayBatDau');
+        $k1 = DB::select('SELECT * FROM `phongthue` WHERE NOW() > NgayBatDau and TrangThai >0');
         foreach ($k1 as $a ) {
             DB::update('UPDATE `phongthue` SET `TrangThai` = 1 WHERE id ='.$a->id);
         }
-        $k2 = DB::select('SELECT * FROM `phongthue` WHERE NOW() > NgayKetThuc');
+        $k2 = DB::select('SELECT * FROM `phongthue` WHERE NOW() > NgayKetThuc and TrangThai >0');
         foreach ($k2 as $a ) {
             DB::update('UPDATE `phongthue` SET `TrangThai` = 2 WHERE id ='.$a->id);
         }
+    }
+    public function xacnhan($id)
+    {
+        DB::update('UPDATE `phongthue` SET `TrangThai` = 1 WHERE id ='.$id);
     }
 }

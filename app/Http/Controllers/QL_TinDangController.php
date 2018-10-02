@@ -23,4 +23,14 @@ class QL_TinDangController extends Controller
         $tindang = $yc->getTinDang($r->ngay);
         return view('page.quanlytindang', ['kq'=>$tindang]);
     }
+    public function getView_XacNhan()
+    {
+        return view('page.quanlytindang_xacnhan');
+    }
+    public function getXacNhan($id)
+    {
+        $xacnhan = new PhongChoThue();
+        $xacnhan -> xacnhan($id);
+        return redirect('page/xacnhantindang')->with('thongbao','Bạn đã xác nhận tin đăng, tin đăng sẽ được đăng trên hệ thống!');
+    }
 }
