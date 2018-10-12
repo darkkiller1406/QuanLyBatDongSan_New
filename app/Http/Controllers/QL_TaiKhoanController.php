@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\LichSuGiaoDich;
 class QL_TaiKhoanController extends Controller
 {
+    private $tien, $id;
     //
     public function getView()
     {
@@ -102,19 +103,32 @@ class QL_TaiKhoanController extends Controller
     }
     public function postNapTien(Request $request)
     {
-        $id = $request->iduser;
-        $pass = $request->pass;
-        $tien = $request->tien;
-        $test = new TaiKhoan;
-        $t = $test->updateTien($id,$pass,$tien);
-        //
-        $lichsu = new LichSuGiaoDich();
-        $lichsu->TienGiaoDich =  $request->tien;
-        $lichsu->LoaiGiaoDich = '2';
-        $lichsu->GiaoDich = 'Nạp thêm tiền';
-        $lichsu->NguoiThucHien = Auth::user()->id;
-        $lichsu->save();
-        return $t;
+        if(isset($request->iduser)) {
+            if(Auth::attempt(['name'=>$request->nameuser,'password'=>$request->pass])) {
+                session(['id' => $request->iduser]);
+                session(['tien' => $request->tien]);    
+                return '0';
+            } else {
+                return '2';        
+            }
+        } else {
+            $taikhoan = new TaiKhoan();
+            $t = $taikhoan->updateTien($request->session()->get('id'), $request->session()->get('tien'));
+            //
+            $lichsu = new LichSuGiaoDich();
+            $lichsu->TienGiaoDich =  $request->session()->get('tien');
+            $lichsu->LoaiGiaoDich = '2';
+            $lichsu->GiaoDich = 'Nạp thêm tiền';
+            $lichsu->NguoiThucHien = Auth::user()->id;
+            $lichsu->save();
+            $request->session()->forget('id');
+            $request->session()->forget('tien');
+            //
+            $thongtin = TaiKhoan::find(Auth::user()->id);
+            $sobaidang = new TaiKhoan();
+            $sobaidang = $sobaidang->demsobai(Auth::user()->id);
+            return view('trangcanhan',['thongtin'=>$thongtin, 'sobaidang'=>$sobaidang, 'thongbao' => 'Nạp tiền thành công']);
+        }
     }
     public function trangcanhan()
     {
@@ -128,9 +142,10 @@ class QL_TaiKhoanController extends Controller
     }
     public function getLichSu($id)
     {
+        if(isset(Auth::user()->id)) {
         $lichsu = new LichSuGiaoDich();
         $lichsu = $lichsu->getLichSuGiaoDich($id);
         return view('lichsugiaodich',['lichsugiaodich'=>$lichsu]);
+        }
     }
-        
 }

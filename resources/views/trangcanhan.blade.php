@@ -12,6 +12,7 @@
     </div>
   </div>
 </section>
+<?php if(isset($thongbao)) echo '<script type="text/javascript">alert("'.$thongbao.'");</script>'; ?>
 <section class="south-contact-area section-padding-100">
   <div class="container">
     <div class="row">
@@ -47,6 +48,7 @@
     <div class="row"">
       <input type="hidden" name="_token" value="{{ csrf_token() }}">
       <input type="hidden" name="iduser" id="iduser" value=" {{ Auth::user()->id }} ">
+      <input type="hidden" name="nameuser" id="nameuser" value=" {{ Auth::user()->name }} ">
       <label class="col-sm-2">Chọn mệnh giá</label>
       <div class="col-sm-9">
         <select class="form-control" name="menhgia" id="menhgia">
@@ -67,7 +69,8 @@
         <div id="ktmk2" class="sub"></div>
       </div>
       <div class="col-md-5"></div>
-      <div class="col-md-2"><button type="button" onclick="capnhattien()" id="submitbtn" name="submitbtn" class="btn south-btn" >NẠP TIỀN</button></div>
+      <div class="col-md-2"><button type="button" onclick="capnhattien()" id="submitbtn" name="submitbtn" class="btn south-btn" >CẬP NHẬT</button></div>
+      </div>
     </div>
   </div>
   <div class="container">
@@ -104,6 +107,7 @@
 <script type="text/javascript">
   function capnhattien()
   {
+    nameuser = $('#nameuser').val();
     iduser = $('#iduser').val();
     pass = $('#password').val();
     repass = $('#repass').val();
@@ -129,10 +133,12 @@
     }
     if(check ==0)
     {
+      var return_url = '{{ url("naptien")}}';
       $.ajax({
-        type:'post',
-        url:'{{ url("naptien") }}',
+        type: 'post',
+        url: '{{ url("naptien")}}',
         data:{
+          nameuser: nameuser,
           iduser: iduser,
           pass: pass,
           repass: repass,
@@ -140,13 +146,14 @@
         },
         async: true,
         success:function(html){
-          if(html == 1)
-          {
+          if(html == 1) {
             alert('Nạp tiền thành công');
             window.location='{{url("quanlytrangcanhan")}}';
-          }
-          else
-          {
+          } else if(html == 0) {
+            window.open("https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=(Mã đơn đặt hàng)&price=" + tien + "&return_url="+return_url+"&comments=(Ghi chú về đơn hàng)", '_blank');
+            $('#password').val('');
+            $('#repass').val('');
+          } else {
             alert('Mật khẩu nhập không đúng.');
             $('#password').val('');
             $('#repass').val('');

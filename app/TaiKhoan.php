@@ -9,6 +9,7 @@ class TaiKhoan extends Model
 {
     //
 	protected $table = 'users';
+  
 	public function timtk($name)
 	{
 		$k = DB::select('select *,users.id as idtk,users.created_at as cr, users.updated_at as up from users where name like "%'.$name.'%"');
@@ -64,20 +65,13 @@ class TaiKhoan extends Model
         return $a;
       }
     }
-    public function updateTien($id,$mk,$tien)
+    public function updateTien($id,$tien)
     {
       $kq = DB::select("select * from users where  id='".$id."'");
-      foreach($kq as $check){
-        if(Auth::attempt(['name'=>$check->name,'password'=>$mk]))
-          {
-            $tien = ($check->Tien)+$tien;
-            $tam = DB::update("UPDATE `users` SET `tien`='".$tien."' WHERE id = '".$check->id."'");
-            return '1';
-          }
-          else
-          {
-            return '0';
-          }
-        }
+      foreach($kq as $check) {
+        $tien = ($check->Tien)+$tien;
+        $tam = DB::update("UPDATE `users` SET `tien`='".$tien."' WHERE id = '".$check->id."'");
+        return '1';
       }
     }
+  }

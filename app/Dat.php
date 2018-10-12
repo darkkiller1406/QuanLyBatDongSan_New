@@ -260,4 +260,8 @@ class Dat extends Model
             return $k;
         }
     }
+    public function tesfunction()
+    {
+        echo $a;
+    }
 }
