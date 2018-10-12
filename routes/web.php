@@ -113,8 +113,10 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::any('guimail','QL_YeuCauController@guiMail');
     // Quan ly tin dang thue phong
     Route::get('quanlytindang','QL_TinDangController@getView')->name('view_QLTD');
+    Route::get('xacnhantindang','QL_TinDangController@getView_XacNhan')->name('view_QLXNTD');
     Route::any('timtindang', 'QL_TinDangController@timTD')->name('TKTD');
     Route::get('xoatd/{id}','QL_TinDangController@getXoa');
+    Route::get('xacnhan/{id}','QL_TinDangController@getXacNhan');
     //
     Route::any('thongkedoanhthu','ThongKeController@getThongKeDoanhThu')->name('TKDT');
     Route::any('thongkegiaodich','ThongKeController@getThongKeGiaoDich')->name('TKGD');

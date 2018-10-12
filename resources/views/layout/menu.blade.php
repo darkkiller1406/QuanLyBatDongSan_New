@@ -37,9 +37,14 @@
               </a>
             </li>
             <li class="sub-menu">
-              <a href="{{route('view_QLTD')}}" class="{{ (\Request::route()->getName() == 'view_QLTD') ? 'active' : '' }}" >
-                <i class="fas fa-clipboard"></i><span>Quản lý tin đăng</span>
+              <a href="javascript:;" >
+                <i class="fas fa-clipboard"></i>
+                <span>Tin đăng</span>
               </a>
+              <ul class="sub">
+                <li><a href="{{route('view_QLTD')}}" class="{{ (\Request::route()->getName() == 'view_QLTD') ? 'active' : '' }}" ><i class="fas fa-clipboard"></i><span>Quản lý tin đăng</span></a></li>
+                <li><a href="{{route('view_QLXNTD')}}" class="{{ (\Request::route()->getName() == 'view_QLTD') ? 'active' : '' }}" ><i class="fas fa-check-square"></i><span>Xác nhận tin đăng</span></a></li>
+              </ul>
             </li>
             <li class="sub-menu">
               <a  href="{{route('view_QLDAT')}}" class="{{ (\Request::route()->getName() == 'view_QLDAT') ? 'active' : '' }}">
@@ -58,24 +63,24 @@
             </li>
             <li class="sub-menu">
               <a href="{{route('view_QLTK')}}" class="{{ (\Request::route()->getName() == 'view_QLTK') ? 'active' : '' }}">
-                 <i class="fas fa-users"></i><span>Quản lý tài khoản</span>
-              </a>
+               <i class="fas fa-users"></i><span>Quản lý tài khoản</span>
+             </a>
 
-            </li>
-            <li class="sub-menu">
-                      <a href="javascript:;" >
-                          <i class="fas fa-chart-bar"></i>
-                          <span>Thống kê</span>
-                      </a>
-                      <ul class="sub">
-                          <li><a  href="{{route('TKDT')}}">Thống kê doanh thu</a></li>
-                          <li><a  href="{{route('TKGD')}}">Thống kê giao dịch</a></li>
-                          <li><a  href="{{route('TKTK')}}">Thống kê tìm kiếm</a></li>
-                      </ul>
-                  </li>
+           </li>
+           <li class="sub-menu">
+            <a href="javascript:;" >
+              <i class="fas fa-chart-bar"></i>
+              <span>Thống kê</span>
+            </a>
+            <ul class="sub">
+              <li><a  href="{{route('TKDT')}}">Thống kê doanh thu</a></li>
+              <li><a  href="{{route('TKGD')}}">Thống kê giao dịch</a></li>
+              <li><a  href="{{route('TKTK')}}">Thống kê tìm kiếm</a></li>
+            </ul>
+          </li>
 
-          </ul>
-          <!-- sidebar menu end-->
-        </div>
-      </aside>
+        </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
       <!--sidebar end-->
