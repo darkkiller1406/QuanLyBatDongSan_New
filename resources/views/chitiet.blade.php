@@ -18,7 +18,6 @@
 <!-- ##### Advance Search Area Start ##### -->
 @include('layout.search')
 <!-- ##### Advance Search Area End ##### -->
-
 <!-- ##### Listings Content Area Start ##### -->
 <section class="listings-content-wrapper section-padding-100">
   <div class="container">
@@ -77,17 +76,19 @@
           </div>
           <div class="realtor--contact-form">
             <form action="{{route('ThemYeuCau')}}" method="post">
+              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="iddat" value="{{$chitiet->id}}">
               <div class="form-group">
                 <input type="text" class="form-control" id="realtor-name" name="ten" placeholder="Tên đầy đủ" required>
               </div>
               <div class="form-group">
-                <input type="number" class="form-control" id="realtor-number" name="email" placeholder="Email" required>
+                <input type="email" class="form-control" id="realtor-number" name="email" placeholder="Email" required>
               </div>
               <div class="form-group">
-                <input type="enumber" class="form-control" id="realtor-email" name="dt" id="dt" placeholder="Điện thoại liên lạc" required>
+                <input type="number" class="form-control" id="realtor-email" name="dt" id="dt" placeholder="Điện thoại liên lạc" required>
               </div>
               <div class="form-group">
-                <textarea name="message" class="form-control" id="realtor-message" cols="30" rows="10" name="yeucau" placeholder="Yêu cầu" required></textarea>
+                <textarea class="form-control" id="realtor-message" cols="30" rows="10" name="noidung" placeholder="Yêu cầu" required></textarea>
               </div>
               <button type="submit" class="btn south-btn">Gửi</button>
             </form>

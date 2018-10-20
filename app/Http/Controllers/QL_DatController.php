@@ -7,7 +7,7 @@ use App\Quan;
 use App\ThongKeTimKiem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+include('Help/simple_html_dom.php');
 class QL_DatController extends Controller {
 	//
 	public function getView() {
@@ -121,8 +121,8 @@ class QL_DatController extends Controller {
 		echo $dat->timdat($r->name);
 	}
 	public function getView_DSDat() {
-		$dat = Dat::paginate(10);
-		return view('danhsachdat')->with('dat', $dat);
+		$datFromOtherPage = $this->findDatFromOtherWeb();
+		return view('danhsachdat', ['resultFromWeb'=>$datFromOtherPage]);
 	}
 	public function timDat_ban(Request $r) {
 		$dt = $r->dt;
@@ -142,8 +142,11 @@ class QL_DatController extends Controller {
 			$thongketimkiem->save();
 			$thongketimkiem->deleteAfterOneYear();
 		}
+		// tim dat tu trang web khac
+		$datFromOtherPage = $this->findDatFromOtherWeb($quan, $gia, $dt);
+		session(['datFromOtherPage' => $datFromOtherPage]);
 		//return view
-		return view('danhsachdat_kqtim')->with('kq', $kq);
+		return view('danhsachdat_kqtim', ['kq'=>$kq, 'resultFromWeb'=>$datFromOtherPage]);
 	}
 	public function timQuan(Request $r) {
 		$quan = new Quan;
@@ -157,5 +160,219 @@ class QL_DatController extends Controller {
 		$dat = new Dat();
 		$dat = $dat->locdat($r->quan, $r->giatien, $r->trangthai, $r->thang);
 		return view('page/quanlydat_loc')->with('dat_loc', $dat);
+	}
+	public function findDatFromOtherWeb($quan = null, $gia = null, $dt = null, $huong = null) {
+		return $this->getDatFromNhaDat($quan, $gia, $dt);
+	}
+	public function getDatFromNhaDat($quan, $gia, $dt) {
+		if ($quan != 0) {
+			$timQuan = Quan::find($quan);
+			$tagQuan = $timQuan->Tag_muabannhadat;
+		}
+		else {
+			$tagQuan = 's59';
+		}
+		switch ($dt) {
+            case '1':
+                $dt = '13847__50';
+                break;
+            case '2':
+                $dt = '13847_50_100';
+                break;
+            case '3':
+                $dt = '13847_100_150';
+                break;
+            case '4':
+                $dt = '13847_150_200';
+                break;
+            default:
+                $dt = '';
+                break;
+        }
+        switch ($gia) {
+            case '1':
+                $gia = '834__800-trieu,';
+                break;
+            case '2':
+                $gia = '834_800-trieu_1,5-ty,';
+                break;
+            case '3':
+                $gia = '834_1,5-ty_2,5-ty,';
+                break;
+            case '4':
+                $gia = '834_2,5-ty_4-ty,';
+                break;
+            default:
+                $gia = '';
+                break;
+        }
+		$html = file_get_html('http://www.muabannhadat.vn/dat-ban-3515/tp-ho-chi-minh-'.$tagQuan.'?aral='.$gia.$dt , FILE_USE_INCLUDE_PATH);
+		$array = array();
+		$count = 5;
+		for($i=0; $i<$count; $i++) {
+			$links = array();
+			foreach($html->find('//*[@id="MainContent_ctlList_ctlResults_repList_ctl00_'.$i.'_divListingInformationTitle_'.$i.'"]/a') as $a) {
+				$html_sub = file_get_html('http://www.muabannhadat.vn'.$a->href, FILE_USE_INCLUDE_PATH);
+				$linkGet = 'http://www.muabannhadat.vn'.$a->href;
+				$links[] = str_replace('/dat-ban-dat-tho-cu-3532/','',$a->href);
+				// get tieu de
+				foreach($html_sub->find('//*[@id="ctl01"]/div[5]/div[2]/div/div/div/div[1]') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get dia chi
+				foreach($html_sub->find('//*[@id="ctl01"]/div[5]/div[3]/div/div/div[4]/div[1]/div[1]/div[1]') as $a) {
+					$vitri = explode('|', $a->plaintext);
+					$links[] = $vitri[2];
+					$links[] = $vitri[1].', '.$vitri[2].', '.$vitri[2];
+					break;
+				}
+				// get vi tri map
+				foreach($html_sub->find('//*[@id="MainContent_ctlDetailBox_lblMapLink"]/a') as $a) {
+					$links[] = str_replace('https://maps.google.com/?q=loc:', '', $a->href);
+					break;
+				}
+				// get dien tich
+				foreach($html_sub->find('//*[@id="ctl01"]/div[5]/div[3]/div/div/div[4]/div[1]/div[2]/div/div[2]/div[1]/table/tbody/tr[2]/td') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get gia tien
+				foreach($html_sub->find('//*[@id="MainContent_ctlDetailBox_lblPrice"]') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get mo ta
+				foreach($html_sub->find('//*[@id="Description"]') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get hinh
+				foreach($html_sub->find('.swipebox') as $a) {
+					$links[] = $a->href;
+					break;
+				}
+				foreach($html_sub->find('//*[@id="MainContent_ctlDetailBox_lblFengShuiDirection"]') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get huong 
+				$links[] = $linkGet;
+				if (count($links) >= 11) {
+					$array[$i] = $links;
+				}
+				else {
+					$count++;
+				}
+				// get hinh 
+			}
+		}
+		return $array;
+	}
+
+	public function getDatFromNhaDatNet($quan, $gia, $dt) {
+		if ($quan != 0) {
+			$timQuan = Quan::find($quan);
+			$tagQuan = $timQuan->Tag_nhadat;
+		}
+		else {
+			$tagQuan = 's59';
+		}
+		switch ($dt) {
+            case '1':
+                $dt = 'dien-tich:0-50';
+                break;
+            case '2':
+                $dt = 'dien-tich:50-100';
+                break;
+            case '3':
+                $dt = 'dien-tich:100-150';
+                break;
+            case '4':
+                $dt = 'dien-tich:150-200';
+                break;
+            default:
+                $dt = '';
+                break;
+        }
+        switch ($gia) {
+            case '1':
+                $gia = 'gia:0-800';
+                break;
+            case '2':
+                $gia = 'gia:800-1500';
+                break;
+            case '3':
+                $gia = 'gia:1500-2500';
+                break;
+            case '4':
+                $gia = 'gia:2500-4000';
+                break;
+            default:
+                $gia = '';
+                break;
+        }
+		$html = file_get_html('http://www.muabannhadat.vn/dat-ban-3515/tp-ho-chi-minh-'.$tagQuan.'?aral='.$gia.$dt , FILE_USE_INCLUDE_PATH);
+		$array = array();
+		$count = 5;
+		for($i=0; $i<$count; $i++) {
+			$links = array();
+			foreach($html->find('//*[@id="MainContent_ctlList_ctlResults_repList_ctl00_'.$i.'_divListingInformationTitle_'.$i.'"]/a') as $a) {
+				$html_sub = file_get_html('http://www.muabannhadat.vn'.$a->href, FILE_USE_INCLUDE_PATH);
+				$linkGet = 'http://www.muabannhadat.vn'.$a->href;
+				$links[] = str_replace('/dat-ban-dat-tho-cu-3532/','',$a->href);
+				// get tieu de
+				foreach($html_sub->find('//*[@id="ctl01"]/div[5]/div[2]/div/div/div/div[1]') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get dia chi
+				foreach($html_sub->find('//*[@id="ctl01"]/div[5]/div[3]/div/div/div[4]/div[1]/div[1]/div[1]') as $a) {
+					$vitri = explode('|', $a->plaintext);
+					$links[] = $vitri[2];
+					$links[] = $vitri[1].', '.$vitri[2].', '.$vitri[2];
+					break;
+				}
+				// get vi tri map
+				foreach($html_sub->find('//*[@id="MainContent_ctlDetailBox_lblMapLink"]/a') as $a) {
+					$links[] = str_replace('https://maps.google.com/?q=loc:', '', $a->href);
+					break;
+				}
+				// get dien tich
+				foreach($html_sub->find('//*[@id="ctl01"]/div[5]/div[3]/div/div/div[4]/div[1]/div[2]/div/div[2]/div[1]/table/tbody/tr[2]/td') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get gia tien
+				foreach($html_sub->find('//*[@id="MainContent_ctlDetailBox_lblPrice"]') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get mo ta
+				foreach($html_sub->find('//*[@id="Description"]') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get hinh
+				foreach($html_sub->find('.swipebox') as $a) {
+					$links[] = $a->href;
+					break;
+				}
+				foreach($html_sub->find('//*[@id="MainContent_ctlDetailBox_lblFengShuiDirection"]') as $a) {
+					$links[] = $a->plaintext;
+					break;
+				}
+				// get huong 
+				$links[] = $linkGet;
+				if (count($links) >= 11) {
+					$array[$i] = $links;
+				}
+				else {
+					$count++;
+				}
+				// get hinh 
+			}
+		}
+		return $array;
 	}
 }

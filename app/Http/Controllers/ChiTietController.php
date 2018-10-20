@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Dat;
 use App\PhongChoThue;
 use Illuminate\Http\Request;
+Use App\Http\Controllers\QL_DatController;
 class ChiTietController extends Controller
 {
     //
@@ -21,5 +22,14 @@ class ChiTietController extends Controller
         $t = new PhongChoThue();
         $top5 = $t->phongnoibat($id);
     	return view('chitiet_phong',['chitiet'=>$chitiet,'top'=>$top5]);
+    }
+    public function getViewFromOtherWeb($link, Request $request) {
+        $results = $request->session()->get('datFromOtherPage');
+        foreach ($results as $result) {
+            if ($result[0] === $link) {
+                return view('chitiet_web',['result'=>$result]);
+                break;
+            }
+        }
     }
 }

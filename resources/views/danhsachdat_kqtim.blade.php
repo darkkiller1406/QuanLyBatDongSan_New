@@ -49,6 +49,30 @@
 				</div>
 			<?php } ?>
 			@endforeach
+			@foreach ($resultFromWeb as $d)
+			<!-- Single Featured Property -->
+				<div class="col-12 col-md-6 col-xl-4">
+					<div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
+						<!-- Property Thumbnail -->
+
+						<div class="property-thumb">
+							<img src="<?php echo $d[8] ?>" alt="" style="height: 250px; width: 100%">
+							<div class="tag">
+								<span>Đang bán</span>
+							</div>
+							<div class="list-price">
+								<a href="chitietdat/<?php echo $d[0] ?>"><p><?php echo $d[6] ?></p></a>
+							</div>
+						</div>
+						<!-- Property Content -->
+						<div class="property-content">
+							<h5>Bán đất <?php echo $d[2] ?></h5>
+							<p class="location"><img src="img/icons/location.png" alt=""><?php echo $d[3] ?></p>
+							<p><b>Diện tích:</b> <?php echo $d[5] ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b></p>
+						</div>
+					</div>
+				</div>
+			@endforeach
 		</div>
 
 		<div class="row">

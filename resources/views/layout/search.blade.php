@@ -15,7 +15,7 @@
                             <div class="col-12 col-md-4 col-lg-3">
                                 <div class="form-group">
                                     <select class="form-control" id="quan" name="quan">
-                                        <option>Tất cả quận</option>
+                                        <option value="0">Tất cả quận</option>
                                         @foreach ($quan as $q)
                                         <option value="{{$q->id}}">{{$q->TenQuan}}</option>
                                         @endforeach 
@@ -28,9 +28,9 @@
                                     <select class="form-control" id="dt" name="dt">
                                         <option value="0">Diện tích</option>
                                         <option value="1">Dưới 50m2</option>
-                                        <option value="2">50 - 80m2</option>
-                                        <option value="3">80 - 120m2</option>
-                                        <option value="4">120 - 160m2</option>
+                                        <option value="2">50 - 100m2</option>
+                                        <option value="3">100 - 150m2</option>
+                                        <option value="4">150 - 200m2</option>
                                     </select>
                                 </div>
                             </div>

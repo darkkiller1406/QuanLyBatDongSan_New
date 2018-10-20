@@ -17,9 +17,11 @@ Route::get('/', function () {
 // page bán
 Route::get('trangchu','TrangChuController@getView_Ban')->name('view_trangchu');
 
-Route::get('chitiet/{id}','ChiTietController@getView')->name('view_chitiet');
+Route::get('chitiet/{id}','ChiTietController@getView');
 
-Route::get('chitietphong/{id}','ChiTietController@getViewRoom')->name('view_chitiet');
+Route::get('chitietphong/{id}','ChiTietController@getViewRoom');
+
+Route::get('chitietdat/{link}','ChiTietController@getViewFromOtherWeb');
 
 Route::get('chinhsuatindang/{id}','QL_ChoThueController@getChinhSua');
 

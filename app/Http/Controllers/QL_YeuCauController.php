@@ -49,7 +49,6 @@ class QL_YeuCauController extends Controller
         $yeucau->Email = $r->email;
         $yeucau->DienThoai = $r->dt;
         $yeucau->LoaiYeuCau = '1';
-        $yeucau->NoiDung = $r->yeucau;
         $yeucau->id_dat= $r->iddat;
         $yeucau->save();
         $dat = Dat::find($r->iddat);

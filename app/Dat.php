@@ -145,13 +145,13 @@ class Dat extends Model
                 $dt = 'DienTich<50';
                 break;
             case '2':
-                $dt = 'DienTich>=50 and DienTich<=80';
+                $dt = 'DienTich>=50 and DienTich<=100';
                 break;
             case '3':
-                $dt = 'DienTich>80 and DienTich<=120';
+                $dt = 'DienTich>100 and DienTich<=150';
                 break;
             case '4':
-                $dt = 'DienTich>120 and DienTich<=160';
+                $dt = 'DienTich>150 and DienTich<=200';
                 break;
             default:
                 $dt = 'DienTich>0';
@@ -195,9 +195,9 @@ class Dat extends Model
         $k  = DB::select('select * from dat where id = '.$id);
         foreach ($k as $m) {
             $a = $m->LuotXem;
+            $a++;
+            $kq = DB::update('update dat set LuotXem  = '.$a.' where id='.$id);
         }
-        $a++;
-        $kq = DB::update('update dat set LuotXem  = '.$a.' where id='.$id);
     }
     public function capnhat_trangthai($id)
     {
