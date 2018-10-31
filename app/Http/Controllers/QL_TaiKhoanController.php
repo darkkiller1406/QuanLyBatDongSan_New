@@ -111,7 +111,8 @@ class QL_TaiKhoanController extends Controller
             } else {
                 return '2';        
             }
-        } else {
+        } 
+        if(!empty($request->session()->get('tien'))) {
             $taikhoan = new TaiKhoan();
             $t = $taikhoan->updateTien($request->session()->get('id'), $request->session()->get('tien'));
             //
@@ -129,6 +130,10 @@ class QL_TaiKhoanController extends Controller
             $sobaidang = $sobaidang->demsobai(Auth::user()->id);
             return view('trangcanhan',['thongtin'=>$thongtin, 'sobaidang'=>$sobaidang, 'thongbao' => 'Nạp tiền thành công']);
         }
+        $thongtin = TaiKhoan::find(Auth::user()->id);
+        $sobaidang = new TaiKhoan();
+        $sobaidang = $sobaidang->demsobai(Auth::user()->id);
+        return view('trangcanhan',['thongtin'=>$thongtin, 'sobaidang'=>$sobaidang, 'thongbao' => 'Nạp tiền không thành công']);
     }
     public function trangcanhan()
     {

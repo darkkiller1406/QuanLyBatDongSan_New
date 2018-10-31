@@ -24,7 +24,7 @@
         <!-- properties -->
         <?php $a=0; ?>
         @foreach ($tindadang as $p)
-        <?php if($p->TrangThai == 1) { ?>
+        <?php if($p->TrangThai == 0) { ?>
           <div class="col-md-12 col-lg-12">
             <div class="contact-realtor-wrapper" style="margin-top: 30px;">
               <div class="realtor-info">
@@ -70,7 +70,7 @@
         <!-- properties -->
         <?php $a=0; ?>
         @foreach ($tindadang as $p)
-        <?php if($p->TrangThai == 2) { ?>
+        <?php if($p->TrangThai == 1) { ?>
           <div class="col-md-12 col-lg-12">
             <div class="contact-realtor-wrapper" style="margin-top: 30px;">
               <div class="realtor-info">

@@ -11,6 +11,7 @@ use App\KhachHang;
 use App\TaiKhoan;
 use App\DuAn;
 use App\Dat;
+use App\Dat_Web;
 use App\HopDong;
 use App\Quan;
 use App\ThanhPho;
@@ -30,6 +31,7 @@ class Controller extends BaseController
     	$khachhang = KhachHang::all();
         $taikhoan = TaiKhoan::all();
         $dat = Dat::all();
+        $dat_web = Dat_Web::all();
         $hopdong = HopDong::all();
         $quan = Quan::all();
         $thanhpho = ThanhPho::all();
@@ -43,6 +45,7 @@ class Controller extends BaseController
     	view()->share('khachhang',$khachhang);
         view()->share('taikhoan',$taikhoan);
         view()->share('dat',$dat);
+        view()->share('dat_web',$dat_web);
         view()->share('thanhpho',$thanhpho);
         view()->share('quan',$quan);
         view()->share('hopdong',$hopdong);
@@ -58,5 +61,7 @@ class Controller extends BaseController
     {
         $capnhat = new PhongChoThue();
         $capnhat->capnhat();
+        $delete_dat_web = new Dat_Web();
+        $delete_dat_web->deleteAfer();
     }
 }

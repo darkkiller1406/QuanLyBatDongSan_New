@@ -11,11 +11,20 @@ class QL_TinDangController extends Controller
     {
     	return view('page.quanlytindang');
     }
-    public function getXoa($id)
+    public function getXoa(Request $r)
     {
-    	$hd = PhongChoThue::find($id);
-        $hd -> delete();
-        return redirect('page/quanlytindang')->with('thongbao','Bạn đã xóa thành công!');
+        $this->validate($r, [
+            'lydo' => 'required',
+        ], [
+            'lydo.required' => 'Bạn cần nhập lý do để xóa tin đăng',
+        ]);
+        $id = $r->id;
+        $lydo = $r->lydo;
+    	$tindang = PhongChoThue::find($id);
+        $tindang->TrangThai = '3';
+        $tindang->LyDoXoa = $lydo;
+        $tindang->save();
+        return "redirect('page/quanlytindang')->with('thongbao','Bạn đã xóa thành công!')";
     }
     public function timTD(Request $r)
     {
@@ -27,10 +36,21 @@ class QL_TinDangController extends Controller
     {
         return view('page.quanlytindang_xacnhan');
     }
+    public function getView_DaXoa()
+    {
+        return view('page.quanlytindang_daxoa');
+    }
     public function getXacNhan($id)
     {
-        $xacnhan = new PhongChoThue();
-        $xacnhan -> xacnhan($id);
+        $tindang = PhongChoThue::find($id);
+        $date = date('d');
+        $datestart = substr($tindang->ngaybatdau,8);
+        if($date == $datestart) {
+            $tindang->TrangThai = '1';
+        } else {
+            $tindang->TrangThai = '2';
+        }
+        $tindang->save();
         return redirect('page/xacnhantindang')->with('thongbao','Bạn đã xác nhận tin đăng, tin đăng sẽ được đăng trên hệ thống!');
     }
 }

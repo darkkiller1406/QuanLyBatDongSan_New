@@ -1,7 +1,6 @@
 @section('title','Trang chủ')
 @extends('layout.master_ban')
 @section('content')
-
 <!-- ##### Hero Area Start ##### -->
 <section class="hero-area">
     <div class="hero-slides owl-carousel">
@@ -78,8 +77,9 @@
                     </div>
                     <!-- Property Content -->
                     <div class="property-content">
-                        <h5>Đất quận {{$d->quan->TenQuan}}</h5>
-                        <p class="location"><img src="img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->quan->TenQuan}}</p>
+                        <?php $tenQuan = $d->TenQuan($d->Phuong) ?>
+                        <h5>Đất quận {{$tenQuan}}</h5>
+                        <p class="location"><img src="img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->phuong->TenPhuong}}, {{$tenQuan}}</p>
                         <p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}</p>
                     </div>
                 </div>
@@ -138,18 +138,7 @@
                         <div class="property-content">
                             <h6 style="font-size: 14px; text-align: center;">{{$d->TieuDe}}</h6>
                             <p class="location"><img src="img/icons/location.png" alt="" style="margin-top: -10px;">
-                                @foreach ($quan as $q)
-                                <?php if ($q->id == $d->phuong->ThuocQuan) {
-                                    echo $q->TenQuan.', ';
-                                    $tam = $q->ThuocThanhPho;
-                                } ?>
-                                @endforeach
-                                @foreach ($thanhpho as $tp)
-                                <?php
-                                if($tp->id == $tam) {
-                                    echo $tp->TenThanhPho;
-                                } ?>
-                            @endforeach</p>
+                            {{$d->TenQuan($d->Phuong)}}, {{$d->TenThanhPho($d->Phuong)}}</p>
                             <p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;
                                 <b>Ngày đăng:</b><?php $date = $d->created_at; ?> {{$date->format('d/m/Y')}}
                             </p>

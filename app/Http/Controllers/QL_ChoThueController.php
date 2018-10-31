@@ -58,7 +58,7 @@ class QL_ChoThueController extends Controller
         $lichsu = new LichSuGiaoDich();
         $lichsu->TienGiaoDich =  $r->tongtien;
         $lichsu->LoaiGiaoDich = '1';
-        $lichsu->GiaoDich = 'Thực hiện đăng tin mới';
+        $lichsu->GiaoDich = 'Đăng tin mới';
         $lichsu->NguoiThucHien = Auth::user()->id;
         $lichsu->save();
         //
@@ -71,13 +71,13 @@ class QL_ChoThueController extends Controller
             $tongtien = ($r->tongtien);
             $tongngay = $r->tongngay;
             $p->NgayKetThuc = date("Y-m-d H:i:s", strtotime($date . "+".$tongngay." day"));
-            $p->TrangThai = '1';
+            $p->TrangThai = '0';
         }
         else
         {
             $p->NgayBatDau = $r->ngaybatdau;
             $p->NgayKetThuc = $r->ngayketthuc;
-            $p->TrangThai = '2';
+            $p->TrangThai = '0';
         }
         //
         $p->TieuDe = $r->tieude;
@@ -139,7 +139,7 @@ class QL_ChoThueController extends Controller
             $lichsu = new LichSuGiaoDich();
             $lichsu->TienGiaoDich =  $r->tienthaydoi;
             $lichsu->LoaiGiaoDich = '1';
-            $lichsu->GiaoDich = 'Thực hiện thay đổi loại tin';
+            $lichsu->GiaoDich = 'Thay đổi loại tin';
             $lichsu->NguoiThucHien = Auth::user()->id;
             $lichsu->save();
             //
@@ -157,7 +157,7 @@ class QL_ChoThueController extends Controller
             $lichsu = new LichSuGiaoDich();
             $lichsu->TienGiaoDich =  $r->tongtien;
             $lichsu->LoaiGiaoDich = '1';
-            $lichsu->GiaoDich = 'Thực hiện gia hạn ngày đăng' ;
+            $lichsu->GiaoDich = 'Gia hạn ngày đăng' ;
             $lichsu->NguoiThucHien = Auth::user()->id;
             $lichsu->save();
             //
@@ -211,7 +211,7 @@ class QL_ChoThueController extends Controller
     	$dt = $r->dt;
         $gia = $r->gia;
         $phuong = $r->phuong;
-        $tp = $r->tp;
+        $tp = 1;
         $quan = $r->quan;
         $loaichothue = $r->loaichothue;
         $a = new PhongChoThue();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\YeuCau;
+use App\Dat_Web;
 use Illuminate\Http\Request;
 use App\Dat;
 use Illuminate\Routing\Redirector;
@@ -13,6 +14,10 @@ class QL_YeuCauController extends Controller
     public function getView()
     {
     	return view('page.quanlyyeucau');
+    }
+    public function getViewWeb()
+    {
+        return view('page.quanlyyeucau_web');
     }
     public function getXoa($id)
     {
@@ -27,6 +32,15 @@ class QL_YeuCauController extends Controller
         $hd = YeuCau::find($id);
         $hd -> delete();
         return redirect('page/quanlyyeucau')->with('thongbao','Bạn đã xóa 1 yêu cầu liên lạc!');
+    }
+    public function getXoaWeb($id)
+    {
+        $hd = Dat_Web::find($id);
+        $dat_web->TrangThai = 0;
+        $dat_web->TenKhach = null;
+        $dat_web->DienThoai = null;
+        $dat_web->Email = null;
+        return redirect('page/quanlyyeucauweb')->with('thongbao','Bạn đã xóa thành công!');
     }
     public function ThemYeuCau(Request $r)
     {
@@ -50,12 +64,27 @@ class QL_YeuCauController extends Controller
         $yeucau->DienThoai = $r->dt;
         $yeucau->LoaiYeuCau = '1';
         $yeucau->id_dat= $r->iddat;
+        $yeucau->NoiDung = $r->noidung;
         $yeucau->save();
         $dat = Dat::find($r->iddat);
         $dat->TrangThai = '1';
         $dat->save();
          return redirect('chitiet/'.$r->iddat)->with('thongbao','Gửi yêu cầu thành công !');
     }
+
+    public function ThemYeuCau_Web(Request $r)
+    {
+        $Dat_Web = new Dat_Web();
+        $id = $Dat_Web->findIdByLink($r->iddat);
+        $yeucau = Dat_Web::find($id);
+        $yeucau->TenKhach = $r->ten;
+        $yeucau->Email = $r->email;
+        $yeucau->DienThoai = $r->dt;
+        $yeucau->TrangThai = '1';
+        $yeucau->save();
+         return redirect('chitietdat/'.str_replace('http://www.muabannhadat.vn/dat-ban-dat-tho-cu-3532/','',$r->iddat))->with('thongbao','Gửi yêu cầu thành công !');
+    }
+
     public function ThemYeuCauLL(Request $r)
     {
         $yeucau = new YeuCau();

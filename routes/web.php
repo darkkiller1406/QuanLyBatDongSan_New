@@ -29,6 +29,8 @@ Route::get('danhsachdat','QL_DatController@getView_DSDat')->name('view_dsDat');
 
 Route::get('danhsachphong_map','QL_ChoThueController@getView_DSPhongMap')->name('view_dsPhong_map');
 
+Route::get('danhsachdat_map','QL_DatController@getView_DSDatMap')->name('view_dsDat_map');
+
 Route::get('lienlac','TrangChuController@getView_lienlac')->name('view_lienlac');
 
 Route::get('vechungtoi','TrangChuController@getView_vechungtoi')->name('view_vechungtoi');
@@ -36,6 +38,8 @@ Route::get('vechungtoi','TrangChuController@getView_vechungtoi')->name('view_vec
 Route::any('timdat_ban', 'QL_DatController@timDat_ban')->name('timDat_ban');
 
 Route::post('guiyeucau', 'QL_YeuCauController@ThemYeuCau')->name('ThemYeuCau');
+
+Route::post('guiyeucau_web', 'QL_YeuCauController@ThemYeuCau_Web')->name('ThemYeuCau_Web');
 
 Route::post('guiyeucaull', 'QL_YeuCauController@ThemYeuCauLL')->name('ThemYeuCauLL');
 
@@ -102,6 +106,7 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::get('xoadat/{id}','QL_DatController@getXoa');
     Route::any('timdat', 'QL_DatController@getTim');
     Route::any('locdat' , 'QL_DatController@getLoc')->name('post_Loc');
+     Route::any('doitrangthaichucnang','QL_DatController@batTatChucNang');
     //quản lý hợp đồng
     Route::get('quanlyhopdong','QL_HopDongController@getView')->name('view_QLHD');
     Route::post('themhd','QL_HopDongController@postThem')->name('post_ThemHD');
@@ -111,13 +116,16 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::get('quanlyyeucau','QL_YeuCauController@getView')->name('view_QLYC');
     Route::get('xoayc/{id}','QL_YeuCauController@getXoa');
     Route::get('xoaycll/{id}','QL_YeuCauController@getXoaLL');
+    Route::get('xoaycweb/{id}','QL_YeuCauController@getXoaWeb');
     Route::any('timyeucau', 'QL_YeuCauController@timYC')->name('TKYC');
     Route::any('guimail','QL_YeuCauController@guiMail');
-    // Quan ly tin dang thue phong
+    Route::get('quanlyyeucauweb','QL_YeuCauController@getViewWeb')->name('view_QLYCW');
+    // Quan ly tin dang thue phong 
     Route::get('quanlytindang','QL_TinDangController@getView')->name('view_QLTD');
     Route::get('xacnhantindang','QL_TinDangController@getView_XacNhan')->name('view_QLXNTD');
+    Route::get('tindaxoa','QL_TinDangController@getView_DaXoa')->name('view_QLTDX');
     Route::any('timtindang', 'QL_TinDangController@timTD')->name('TKTD');
-    Route::get('xoatd/{id}','QL_TinDangController@getXoa');
+    Route::post('xoatd','QL_TinDangController@getXoa');
     Route::get('xacnhan/{id}','QL_TinDangController@getXacNhan');
     //
     Route::any('thongkedoanhthu','ThongKeController@getThongKeDoanhThu')->name('TKDT');
@@ -126,4 +134,6 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     //
     Route::any('pdfgiaodich','PDFController@pdf_giaodich')->name('inGD');
     Route::any('pdfdoanhthu','PDFController@pdf_doanhthu')->name('inDT');
+    //
+
  });

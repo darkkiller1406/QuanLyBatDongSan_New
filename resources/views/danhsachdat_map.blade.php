@@ -7,7 +7,7 @@
             <div class="row h-100 align-items-center">
                 <div class="col-12">
                     <div class="breadcumb-content">
-                        <h3 class="breadcumb-title">DANH SÁCH PHÒNG</h3>
+                        <h3 class="breadcumb-title">DANH SÁCH ĐẤT</h3>
                     </div>
                 </div>
             </div>
@@ -45,14 +45,13 @@
             /* Get latlng list phòng trọ */
             <?php
             $arrmergeLatln = array();
-            foreach ($phong as $room) {
-                if ($room->LoaiTin == 1) {
-                    $arrlatlng = explode(';', $room->Map);
-                    $slug = $room->id;
-                    //$arrlatlng = json_decode($room->Map,true);
-                    $arrImg = explode(';', $room->HinhAnh);
-                    $arrmergeLatln[] = ["slug" => $slug, "lat" => $arrlatlng[0], "lng" => $arrlatlng[1], "title" => $room->TieuDe, "address" => $room->DiaChi, "image" => $arrImg[0], "phone" => $room->DienThoaiLienLac, "owner" => $room->TenLienHe];
-                }
+            foreach ($dat as $room) {
+                $arrlatlng = explode(';', $room->Map);
+                $slug = $room->id;
+                //$arrlatlng = json_decode($room->Map,true);
+                $arrImg = explode(';', $room->HinhAnh);
+                $arrmergeLatln[] = ["slug" => $slug, "lat" => $arrlatlng[0], "lng" => $arrlatlng[1], "title" => 'Đất bán', "address" => $room->phuong->TenPhuong . ', ' . $room->TenQuan($room->Phuong), "image" => $arrImg[0], "phone" => '0569885811'];
+
             }
 
             $js_array = json_encode($arrmergeLatln);
@@ -74,10 +73,10 @@
                 var infowindow = new google.maps.InfoWindow();
                 (function (phongtro, data) {
                     var content = '<div id="iw-container">' +
-                        '<img height="200px" width="300" src="img/ThuePhong/' + data.image + '">' +
-                        '<a href="chitietphong/' + data.slug + '"><div class="iw-title">' + data.title + '</div></a>' +
-                        '<p><i class="fas fa-map-marker" style="color:#003352"></i> ' + data.address + '<br>Tên liên lạc: ' + data.owner + '<br>' +
-                        'SĐT: ' + data.phone + '</div>';
+                        '<img height="200px" width="300" src="img/' + data.image + '">' +
+                        '<a href="chitiet/' + data.slug + '"><div class="iw-title">' + data.title + '</div></a>' +
+                        '<p><i class="fas fa-map-marker" style="color:#003352"></i> ' + data.address +
+                        '<br>SĐT: ' + data.phone + '</div>';
 
                     google.maps.event.addListener(phongtro, "click", function (e) {
 

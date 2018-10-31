@@ -31,7 +31,7 @@ class QL_DangNhapConTroller extends Controller
         	{
                 if(Auth::user()->Quyen==1)
                 {
-                    return redirect('page/quanlyyeucau');
+                    return redirect('page/index');
                 }
         		else
                 {
@@ -76,11 +76,9 @@ class QL_DangNhapConTroller extends Controller
     }
     public function getDX()
     {
-        if(Auth::user()->Quyen==2)
-                {
-                    Auth::logout();
-                    return back();
-                }
+        Auth::logout();
+        return back();
+
     }
     public function postDK(Request $request)
     {

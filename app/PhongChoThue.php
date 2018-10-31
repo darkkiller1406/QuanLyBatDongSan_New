@@ -24,6 +24,20 @@ class PhongChoThue extends Model
     {
         return $this->belongsTo('App\LoaiChoThue','LoaiChoThue','id');
     }
+    public function tenQuan($idPhuong)
+    {
+        $k = DB::select("SELECT TenQuan FROM phuong, quan where quan.id = phuong.ThuocQuan and phuong.id = '$idPhuong'");
+        foreach ($k as $key) {
+            return $key->TenQuan;
+        }
+    }
+    public function tenThanhPho($idPhuong)
+    {
+        $k = DB::select("SELECT TenThanhPho FROM phuong, quan, thanhpho where quan.ThuocThanhPho = thanhpho.id and quan.id = phuong.ThuocQuan and phuong.id = '$idPhuong'");
+        foreach ($k as $key) {
+            return $key->TenThanhPho;
+        }
+    }
     public function phongnoibat()
     {
     		$k = DB::select("SELECT *, phongthue.id as idphong FROM phongthue,quan,thanhpho,phuong WHERE phongthue.Phuong = phuong.id and phuong.ThuocQuan = quan.id and quan.ThuocThanhPho = thanhpho.id and phongthue.loaitin = 1
@@ -95,11 +109,11 @@ class PhongChoThue extends Model
         }elseif ($phuong == 0)
         {
             $k = DB::select('select *, PhongThue.id as idphong, PhongThue.created_at as ngaydang from PhongThue,ThanhPho,Quan,Phuong,LoaiChoThue where '.$dt.' and '.$gia.' and PhongThue.phuong = Phuong.id and Phuong.ThuocQuan = Quan.id and Quan.ThuocThanhPho = ThanhPho.id and Phuong.ThuocQuan ='.$quan.' and PhongThue.LoaiChoThue = '.$loai.' and PhongThue.loaichothue = LoaiChoThue.id');
-            return $k;
+            return 0;
         }
         else
         {
-            $k = DB::select('select *, PhongThue.id as idphong, PhongThue.created_at as ngaydang from PhongThue,ThanhPho,Quan,Phuong,LoaiChoThue where '.$dt.' and '.$gia.' and PhongThue.phuong = Phuong.id and Phuong.ThuocQuan = Quan.id and Quan.ThuocThanhPho = ThanhPho.id and PhongThue.Phuong='.$phuong.' and PhongThue.LoaiChoThue = '.$loai.' and PhongThue.loaichothue = LoaiChoThue.id');
+            $k = DB::select('select *, PhongThue.id as idphong, PhongThue.created_at as ngaydang from PhongThue,ThanhPho,Quan,Phuong,LoaiChoThue where '.$dt.' and '.$gia.' and PhongThue.phuong = Phuong.id and Phuong.ThuocQuan = Quan.id and Quan.ThuocThanhPho = ThanhPho.id and PhongThue.phuong='.$phuong.' and PhongThue.LoaiChoThue = '.$loai.' and PhongThue.loaichothue = LoaiChoThue.id');
             return $k;
         }
     }
@@ -117,17 +131,8 @@ class PhongChoThue extends Model
     }
     public function capnhat()
     {
-        $k1 = DB::select('SELECT * FROM `phongthue` WHERE NOW() > NgayBatDau and TrangThai >0');
-        foreach ($k1 as $a ) {
-            DB::update('UPDATE `phongthue` SET `TrangThai` = 1 WHERE id ='.$a->id);
-        }
-        $k2 = DB::select('SELECT * FROM `phongthue` WHERE NOW() > NgayKetThuc and TrangThai >0');
-        foreach ($k2 as $a ) {
-            DB::update('UPDATE `phongthue` SET `TrangThai` = 2 WHERE id ='.$a->id);
-        }
-    }
-    public function xacnhan($id)
-    {
-        DB::update('UPDATE `phongthue` SET `TrangThai` = 1 WHERE id ='.$id);
+        DB::update('UPDATE `phongthue` SET `TrangThai` = 1 WHERE NOW() > NgayBatDau and TrangThai >0 and TrangThai <3');
+        DB::update('UPDATE `phongthue` SET `TrangThai` = 2 WHERE NOW() > NgayKetThuc and TrangThai >0 and TrangThai <3');
+        DB::delete('DELETE FROM `phongthue` WHERE DATEDIFF(NOW(), updated_at) > 7 and TrangThai = 3');
     }
 }

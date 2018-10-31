@@ -97,24 +97,13 @@
      </tr>
    </thead>
    <tbody>
-    <?php $i=0;$idtam; $tentam ?>
-    @foreach($dat_loc as $d)
-    <!--  -->
-    @foreach ($thanhpho as $tp)
-    <?php
-    if($tp->id == $d->ThuocThanhPho){
-     $idtam = $tp->id;
-     $tentam = $tp->TenThanhPho;
-   }
-   ?>
-   @endforeach
-   <!--  -->
+  @foreach($dat_loc as $d)
    <tr>
      <td>{{++$i}}</td>
      <td>{{$d->KyHieuLoDat}}</td>
      <td>{{number_format($d->DonGia)}} VND/m2</td>
      <td>{{number_format($d->Gia)}} VND</td>
-     <td>{{$d->DiaChi}},{{$d->TenQuan}},{{$tentam}}</td>
+     <td>{{$d->diaChi}}, {{$d->TenPhuong}}, {{$d->TenQuan}}, {{$d->TenThanhPho}}</td>
      <td><?php 
      if ($d->TrangThai == 0){echo 'Hiện có';}
      if ($d->TrangThai == 1){echo 'Đang giao dịch';}
@@ -125,6 +114,7 @@
       <button class="btn btn-success btn-xs" 
       data-iddat="{{$d->id}}"
       data-mald="{{$d->KyHieuLoDat}}"
+      data-map = "{{$d->Map}}"
       data-dongia="{{number_format($d->DonGia)}}"
       data-gia = "{{number_format($d->Gia)}}"
       data-rong="{{$d->Rong}}"
@@ -137,7 +127,7 @@
       data-trangthai="{{$d->TrangThai}}"
       data-ghichu="{{$d->GhiChu}}"
       data-luotxem="{{$d->LuotXem}}"
-      data-vitri="{{$d->DiaChi}},{{$d->TenQuan}},{{$tentam}}"
+      data-vitri="{{$d->diaChi}},{{$d->TenPhuong}},{{$d->TenQuan}},{{$d->TenThanhPho}}"
       data-ngaytao='
       <?php $date=date_create($d->created_at);
       echo date_format($date,"d/m/Y H:i:s") ?>'
@@ -161,9 +151,10 @@
         data-trangthai="{{$d->TrangThai}}"
         data-ghichu="{{$d->GhiChu}}"
         data-luotxem="{{$d->LuotXem}}"
-        data-diachi="{{$d->DiaChi}}"
-        data-quan="{{$d->Quan}}"
-        data-thanhpho="{{$idtam}}"
+        data-diachi="{{$d->diaChi}}"
+        data-quan="{{$d->idQuan}}"
+        data-phuong="{{$d->Phuong}}"
+        data-thanhpho="{{$d->idThanhPho}}"
         data-ngaytao='
         <?php $date=date_create($d->created_at);
         echo date_format($date,"d/m/Y H:i:s") ?>'
@@ -299,6 +290,7 @@
           <div class="form-panel">
             <form id="upload" class="form-horizontal style-form" method="post" action="{{route('post_ThemDAT')}}" enctype="multipart/form-data">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="map" id="map-add" value="">
               <input type="hidden" name="idnguoitao" value="{{ Auth::user()->id }}">
               <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">Ký hiệu lô đất</label>
@@ -309,15 +301,25 @@
               <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">Địa chỉ</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" name='diachi' required>
+                  <input type="text" class="form-control" name='diachi' id="diachi-add" required>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">Quận</label>
                 <div class="col-sm-10">
-                  <select class="form-control" name="quan">
+                  <select class="form-control" name="quan" id="quan-add">
                     @foreach ($quan as $l)
                     <option value="{{$l->id}}">{{$l->TenQuan}}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 col-sm-2 control-label">Phường</label>
+                <div class="col-sm-10">
+                  <select class="form-control" name="phuong" id="phuong-add">
+                    @foreach ($phuong as $p)
+                    <option value="{{$p->id}}">{{$p->TenPhuong}}</option>
                     @endforeach
                   </select>
                 </div>
@@ -425,6 +427,7 @@
             <form class="form-horizontal style-form" method="post" action="{{route('post_SuaDAT')}}" enctype="multipart/form-data">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
               <input type="hidden" name="idnguoitao" value="{{ Auth::user()->id }}">
+              <input type="hidden" name="map" id="map-edit" value="">
               <input type="hidden" name="iddat" id="iddat">
               <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">Ký hiệu lô đất</label>
@@ -435,15 +438,25 @@
               <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">Địa chỉ</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" name='diachi' id="diachi" required>
+                  <input type="text" class="form-control" name='diachi' id="diachi-edit" required>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">Quận</label>
                 <div class="col-sm-10">
-                  <select class="form-control" name="quan" id="quan">
+                  <select class="form-control" name="quan" id="quan-edit">
                     @foreach ($quan as $l)
                     <option value="{{$l->id}}">{{$l->TenQuan}}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 col-sm-2 control-label">Phường</label>
+                <div class="col-sm-10">
+                  <select class="form-control" name="phuong" id="phuong-edit">
+                    @foreach ($phuong as $p)
+                    <option value="{{$p->id}}">{{$p->TenPhuong}}</option>
                     @endforeach
                   </select>
                 </div>
@@ -540,38 +553,42 @@
 <!-- js placed at the end of the document so the pages load faster -->
 <script src="{{asset('js/common-scripts.js')}}"></script>
 <script type="text/javascript">
-  function initMap(vitri) {
+
+  function initMap(Lat,Lng) {
     var mapCanvas = document.getElementById("map");
-    var myCenter = new google.maps.LatLng(10.769444,106.681944); 
+    var myCenter = new google.maps.LatLng(Lat, Lng); 
     var mapOptions = {center: myCenter, zoom: 15};
-    var map = new google.maps.Map(mapCanvas,mapOptions);
+    var map = new google.maps.Map(mapCanvas, mapOptions);
     var marker = new google.maps.Marker({
+      map: map,
       position: myCenter,
-      animation: google.maps.Animation.BOUNCE,
-      mapTypeId: google.maps.MapTypeId.HYBRID
+      icon: "../img/gps.png",
+      animation: google.maps.Animation.BOUNCE
     });
-
-    var geocoder = new google.maps.Geocoder();
-    geocodeAddress(geocoder,map,vitri);
-
   }
-  function geocodeAddress(geocoder, resultsMap,vitri) {
-    var address = vitri;
-    geocoder.geocode({'address': address}, function(results, status) {
+  function geocodeAddress(geocoder, vitri) {
+    geocoder.geocode({'address': vitri}, function(results, status) {
       if (status === 'OK') {
-        resultsMap.setCenter(results[0].geometry.location);
-        var marker = new google.maps.Marker({
-          map: resultsMap,
-          position: results[0].geometry.location
-        });
-      } else {
-        alert('Geocode was not successful for the following reason: ' + address);
+         var result = (results[0].geometry.location.lat() + ';' + results[0].geometry.location.lng())
+         $( "#map-add" ).val(result);
+         $( "#map-edit" ).val(result);
+         console.log($( "#map-add" ).val())
+         console.log($( "#map-edit" ).val())
       }
-    });   
+    });
   }
+  $( "#diachi-add" ).keyup(function() {
+    var vitri = $( "#diachi-add" ).val();
+    var geocoder = new google.maps.Geocoder();
+    geocodeAddress(geocoder, vitri);
+  });
+  $( "#diachi-edit" ).keyup(function() {
+    var vitri = $( "#diachi-edit" ).val();
+    var geocoder = new google.maps.Geocoder();
+    geocodeAddress(geocoder, vitri);
+  });
       // chi tiết
       $('#chitiet').on('show.bs.modal', function (event) {
-        console.log('open');
         for(var i = 0; i < 3; i++)
         {
           document.getElementById("hinh"+i).src = "";
@@ -593,6 +610,8 @@
         var updated_at = button.data('ngaycapnhat')
         var hinhanh = button.data('hinh')
         var gia = button.data('gia')
+        var map = button.data('map')
+        map = map.split(";");
         var splitted = hinhanh.split(";");
         var modal = $(this)
         for(var i = 0; i < (splitted.length-1); i++)
@@ -626,11 +645,10 @@
         modal.find('.modal-body #ghichu').html(ghichu);
         modal.find('.modal-body #created_at').html(created_at);
         modal.find('.modal-body #updated_at').html(updated_at);
-        initMap(vitri);
+        initMap(map[0],map[1]);
       })
         // sua
-        $('#sua').on('show.bs.modal', function (event) {
-          console.log('opensua');
+      $('#sua').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var iddat = button.data('iddat') // Extract info from data-* attributes
         var mald = button.data('mald')
@@ -646,11 +664,13 @@
         var trangthai = button.data('trangthai')
         var diachi = button.data('diachi')
         var quan = button.data('quan')
+        var phuong = button.data('phuong')
         var thanhpho = button.data('thanhpho')
         var luotxem = button.data('luotxem')
         var created_at = button.data('ngaytao')
         var updated_at = button.data('ngaycapnhat')
         var hinhanh = button.data('hinh')
+        var map = button.data('map')
         var gia = button.data('gia')
         var modal = $(this)
         modal.find('.modal-body #iddat').val(iddat);
@@ -661,12 +681,14 @@
         modal.find('.modal-body #dai').val(dai);
         modal.find('.modal-body #nohau').val(nohau);
         modal.find('.modal-body #huong').val(huong);
-        modal.find('.modal-body #diachi').val(diachi);
-        modal.find('.modal-body #quan').val(quan);
+        modal.find('.modal-body #diachi-edit').val(diachi);
+        modal.find('.modal-body #quan-edit').val(quan);
+        modal.find('.modal-body #phuong-edit').val(phuong);
         modal.find('.modal-body #thanhpho').val(tp);
         modal.find('.modal-body #ghichu').val(ghichu);
         modal.find('.modal-body #created_at').val(created_at);
         modal.find('.modal-body #updated_at').val(updated_at);
+        modal.find('.modal-body #map').val(map);
       })
         /// ajax
         $.ajaxSetup({
@@ -682,7 +704,42 @@
             location.href='xoadat/'+id;
           }
         }
+
         $(document).ready(function(){
+          $('#quan-add').on('change',function(){
+            if(quan){
+              $.ajax({
+                type:'get',
+                url:'{{ url("timphuong") }}',
+                data:{quan:$(this).val()},
+                async: true,
+                success:function(html){
+                  html = html.slice(110)
+                  console.log(html)
+                  $('#phuong-add').html(html);
+                }
+              }); 
+            }else{
+              $('#phuong-add').html('<option value="0">Chọn quận</option>');
+            }
+          });
+          $('#quan-edit').on('change',function(){
+            if(quan){
+              $.ajax({
+                type:'get',
+                url:'{{ url("timphuong") }}',
+                data:{quan:$(this).val()},
+                async: true,
+                success:function(html){
+                  html = html.slice(110)
+                  console.log(html)
+                  $('#phuong-edit').html(html);
+                }
+              }); 
+            }else{
+              $('#phuong-edit').html('<option value="0">Chọn quận</option>');
+            }
+          });
          $('#dongia').on('change',function(){
           if($('#dongia').val() <= 0)
           {

@@ -10,12 +10,21 @@ class Quan extends Model
     protected $table = 'Quan';
     public function timquan($id)
     {
-    	$k = DB::select('select * from quan where ThuocThanhPho = '.$id);
-    	$string = '<option value="0">Chọn Quận/Huyện</option>';
-    	foreach ($k as $q) 
-    	{
-    		$string .= '<option value="'.$q->id.'">'.$q->TenQuan.'</option>';
-    	}
+        if($id != 0) {
+            $k = DB::select('select * from quan where ThuocThanhPho = '.$id);
+            $string = '<select class="form-control" name="quan" id="quan"> 
+            <option value="0">Tất cả quận</option>';
+            foreach ($k as $q) 
+            {
+                $string .= '<option value="'.$q->id.'">'.$q->TenQuan.'</option>';
+            }
+            $string .= '</select>';
+        } else {
+            $string = '<select class="form-control" name="quan" id="quan"> 
+            <option value="0">Tất cả quận</option>
+            </select>';
+        }
+    	
     	return $string;
     }
 }

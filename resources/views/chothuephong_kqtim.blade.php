@@ -30,8 +30,7 @@
 					<div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
 						<!-- Property Thumbnail -->
 						<div class="property-thumb">
-							<?php $array =  (explode(';', $p->HinhAnh)); $hinh = $array[0]; ?>
-							<img src="<?php echo asset('img/ThuePhong/'.$hinh) ?>" alt="" style="height: 250px; width: 100%">
+							<img src="<?php echo asset('img/ThuePhong/'.srcImg($p->HinhAnh)) ?>" alt="" style="height: 250px; width: 100%">
 							<div class="tag">
 								<span>VIP 1</span>
 							</div>
@@ -41,7 +40,7 @@
 						</div>
 						<!-- Property Content -->
 						<div class="property-content">
-							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->id}}">{{$p->TieuDe}}</a></h6>
+							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->idphong}}">{{$p->TieuDe}}</a></h6>
 							<p class="location"><img src="img/icons/location.png" alt="">
 								{{$p->TenQuan}}, {{$p->TenThanhPho}}
 							</p>
@@ -71,7 +70,7 @@
 						</div>
 						<!-- Property Content -->
 						<div class="property-content">
-							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->id}}">{{$p->TieuDe}}</a></h6>
+							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->idphong}}">{{$p->TieuDe}}</a></h6>
 							<p class="location"><img src="img/icons/location.png" alt="">
 								{{$p->TenQuan}}, {{$p->TenThanhPho}}
 							</p>
@@ -101,7 +100,7 @@
 						</div>
 						<!-- Property Content -->
 						<div class="property-content">
-							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->id}}">{{$p->TieuDe}}</a></h6>
+							<h6 style="font-size: 14px; text-align: center;"><a href="chitietphong/{{$p->idphong}}">{{$p->TieuDe}}</a></h6>
 							<p class="location"><img src="img/icons/location.png" alt="">
 								{{$p->TenQuan}}, {{$p->TenThanhPho}}
 							</p>
@@ -147,6 +146,15 @@ function _substr($str, $length, $minword = 3)
 		}
 	}
 	return $sub . (($len < strlen($str)) ? '...' : '');
+}
+function srcImg($array) {
+	if(!empty($array)){
+		$hinh =  (explode(';', $array)); 
+		$hinh = $hinh[0];
+		return $hinh;
+	} else {
+		return 'default.jpg';
+	}
 }
 ?>
 @endsection

@@ -1,9 +1,9 @@
-@section('title','Quản lý tin đăng')
+@section('title','Xem tin đã xoá')
 @extends('layout.master')
 @section('content')
 <section id="main-content">
   <section class="wrapper">
-    <h3>QUẢN LÝ TIN ĐĂNG</h3>
+    <h3>XEM TIN ĐÃ XÓA</h3>
 
     <div class="row mt">
       <div class="col-md-12">
@@ -26,89 +26,7 @@
             {{ session('canhbao') }}
           </div>
           @endif
-          <form method="post" action="{{route('TKTD')}}">
-            {{csrf_field()}}
-            <div class="form-group">
-              <div class="col-md-3 col-sm-1 control-label"></div>
-              <div class="col-md-5 col-sm-5">
-                <div class="form-group">
-                  <input type="date" name="ngay" class="form-control" value="<?php echo date('Y-m-d') ?>">
-                </div>
-              </div>
-              <div class="col-md-1 col-sm-1 control-label"><button type="submit" class="btn btn-theme"><i class="fas fa-search"></i></button></div>
-            </div>
-          </form>
-          <?php if(isset($kq)) { ?>
-            <table id="dtable" class="table table-striped table-advance table-hover table-ed">
-             <hr>
-             <thead>
-              <tr>
-               <th>STT</th>
-               <th>Nguời đăng tin</th>
-               <th>Địa chỉ</th>
-               <th>Loại tin</th>
-               <th>Loại cho thuê</th>
-               <th>Thời gian gửi</th>
-               <th>Trạng thái</th>
-               <th></th>
-             </tr>
-           </thead>
-           <tbody>
-            <?php $i=0;
-            ?>
-            @foreach($kq as $p)
-            <?php if(($p->TrangThai) == 0) { ?>
-            <tr>
-             <td>{{++$i}}</td>
-             <td>{{$p->name}}</td>
-             <td>{{$p->DiaChi}}, {{$p->TenPhuong}}, {{$p->TenQuan}}, {{$p->TenThanhPho}}</td>
-             <td>{{$p->loaitin}}</td>
-             <td>{{$p->loaichothue}}</td>
-             <td><?php $date=date_create($p->ngaydang);
-             echo date_format($date,"d/m/Y H:i:s") ?></td>
-             <th><?php if(($p->TrangThai) == 1) {echo "Đang đăng";}else{echo "Đã ngừng đăng";} ?></th>
-             <td></td>
-             <td>
-              <button class="btn btn-info btn-xs" 
-              data-idphong="{{$p->id}}"
-              data-tieude="{{$p->TieuDe}}"
-              data-diachi="{{$p->DiaChi}}, {{$p->TenPhuong}}, {{$p->TenQuan}}, {{$p->TenThanhPho}}"
-              data-dientich="{{$p->DienTich}}"
-              data-gia="{{$p->Gia}}"
-              data-mota="{{$p->MoTa}}"
-              data-hinhanh="{{$p->HinhAnh}}"
-              data-loaitin="{{$p->loaitin}}"
-              data-loaichothue="{{$p->loaichothue}}"
-              data-nguoidang="{{$p->name}}"
-              data-trangthai="{{$p->TrangThai}}"
-              data-tongtien="{{$p->TongTien}}"
-              data-ngaybatdau='
-              <?php $date=date_create($p->NgayBatDau);
-              echo date_format($date,"d/m/Y H:i:s") ?>'
-              data-ngayketthuc='
-              <?php $date=date_create($p->NgayKetThuc);
-              echo date_format($date,"d/m/Y H:i:s") ?>'
-              data-tenlienhe="{{$p->TenLienHe}}"
-              data-diachilienlac="{{$p->DiaChiLienLac}}"
-              data-dienthoai="{{$p->DienThoaiLienLac}}"
-              data-email="{{$p->Email}}"
-              data-ngaytao='
-              <?php $date=date_create($p->ngaydang);
-              echo date_format($date,"d/m/Y H:i:s") ?>'
-              data-ngaycapnhat='
-              <?php $date=date_create($p->ngaycapnhat);
-              echo date_format($date,"d/m/Y H:i:s") ?>'
-              data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
-              <button class="btn btn-danger btn-xs classXoa"  id="{{$p->id}}" onClick="del_click(this.id)"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      <?php } ?>
-      @endforeach
-    </table>
-  <?php } else { ?>
    <table id="dtable" class="table table-striped table-advance table-hover table-ed">
-     <hr>
      <thead>
       <tr>
        <th>STT</th>
@@ -116,15 +34,14 @@
        <th>Địa chỉ</th>
        <th>Loại tin</th>
        <th>Loại cho thuê</th>
-       <th>Thời gian gửi</th>
-       <th>Trạng thái</th>
+       <th>Lý do xóa</th>
        <th></th>
      </tr>
    </thead>
    <tbody>
     <?php $i=0;?>
     @foreach($phong as $p)
-    <?php if(($p->TrangThai) == '1' || ($p->TrangThai) == '2' ) { ?>
+    <?php if(($p->TrangThai) == 3 ) { ?>
       <tr>
        <td>{{++$i}}</td>
        <td>{{$p->nguoidang->name}}</td>
@@ -144,9 +61,7 @@
       @endforeach</td>
       <td>{{$p->loaitin->LoaiTin}}</td>
       <td>{{$p->loaichothue->LoaiChoThue}}</td>
-      <td><?php $date=date_create($p->created_at);
-      echo date_format($date,"d/m/Y H:i:s") ?></td>
-      <th><?php if(($p->TrangThai) == 1) {echo "Đang đăng";}else{echo "Chưa đăng";} ?></th>
+      <th>{{$p->LyDoXoa}}</th>
       <td></td>
       <td>
         <button class="btn btn-info btn-xs" 
@@ -192,14 +107,13 @@
         <?php $date=date_create($p->updated_at);
         echo date_format($date,"d/m/Y H:i:s") ?>'
         data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
-        <button class="btn btn-danger btn-xs classXoa"  data-id="{{$p->id}}" data-toggle="modal" data-target="#xoa"><i class="fas fa-trash"></i></button>
       </td>
     </tr>
   </tbody>
   <?php } ?>
   @endforeach
 </table>
-<?php } ?>
+
 </div><!-- /content-panel -->
 </div><!-- /col-md-12 -->
 </div><!-- /row -->
@@ -328,38 +242,15 @@
     </div>
   </div>
 </div>
-</div>
-<div class="modal fade" id="xoa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Xóa tin đăng</h4>
-      </div>
-      <div class="modal-body">
-       <!-- BASIC FORM ELELEMNTS -->
-       <div class="row">
-        <div class="col-md-12">
-            <input type="hidden" id="id" value="">
-            <label for="comment">Lý do xoá:</label>
-            <textarea class="form-control" rows="5" id="comment" required></textarea>
-            <div id="kt" style="color: red"></div>
-        </div><!-- /col-md-12 -->   
-      </div><!-- /row -->
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-      <button type="button" class="btn btn-info" onClick="del_click()">Xóa</button>
-    </div>
-  </div>
-</div>
-</div>              
+</div>           
 </div><!-- /showback -->
 </section>
 @endsection
 @section('script')
 <!-- js placed at the end of the document so the pages load faster -->
 <script src="{{asset('js/common-scripts.js')}}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzlVX517mZWArHv4Dt3_JVG0aPmbSE5mE"
+type="text/javascript"></script>
 <script type="text/javascript">
   function initMap(vitri) {
     var mapCanvas = document.getElementById("map");
@@ -383,9 +274,7 @@
         resultsMap.setCenter(results[0].geometry.location);
         var marker = new google.maps.Marker({
           map: resultsMap,
-          position: results[0].geometry.location,
-          icon: "../img/gps.png",
-          animation: google.maps.Animation.BOUNCE
+          position: results[0].geometry.location
         });
       } else {
         alert('Geocode was not successful for the following reason: ' + address);
@@ -440,41 +329,6 @@
         modal.find('.modal-body #updated_at').html(updated_at);
         initMap(diachi);
       })
-      $('#xoa').on('show.bs.modal', function (event) {
-        console.log('open');
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('id')
-        var modal = $(this)
-        modal.find('.modal-body #id').val(id);
-      })
-        /// ajax
-        $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
-        function del_click()
-        {
-          var id = $('#id').val();
-          var lydo = $('#comment').val();
-          if (lydo == '') {
-            $('#kt').html('*Vui lòng nhập lý do');
-          } else {
-              $('#xoa').modal('toggle');
-              $.ajax({
-                type: 'post',
-                url: '{{ url("page/xoatd") }}',
-                data: {id: id, lydo: lydo},
-                async: true,
-                success: function (html) {
-                  alert('Xóa thành công');
-                  location.reload();
-              }
-            });
-          }
-          
-        }
       </script>
-      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzlVX517mZWArHv4Dt3_JVG0aPmbSE5mE"
-      type="text/javascript"></script>
+
       @endsection

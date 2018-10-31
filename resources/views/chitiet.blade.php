@@ -33,17 +33,8 @@
        </div>
      </div>
    </div>
-
-   <!-- Get name city -->
-   @foreach ($thanhpho as $tp)
-   <?php
-   if($tp->id == $chitiet->quan->ThuocThanhPho){
-     $idtam = $tp->id;
-     $tentam = $tp->TenThanhPho;
-   } ?>
-   @endforeach
    <!-- Get map -->
-   <input type="hidden" id="vitri" value="{{$chitiet->DiaChi}},{{$chitiet->quan->TenQuan}},{{$tentam}}">
+   <input type="hidden" id="vitri" value="{{$chitiet->Map}}">
    <div class="row justify-content-center">
     <div class="col-12 col-lg-8">
       <div class="listings-content">
@@ -51,8 +42,8 @@
         <div class="list-price">
           <p>{{number_format(($chitiet->DienTich)*($chitiet->DonGia))}} VNĐ</p>
         </div>
-        <h5>Bán đất {{$chitiet->quan->TenQuan}}</h5>
-        <p class="location" style="margin-top: -5px;"><img src="../img/icons/location.png" alt=""> {{$chitiet->DiaChi}}, {{$chitiet->quan->TenQuan}}, {{$tentam}}</p>
+        <h5>Bán đất {{$chitiet->TenQuan($chitiet->Phuong)}}</h5>
+        <p class="location" style="margin-top: -5px;"><img src="../img/icons/location.png" alt=""> {{$chitiet->phuong->TenPhuong}}, {{$chitiet->TenQuan($chitiet->Phuong)}}, {{$chitiet->TenThanhPho($chitiet->Phuong)}}</p>
         <p>
           - <b>Hướng:</b> {{$chitiet->Huong}} <br>
           - <b>Rộng:</b> {{$chitiet->Rong}}m <br>
@@ -143,29 +134,20 @@ type="text/javascript"></script>
 <script type="text/javascript">
   function initMap() {
 
-    var vitri =  $('#vitri').val();
+    var location =  $('#vitri').val();
+
+    location = location.split(";");
     var mapCanvas = document.getElementById("map");
-    var myCenter = new google.maps.LatLng(10.769444,106.681944); 
-    var mapOptions = {center: myCenter, zoom: 17};
-    var map = new google.maps.Map(mapCanvas,mapOptions);
-    var geocoder = new google.maps.Geocoder();
-    geocodeAddress(geocoder,map,vitri);
+    var myCenter = new google.maps.LatLng(location[0], location[1]); 
+    var mapOptions = {center: myCenter, zoom: 15};
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+    var marker = new google.maps.Marker({
+      map: map,
+      position: myCenter,
+      icon: "../img/gps.png",
+      animation: google.maps.Animation.BOUNCE
+    });
 
-  }
-  function geocodeAddress(geocoder, resultsMap,vitri) {
-    var address = vitri;
-    geocoder.geocode({'address': address}, function(results, status) {
-      if (status === 'OK') {
-        resultsMap.setCenter(results[0].geometry.location);
-        var marker = new google.maps.Marker({
-          map: resultsMap,
-          position: results[0].geometry.location
-
-        });
-      } else {
-        alert('Geocode was not successful for the following reason: ' + address);
-      }
-    });   
   }
   $.ajaxSetup({
     headers: {

@@ -7,24 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class TrangChu extends Model
 {
     //
-    function hd_dahoanthanh()
+    function thongketrangchu()
     {
-    	return DB::select("SELECT count(*) as slht FROM hopdong where hopdong.trangthai = '1'");
-    }
-    function hd_chuahoanthanh()
-    {
-    	return DB::select("SELECT count(*) as slcht FROM hopdong where hopdong.trangthai = '2'");
-    }
-    function nhanvien()
-    {
-    	return DB::select("SELECT count(*) as slnv FROM nhanvien");
-    }
-    function khachhang()
-    {
-    	return DB::select("SELECT count(*) as slkh FROM khachhang");
-    }
-    function duan()
-    {
-    	return DB::select("SELECT count(*) as slda FROM duan");
-    }
+        $phong = DB::select("SELECT count(*) as slp FROM phongthue where phongthue.trangthai = '1'");
+    	$hopdong = DB::select("SELECT count(*) as slht FROM hopdong");
+        $khachhang = DB::select("SELECT count(*) as slkh FROM khachhang");
+        $dat = DB::select("SELECT count(*) as sld FROM dat where dat.trangthai < 2");
+        $nguoisudung = DB::select("SELECT count(*) as slu FROM users where users.quyen = '2'");
+        $array = array("phong" => $phong[0]->slp, "hopdong" => $hopdong[0]->slht, "khachhang" => $khachhang[0]->slkh, "dat" => $dat[0]->sld, "nguoisudung" => $nguoisudung[0]->slu);
+        return $array;
+    }    
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Dat;
+use App\Dat_Web;
 use App\PhongChoThue;
 use Illuminate\Http\Request;
 Use App\Http\Controllers\QL_DatController;
@@ -13,8 +14,7 @@ class ChiTietController extends Controller
         $chitiet = Dat::find($id);
         $t = new Dat();
         $t->tangluotxem($id);
-        $top5 = $t->topdat();
-    	return view('chitiet',['chitiet'=>$chitiet,'top'=>$top5]);
+    	return view('chitiet',['chitiet'=>$chitiet]);
     }
     public function getViewRoom($id)
     {
@@ -24,12 +24,9 @@ class ChiTietController extends Controller
     	return view('chitiet_phong',['chitiet'=>$chitiet,'top'=>$top5]);
     }
     public function getViewFromOtherWeb($link, Request $request) {
-        $results = $request->session()->get('datFromOtherPage');
-        foreach ($results as $result) {
-            if ($result[0] === $link) {
-                return view('chitiet_web',['result'=>$result]);
-                break;
-            }
-        }
+        $dat_web = new Dat_Web();
+        $id = $dat_web->findIdByLink($link);
+        $data = Dat_Web::find($id);
+        return view('chitiet_web', ['chitiet'=>$data]);
     }
 }

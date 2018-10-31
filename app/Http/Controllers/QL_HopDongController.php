@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\HopDong;
 use Illuminate\Http\Request;
 use App\Dat;
+use App\Dat_Web;
 class QL_HopDongController extends Controller
 {
     //
@@ -54,6 +55,17 @@ class QL_HopDongController extends Controller
         $d->TrangThai = 2;
         $d->save();
         $hd->save();
+        if(isset($request->link)) {
+            $dat_web = new Dat_Web();
+            $id = $dat_web->findIdByLink($request->link);
+            $dat_web = Dat_Web::find($id);
+            $dat_web->TrangThai = 2;
+            $dat_web->TenKhach = null;
+            $dat_web->DienThoai = null;
+            $dat_web->Email = null;
+            $dat_web->save();
+            return redirect('page/quanlyyeucauweb')->with('thongbao','Cập nhật thành công thông tin hợp đồng !');
+        }
         return redirect('page/quanlyyeucau')->with('thongbao','Cập nhật thành công thông tin hợp đồng !');
     }
     public function getTim(Request $r)
