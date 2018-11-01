@@ -44,18 +44,36 @@
         </div>
         <h5>Bán đất {{$chitiet->TenQuan($chitiet->Phuong)}}</h5>
         <p class="location" style="margin-top: -5px;"><img src="../img/icons/location.png" alt=""> {{$chitiet->phuong->TenPhuong}}, {{$chitiet->TenQuan($chitiet->Phuong)}}, {{$chitiet->TenThanhPho($chitiet->Phuong)}}</p>
-        <p>
-          - <b>Hướng:</b> {{$chitiet->Huong}} <br>
-          - <b>Rộng:</b> {{$chitiet->Rong}}m <br>
-          - <b>Dài:</b> {{$chitiet->Dai}}m <br>
-          - <b>Nở hậu:</b> {{$chitiet->NoHau}}m <br>
-          - <b>Diện tích:</b> {{$chitiet->DienTich}}m2<br>
-          <?php $array_mota =  (explode('.', $chitiet->GhiChu));?>
-          - <b>Mô tả:</b>
-          @foreach ($array_mota as $a)
-          {{$a}}.<br>
-          @endforeach
-        </p>
+        <table class="table table-condensed">
+            <tr>
+              <td>Hướng</td>
+              <td>{{$chitiet->Huong}}</td>
+            </tr>
+            <tr>
+              <td>Rộng</td>
+              <td>{{$chitiet->Rong}}m</td>
+            </tr>
+            <tr>
+              <td>Dài</td>
+              <td>{{$chitiet->Dai}}m</td>
+            </tr>
+            <tr>
+              <td>Nở hậu</td>
+              <td>{{$chitiet->NoHau}}m</td>
+            </tr>
+            <tr>
+              <td>Diện tích</td>
+              <td>{{$chitiet->DienTich}}m2</td>
+            </tr>
+            <tr>
+              <td>Mô tả</td>
+              <td><?php $array_mota =  (explode('.', $chitiet->GhiChu));?>
+              @foreach ($array_mota as $a)
+              {{$a}}.<br>
+              @endforeach
+              </td>
+            </tr>
+        </table>
       </div>
     </div>
    <div class="col-12 col-md-6 col-lg-4">
@@ -139,7 +157,7 @@ type="text/javascript"></script>
     location = location.split(";");
     var mapCanvas = document.getElementById("map");
     var myCenter = new google.maps.LatLng(location[0], location[1]); 
-    var mapOptions = {center: myCenter, zoom: 15};
+    var mapOptions = {center: myCenter, zoom: 18};
     var map = new google.maps.Map(mapCanvas, mapOptions);
     var marker = new google.maps.Marker({
       map: map,
@@ -156,14 +174,14 @@ type="text/javascript"></script>
   });
   function checkPhoneNumber() {
     var flag = false;
-    var phone = $('#dt').val().trim(); // ID của trường Số điện thoại
+    var phone = $('#sdt').val().trim(); // ID của trường Số điện thoại
     phone = phone.replace('(+84)', '0');
     phone = phone.replace('+84', '0');
     phone = phone.replace('0084', '0');
     phone = phone.replace(/ /g, '');
     if (phone != '') {
       var firstNumber = phone.substring(0, 2);
-      if ((firstNumber == '09' || firstNumber == '08') && phone.length == 10) {
+      if ((firstNumber == '09' || firstNumber == '08' || firstNumber == '03' || firstNumber == '07' || firstNumber == '05') && phone.length == 10) {
         if (phone.match(/^\d{10}/)) {
           flag = true;
         }

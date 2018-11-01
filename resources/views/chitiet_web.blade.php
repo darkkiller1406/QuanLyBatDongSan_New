@@ -58,15 +58,23 @@ function _substr($str, $length, $minword = 3)
                     <h5><?php echo $chitiet->TieuDeu ?></h5>
                     <p class="location" style="margin-top: -5px;"><img src="../img/icons/location.png"
                      alt=""><?php echo $chitiet->DiaChi ?></p>
-                     <p>
-                        - <b>Hướng:</b> <br>
-                        - <b>Rộng:</b> <br>
-                        - <b>Dài:</b> <br>
-                        - <b>Nở hậu:</b> <br>
-                        - <b>Diện tích:</b> <?php echo $chitiet->DienTich ?> <br>
-                        - <b>Mô tả:</b>
-                        <?php echo _substr($chitiet->MoTa, (strlen($chitiet->MoTa) - 200)) ?>
-                    </p>
+                     <table class="table table-condensed">
+                      <thread></thread>
+                      <tbody>
+                        <tr>
+                          <td>Hướng</td>
+                          <td>{{$chitiet->Huong}}</td>
+                      </tr>
+                      <tr>
+                          <td>Diện tích</td>
+                          <td>{{$chitiet->DienTich}}</td>
+                      </tr>
+                      <tr>
+                          <td>Mô tả</td>
+                          <td><?php echo _substr($chitiet->MoTa, (strlen($chitiet->MoTa) - 200)) ?></td>
+                  </tr>
+              </tbody>
+          </table>
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
@@ -153,7 +161,7 @@ type="text/javascript"></script>
         <?php $arrlatlng = explode(',', $chitiet->Map); ?>
         var mapCanvas = document.getElementById("map");
         var myCenter = new google.maps.LatLng(<?php echo $arrlatlng[0] . ',' . $arrlatlng[1] ?>);
-        var mapOptions = {center: myCenter, zoom: 17};
+        var mapOptions = {center: myCenter, zoom: 19};
         var map = new google.maps.Map(mapCanvas, mapOptions);
             //var geocoder = new google.maps.Geocoder();
             //geocodeAddress(geocoder,map,vitri);
@@ -188,25 +196,25 @@ type="text/javascript"></script>
 
         function checkPhoneNumber() {
             var flag = false;
-            var phone = $('#dt').val().trim(); // ID của trường Số điện thoại
+            var phone = $('#sdt').val().trim(); // ID của trường Số điện thoại
             phone = phone.replace('(+84)', '0');
             phone = phone.replace('+84', '0');
             phone = phone.replace('0084', '0');
             phone = phone.replace(/ /g, '');
             if (phone != '') {
-                var firstNumber = phone.substring(0, 2);
-                if ((firstNumber == '09' || firstNumber == '08') && phone.length == 10) {
-                    if (phone.match(/^\d{10}/)) {
-                        flag = true;
-                    }
-                } else if (firstNumber == '01' && phone.length == 11) {
-                    if (phone.match(/^\d{11}/)) {
-                        flag = true;
-                    }
+              var firstNumber = phone.substring(0, 2);
+              if ((firstNumber == '09' || firstNumber == '08' || firstNumber == '03' || firstNumber == '07' || firstNumber == '05') && phone.length == 10) {
+                if (phone.match(/^\d{10}/)) {
+                  flag = true;
                 }
+              } else if (firstNumber == '01' && phone.length == 11) {
+                if (phone.match(/^\d{11}/)) {
+                  flag = true;
+                }
+              }
             }
             return flag;
-        }
+          }
 
         $(document).ready(function () {
             $('#dt').on('change', function () {

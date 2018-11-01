@@ -61,19 +61,12 @@
                                         <li><a href="{{route('view_dsDat_map')}}">Xem trên bản đồ</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="{{route('view_dsPhong')}}" class="{{ (\Request::route()->getName() == 'view_dsPhong') ? 'active' : '' }}">Phòng cho thuê</a>
-                                    <ul class="dropdown">
-                                        <li><a href="{{route('view_dsPhong_map')}}">Xem trên bản đồ</a></li>
-                                    </ul>
-                                </li>
                                 <li><a href="{{route('view_vechungtoi')}}" class="{{ (\Request::route()->getName() == 'view_vechungtoi') ? 'active' : '' }}">Về chúng tôi</a></li>
                                 <li><a href="{{route('view_lienlac')}}" class="{{ (\Request::route()->getName() == 'view_lienlac') ? 'active' : '' }}">Liên hệ</a></li>
                                 <?php if(Auth::check()) { ?>
                                 <li><a>XIN CHÀO {{Auth::user()->Ten}}</a>
                                     <ul class="dropdown">
-                                        <li><a href="index.html">TIỀN: {{number_format(Auth::user()->Tien)}} VNĐ</a></li>
                                         <li><a href="{{route('view_trangcanhan')}}">TÀI KHOẢN</a></li>
-                                        <li><a href="{{route('view_dangtin')}}">ĐĂNG TIN</a></li>
                                         <li><a href="./dangxuat">ĐĂNG XUẤT</a></li>
                                     </ul>
                                 </li>

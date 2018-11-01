@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Dat;
-use App\Dat_Web;
+use Illuminate\Support\Facades\Auth;
 use App\Phuong;
 use App\Quan;
 use App\ThongKeTimKiem;
@@ -12,7 +12,9 @@ include('Help/simple_html_dom.php');
 class QL_DatController extends Controller {
 	//
 	public function getView() {
-		return view('page.quanlydat');
+		$dat = new Dat();
+		$dat = Dat::where('SoHuu', Auth::user()->ThuocCongTy)->get();
+		return view('page.quanlydat', ['dat' => $dat]);
 	}
 	public function getView_DSDatMap()
     {
@@ -117,7 +119,6 @@ class QL_DatController extends Controller {
 			$dt = ($request->dai) * ($request->rong) + (0.5 * ($request->nohau) * ($request->dai));
 			$gia = $dt * ($request->dongia);
 			$dat->KyHieuLoDat = $request->mald;
-			$dat->SoHuu = $request->sohuu;
 			$dat->DiaChi = $request->diachi;
 			$dat->Phuong = $request->phuong;
 			//$dat->ThanhPho = $request->tp;
@@ -142,8 +143,7 @@ class QL_DatController extends Controller {
 	}
 	public function getView_DSDat() {
 		$dat = new Dat;
-		return view('danhsachdat');
-		$trangthai = $dat->getTrangThaiChucNang();		
+		return view('danhsachdat');	
 	}
 	public function timDat_ban(Request $r) {
 		$dt = $r->dt;
@@ -163,14 +163,7 @@ class QL_DatController extends Controller {
 			$thongketimkiem->save();
 			$thongketimkiem->deleteAfterOneYear();
 		}
-		// tim dat tu trang web khac
-		$trangthai = $dat->getTrangThaiChucNang();
-		if( $trangthai == 0 && count($kq) < 9 ) {
-			$datFromOtherPage = $this->findDatFromOtherWeb($quan, $gia, $dt);
-			return view('danhsachdat_kqtim', ['kq'=>$kq, 'resultFromWeb'=>$datFromOtherPage]);
-		} else {
-			return view('danhsachdat_kqtim', ['kq'=>$kq]);
-		}
+		return view('danhsachdat_kqtim', ['kq'=>$kq]);
 	}
 	public function timQuan(Request $r) {
 		$quan = new Quan;
@@ -184,156 +177,5 @@ class QL_DatController extends Controller {
 		$dat = new Dat();
 		$dat = $dat->locdat($r->quan, $r->giatien, $r->trangthai, $r->thang);
 		return view('page/quanlydat_loc')->with('dat_loc', $dat);
-	}
-	public function findDatFromOtherWeb($quan = null, $gia = null, $dt = null, $huong = null) {
-		return $this->getDatFromNhaDat($quan, $gia, $dt);
-	}
-	public function getDatFromNhaDat($quan, $gia, $dt) {
-		if ($quan != 0) {
-			$timQuan = Quan::find($quan);
-			$tagQuan = $timQuan->Tag_muabannhadat;
-		}
-		else {
-			$tagQuan = 's59';
-		}
-		switch ($dt) {
-            case '1':
-                $dt = '13847__50';
-                break;
-            case '2':
-                $dt = '13847_50_100';
-                break;
-            case '3':
-                $dt = '13847_100_150';
-                break;
-            case '4':
-                $dt = '13847_150_200';
-                break;
-            default:
-                $dt = '';
-                break;
-        }
-        switch ($gia) {
-            case '1':
-                $gia = '834__800-trieu,';
-                break;
-            case '2':
-                $gia = '834_800-trieu_1,5-ty,';
-                break;
-            case '3':
-                $gia = '834_1,5-ty_2,5-ty,';
-                break;
-            case '4':
-                $gia = '834_2,5-ty_4-ty,';
-                break;
-            default:
-                $gia = '';
-                break;
-        }
-		$html = file_get_html('http://www.muabannhadat.vn/dat-ban-3515/tp-ho-chi-minh-'.$tagQuan.'?aral='.$gia.$dt , FILE_USE_INCLUDE_PATH);
-		$array = array();
-		$count = 6;
-		for($i=0; $i<$count; $i++) {
-			$links = array();
-			foreach($html->find('//*[@id="MainContent_ctlList_ctlResults_repList_ctl00_'.$i.'_divListingInformationTitle_'.$i.'"]/a') as $a) {
-				$html_sub = file_get_html('http://www.muabannhadat.vn'.$a->href, FILE_USE_INCLUDE_PATH);
-				$linkGet = 'http://www.muabannhadat.vn'.$a->href;
-				//
-				$links[] = str_replace('/dat-ban-dat-tho-cu-3532/','',$a->href);
-				// get tieu de
-				foreach($html_sub->find('//*[@id="ctl01"]/div[5]/div[2]/div/div/div/div[1]') as $a) {
-					$links[] = $a->plaintext;
-					break;
-				}
-				// get dia chi
-				foreach($html_sub->find('//*[@id="ctl01"]/div[5]/div[3]/div/div/div[4]/div[1]/div[1]/div[1]') as $a) {
-					$vitri = explode('|', $a->plaintext);
-					$links[] = $vitri[2];
-					$links[] = $vitri[1].', '.$vitri[2];
-					break;
-				}
-				// get vi tri map
-				foreach($html_sub->find('//*[@id="MainContent_ctlDetailBox_lblMapLink"]/a') as $a) {
-					$links[] = str_replace('https://maps.google.com/?q=loc:', '', $a->href);
-					break;
-				}
-				// get dien tich
-				foreach($html_sub->find('//*[@id="ctl01"]/div[5]/div[3]/div/div/div[4]/div[1]/div[2]/div/div[2]/div[1]/table/tbody/tr[2]/td') as $a) {
-					$links[] = $a->plaintext;
-					break;
-				}
-				// get gia tien
-				foreach($html_sub->find('//*[@id="MainContent_ctlDetailBox_lblPrice"]') as $a) {
-					$links[] = $a->plaintext;
-					break;
-				}
-				// get mo ta
-				foreach($html_sub->find('//*[@id="Description"]') as $a) {
-					if(strlen($a->plaintext) > 1000) {
-						$links[] = $this->substr($a->plaintext, 1000);
-					} else {
-						$links[] = $a->plaintext;
-					}
-					break;
-				}
-				// get hinh
-				foreach($html_sub->find('.swipebox') as $a) {
-					$links[] = $a->href;
-					break;
-				}
-				foreach($html_sub->find('//*[@id="MainContent_ctlDetailBox_lblFengShuiDirection"]') as $a) {
-					$links[] = $a->plaintext;
-					break;
-				}
-				$links[] = $linkGet;
-
-				// save to DB
-				if (count($links) >= 11) {
-					$dat = new Dat_Web();
-					if($dat->checkLink($links[0])) {
-						$dat->link = $links[0];
-						$dat->TrangThai = 0;
-						$dat->Gia = $links[6];
-						$dat->DiaChi = $links[3];
-						$dat->DienTich = $links[5];
-						$dat->MoTa = $links[7];
-						$dat->Map = $links[4];
-						$dat->Hinh = $links[8];
-						$dat->save();
-						$array[$i] = $links;
-					} else {
-						$id = $dat->findIdByLink($links[0]);
-						$dat_web = Dat_Web::find($id);
-						if ($dat_web->TrangThai == 2 || $dat_web->TrangThai == 1) {
-							$count++;
-						} else {
-							$array[$i] = $links;
-						}
-					}
-				} else {
-					$count++;
-				}
-			}
-		}
-		return $array;
-	}
-	function substr($str, $length, $minword = 3)
-	{
-	    $sub = '';
-	    $len = 0;
-	    foreach (explode(' ', $str) as $word) {
-	        $part = (($sub != '') ? ' ' : '') . $word;
-	        $sub .= $part;
-	        $len += strlen($part);
-	        if (strlen($word) > $minword && strlen($sub) >= $length) {
-	            break;
-	        }
-	    }
-	    return $sub . (($len < strlen($str)) ? '...' : '');
-	}
-	public function batTatChucNang (Request $r) {
-		$dat = new Dat;
-		$dat->batTatChucNang($r->check);
-		return $r->check;
 	}
 }

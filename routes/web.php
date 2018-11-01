@@ -45,7 +45,7 @@ Route::post('guiyeucaull', 'QL_YeuCauController@ThemYeuCauLL')->name('ThemYeuCau
 
 Route::get('dangky', 'QL_DangNhapController@getViewDK')->name('DangKy');
 
-Route::any('postdangky', 'QL_DangNhapController@postDK')->name('postDangKy');
+Route::any('postdangky', 'QL_TaiKhoanController@postDK')->name('postDangKy');
 
 Route::post('dangnhap', 'QL_DangNhapController@getDN');
 
@@ -106,7 +106,6 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::get('xoadat/{id}','QL_DatController@getXoa');
     Route::any('timdat', 'QL_DatController@getTim');
     Route::any('locdat' , 'QL_DatController@getLoc')->name('post_Loc');
-     Route::any('doitrangthaichucnang','QL_DatController@batTatChucNang');
     //quản lý hợp đồng
     Route::get('quanlyhopdong','QL_HopDongController@getView')->name('view_QLHD');
     Route::post('themhd','QL_HopDongController@postThem')->name('post_ThemHD');

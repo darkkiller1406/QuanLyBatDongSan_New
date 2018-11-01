@@ -12,9 +12,7 @@ class TrangChuConTroller extends Controller
     {
     	$thongkeindex = new TrangChu();
         $thongke = $thongkeindex->thongketrangchu();
-        $dat = new Dat();
-        $trangthaichucnang = $dat->getTrangThaiChucNang();
-    	return view('page/index', ['thongke' => $thongke, 'trangthaichucnang' => $trangthaichucnang ]);
+    	return view('page/index', ['thongke' => $thongke]);
     }
     public function getView_Ban()
     {

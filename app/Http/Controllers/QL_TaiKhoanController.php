@@ -6,6 +6,8 @@ use App\TaiKhoan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\LichSuGiaoDich;
+use App\CongTy;
+use Illuminate\Support\Facades\DB;
 class QL_TaiKhoanController extends Controller
 {
     private $tien, $id;
@@ -152,5 +154,50 @@ class QL_TaiKhoanController extends Controller
         $lichsu = $lichsu->getLichSuGiaoDich($id);
         return view('lichsugiaodich',['lichsugiaodich'=>$lichsu]);
         }
+    }
+    public function postDK(Request $request)
+    {
+         $this->validate($request,[
+            'username'=> 'required|min:3|unique:users,name',
+            'email'=>'required|email|unique:users,email',
+            'password'=> 'required|between:6,20',
+            'passwordAgain'=> 'required|same:password',
+            'tenCongTy' => 'required|unique:congty,TenCongTy',
+            'sdt' => 'unique:congty,SDT',
+            'diaChi' => 'unique:congty,DiaChi'
+        ],[
+            'username.required'=> 'Bạn chưa nhập tên người dùng',
+            'username.min' => 'Tên người dùng phải có ít nhất 3 kí tự',
+            'email.required'=> 'Bạn chưa nhập email',
+            'email.email'=> 'Bạn chưa nhập đúng định dạng email',
+            'email.unique'=> 'Email đã tồn tại',
+            'username.unique'=>'Tên đăng nhập đã tồn tại',
+            'password.required'=> 'Bạn chưa nhập mật khẩu',
+            'password.between' => 'Mật khẩu phải có ít nhất 6 kí tự',
+            'passwordAgain.required' => 'Bạn chưa nhập lại mật khẩu',
+            'passwordAgain.same' => 'Mật khẩu nhập lại không khớp',
+            'tenCongTy.required' => 'Bạn cần nhập tên công ty',
+            'tenCongTy.unique' => 'Tên công ty đã tồn tại',
+            'sdt.unique' => 'SDT đã được sử dụng',
+            'diaChi.unique' => 'Địa chỉ đã tồn tại trong hệ thống'
+        ]);
+        //thêm cty
+        $congty = new CongTy;
+        $congty->TenCongTy = $request->tenCongTy;
+        $congty->DiaChi = $request->diaChi;
+        $congty->SDT = $request->sdt;
+        $congty->Email = $request->email;
+        $now = (new \DateTime())->format('Y-m-d H:i:s');
+        $congty->save();
+        //thêm người dùng
+        $user = new User;
+        $user->name = $request->username; 
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->Quyen = '2'; 
+        $user->Ten = $request->name;
+        $user->ThuocCongTy = $congty->getIdByCreatedAt($now); 
+        $user->save();
+        return true;
     }
 }

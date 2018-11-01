@@ -73,10 +73,11 @@
                 </div>
                 <div class="col-md-2">
                     <select class="form-control" id="trangthai" name="trangthai">
-                        <option value="3">Trạng thái</option>
-                        <option value="0">Hiện có</option>
+                        <option value="4">Trạng thái</option>
+                        <option value="0">Đang đăng bán</option>
                         <option value="1">Đang giao dịch</option>
                         <option value="2">Đã bán</option>
+                        <option value="3">Hiện có</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -107,39 +108,26 @@
                 </tr>
             </thead>
             <tbody>
-                <?php $i = 0;$idtam; $tentam ?>
-                @foreach($dat as $d)
-                @foreach ($quan as $q)
-                <?php
-                if ($q->id == $d->phuong->ThuocQuan) {
-                    $tentam = $q->TenQuan . ', ';
-                    $tam = $q->ThuocThanhPho;
-                    $idQuan = $q->id;
-                } ?>
-                @endforeach
-                @foreach ($thanhpho as $tp)
-                <?php
-                if ($tp->id == $tam) {
-                    $idtam = $tp->id;
-                    $tentam .= $tp->TenThanhPho;
-                } ?>
-                @endforeach
-                <!--  -->
+                <?php $i = 0;?>
+                @foreach( $dat as $d )
                 <tr>
                     <td>{{++$i}}</td>
                     <td>{{$d->KyHieuLoDat}}</td>
                     <td>{{number_format($d->DonGia)}} VND/m2</td>
                     <td>{{number_format($d->Gia)}} VND</td>
-                    <td>{{$d->DiaChi}}, {{$d->phuong->TenPhuong}}, {{$tentam}}</td>
+                    <td>{{$d->DiaChi}}, {{$d->TenPhuong($d->Phuong)}}, {{$d->TenQuan($d->Phuong)}}, {{$d->TenThanhPho($d->Phuong)}}</td>
                     <td><?php
                     if ($d->TrangThai == 0) {
-                        echo 'Hiện có';
+                        echo 'Đang đăng bán';
                     }
                     if ($d->TrangThai == 1) {
                         echo 'Đang giao dịch';
                     }
                     if ($d->TrangThai == 2) {
                         echo 'Đã bán';
+                    }
+                    if ($d->TrangThai == 3) {
+                        echo 'Hiện có';
                     }
                     ?></td>
                     <td></td>
@@ -155,12 +143,11 @@
                         data-dai="{{$d->Dai}}"
                         data-nohau="{{$d->NoHau}}"
                         data-huong="{{$d->Huong}}"
-                        data-sohuu="{{$d->khachhang->HoVaTenDem}} {{$d->khachhang->Ten}}"
                         data-hinh="{{$d->HinhAnh}}"
                         data-trangthai="{{$d->TrangThai}}"
                         data-ghichu="{{$d->GhiChu}}"
                         data-luotxem="{{$d->LuotXem}}"
-                        data-vitri="{{$d->DiaChi}},{{$d->phuong->TenPhuong}},{{$tentam}}"
+                        data-vitri="{{$d->DiaChi}}, {{$d->TenPhuong($d->Phuong)}}, {{$d->TenQuan($d->Phuong)}}, {{$d->TenThanhPho($d->Phuong)}}"
                         data-ngaytao='
                         <?php $date = date_create($d->created_at);
                         echo date_format($date, "d/m/Y H:i:s") ?>'
@@ -180,15 +167,14 @@
                         data-dai="{{$d->Dai}}"
                         data-nohau="{{$d->NoHau}}"
                         data-huong="{{$d->Huong}}"
-                        data-sohuu="{{$d->SoHuu}}"
                         data-hinh="{{$d->HinhAnh}}"
                         data-trangthai="{{$d->TrangThai}}"
                         data-ghichu="{{$d->GhiChu}}"
                         data-luotxem="{{$d->LuotXem}}"
                         data-diachi="{{$d->DiaChi}}"
-                        data-quan="{{$idQuan}}"
+                        data-quan="{{$d->idQuan($d->Phuong)}}"
                         data-phuong="{{$d->Phuong}}"
-                        data-thanhpho="{{$idtam}}"
+                        data-thanhpho="{{$d->idThanhPho($d->Phuong)}}"
                         data-ngaytao='
                         <?php $date = date_create($d->created_at);
                         echo date_format($date, "d/m/Y H:i:s") ?>'
@@ -267,10 +253,6 @@ aria-hidden="true">
                                 <td id="vitri"></td>
                             </tr>
                             <tr>
-                                <td class="col-md-2">Người sở hữu</td>
-                                <td id="sohuu"></td>
-                            </tr>
-                            <tr>
                                 <td class="col-md-2">Trạng thái</td>
                                 <td id="trangthai"></td>
                             </tr>
@@ -281,6 +263,14 @@ aria-hidden="true">
                             <tr>
                                 <td class="col-md-2">Mô tả</td>
                                 <td id="ghichu"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-2">Ngày tạo</td>
+                                <td id="ngaytao"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-2">Ngày cập nhật</td>
+                                <td id="ngaycapnhat"></td>
                             </tr>
                             <tr>
                                 <td class="col-md-2">Hình ảnh</td>
@@ -332,6 +322,7 @@ aria-hidden="true">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="idnguoitao" value="{{ Auth::user()->id }}">
                             <input type="hidden" name="map" id="map-add" value="">
+                            <input type="hidden" name="sohuu" value="{{ Auth::user()->ThuocCongTy }}">
                             <div class="form-group">
                                 <label class="col-sm-2 col-sm-2 control-label">Ký hiệu lô đất</label>
                                 <div class="col-sm-10">
@@ -342,9 +333,9 @@ aria-hidden="true">
                                 <label class="col-sm-2 col-sm-2 control-label">Trạng Thái</label>
                                 <div class="col-sm-10">
                                     <select class="form-control" id="trangthai_add" name="trangthai">
-                                        <option value="0">Hiện có</option>
+                                        <option value="0">Đang đăng bán</option>
                                         <option value="1">Đang giao dịch</option>
-                                        <option value="2">Đã bán</option>
+                                        <option value="3">Hiện có</option>
                                     </select>
                                 </div>
                             </div>
@@ -381,16 +372,6 @@ aria-hidden="true">
                                     <select class="form-control" name="tp">
                                         @foreach ($thanhpho as $tp)
                                         <option value="{{$tp->id}}">{{$tp->TenThanhPho}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Người sở hữu</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" name="sohuu">
-                                        @foreach ($khachhang as $kh)
-                                        <option value="{{$kh->id}}">{{$kh->HoVaTenDem}} {{$kh->Ten}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -529,16 +510,6 @@ aria-hidden="true">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Người sở hữu</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" name="sohuu" id="sohuu">
-                                        @foreach ($khachhang as $kh)
-                                        <option value="{{$kh->id}}">{{$kh->HoVaTenDem}} {{$kh->Ten}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label class="col-sm-2 col-sm-2 control-label">Đơn giá</label>
                                 <div class="col-sm-9">
                                     <input type="number" name="dongia" id="dongia" class="form-control"
@@ -667,7 +638,6 @@ type="text/javascript"></script>
             var dientich = button.data('dientich')
             var nohau = button.data('nohau')
             var huong = button.data('huong')
-            var sohuu = button.data('sohuu')
             var ghichu = button.data('ghichu')
             var trangthai = button.data('trangthai')
             var luotxem = button.data('luotxem')
@@ -702,10 +672,9 @@ type="text/javascript"></script>
                 modal.find('.modal-body #trangthai').html('Hiện có');
             }
             modal.find('.modal-body #luotxem').html(luotxem);
-            modal.find('.modal-body #sohuu').html(sohuu);
             modal.find('.modal-body #ghichu').html(ghichu);
-            modal.find('.modal-body #created_at').html(created_at);
-            modal.find('.modal-body #updated_at').html(updated_at);
+            modal.find('.modal-body #ngaytao').html(created_at);
+            modal.find('.modal-body #ngaycapnhat').html(updated_at);
             initMap(map[0], map[1]);
         })
         // sua
@@ -720,7 +689,6 @@ type="text/javascript"></script>
             var dientich = button.data('dientich')
             var nohau = button.data('nohau')
             var huong = button.data('huong')
-            var sohuu = button.data('sohuu')
             var ghichu = button.data('ghichu')
             var trangthai = button.data('trangthai')
             var diachi = button.data('diachi')
@@ -746,7 +714,6 @@ type="text/javascript"></script>
             modal.find('.modal-body #quan-edit').val(quan);
             modal.find('.modal-body #phuong-edit').val(phuong);
             modal.find('.modal-body #thanhpho').val(tp);
-            modal.find('.modal-body #sohuu').val(sohuu);
             modal.find('.modal-body #ghichu').val(ghichu);
             modal.find('.modal-body #created_at').val(created_at);
             modal.find('.modal-body #updated_at').val(updated_at);

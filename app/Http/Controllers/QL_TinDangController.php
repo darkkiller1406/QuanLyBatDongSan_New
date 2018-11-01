@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\PhongChoThue;
+use App\Dat;
+use Illuminate\Support\Facades\Auth;
 class QL_TinDangController extends Controller
 {
     //
      public function getView()
     {
-    	return view('page.quanlytindang');
+        $dat = Dat::where('SoHuu', Auth::user()->ThuocCongTy)
+                    ->where('TrangThai', '<', 2)
+                    ->get();
+    	return view('page.quanlytindang', ['dat' => $dat]);
     }
     public function getXoa(Request $r)
     {

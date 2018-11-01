@@ -80,34 +80,4 @@ class QL_DangNhapConTroller extends Controller
         return back();
 
     }
-    public function postDK(Request $request)
-    {
-         $this->validate($request,[
-            'name'=> 'required|min:3|unique:users,name',
-            'email'=>'required|email|unique:users,email',
-            'password'=> 'required|between:6,20',
-            'passwordAgain'=>'required|same:password'
-        ],[
-            'name.required'=> 'Bạn chưa nhập tên người dùng',
-            'name.min' => 'Tên người dùng phải có ít nhất 3 kí tự',
-            'email.required'=> 'Bạn chưa nhập email',
-            'email.email'=> 'Bạn chưa nhập đúng định dạng email',
-            'email.unique'=>'Email đã tồn tại',
-            'name.unique'=>'Tên đăng nhập đã tồn tại',
-            'password.required'=> 'Bạn chưa nhập mật khẩu',
-            'password.between' => 'Mật khẩu phải có ít nhất 6 kí tự',
-            'passwordAgain.required' => 'Bạn chưa nhập lại mật khẩu',
-            'passwordAgain.same' => 'Mật khẩu nhập lại không khớp'
-        ]);
-        
-        $user = new User;
-        $user->name = $request->name; 
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->Quyen = '2'; 
-        $user->Ten = $request->form_name;
-        $user->Tien = '100000'; 
-        $user->save();
-        return redirect('dangky')->with('thongbao','Chúc mừng bạn đã đăng kí thành công!');
-    }
 }

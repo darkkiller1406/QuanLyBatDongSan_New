@@ -8,13 +8,33 @@ class Dat extends Model
 {
     //
     protected $table = 'dat';
+    public function getDatBySoHuu($id) {
+        return DB::table('dat')->where('SoHuu', $id)->get();
+    }
     public function phuong()
     {
         return $this->belongsTo('App\Phuong','Phuong','id');
     }
-    public function khachhang()
+    public function congty()
     {
-        return $this->belongsTo('App\KhachHang','SoHuu','id');
+        return $this->belongsTo('App\CongTy','SoHuu','id');
+    }
+    public function tenPhuong($idPhuong)
+    {
+        $k = DB::select("SELECT TenPhuong FROM phuong, dat where phuong.id = dat.Phuong and phuong.id = '$idPhuong'");
+        foreach ($k as $key) {
+            return $key->TenPhuong;
+        }
+    }
+    public function idQuan($idPhuong)
+    {
+        $k = DB::select("SELECT quan.id as id FROM phuong, quan where quan.id = phuong.ThuocQuan and phuong.id = '$idPhuong'");
+        return $k[0]->id;
+    }
+    public function idThanhPho($idPhuong)
+    {
+        $k = DB::select("SELECT thanhpho.id as id FROM phuong, quan, thanhpho where quan.ThuocThanhPho = thanhpho.id and quan.id = phuong.ThuocQuan and phuong.id = '$idPhuong'");
+        return $k[0]->id;
     }
     public function tenQuan($idPhuong)
     {
@@ -250,7 +270,7 @@ class Dat extends Model
                 $gia = 'Gia>0';
                 break;
         }
-        if($trangthai == 3)
+        if($trangthai == 4)
         {
             $trangthai = 'trangthai >= 0';
         }
@@ -283,13 +303,5 @@ class Dat extends Model
             return true;
         }
         return false;
-    }
-    public function batTatChucNang($trangthai) {
-        $trangthai = ($trangthai == 'true' ? 0 : 1 ); 
-        return DB::update('UPDATE `chucnang` SET `TrangThai` = '.$trangthai.' WHERE `chucnang`.`id` = 0');
-    }
-    public function getTrangThaiChucNang() {
-        $k = DB::select('select TrangThai from chucnang where id=0');
-        return $k[0]->TrangThai;
     }
 }
