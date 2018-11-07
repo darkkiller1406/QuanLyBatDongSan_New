@@ -4,7 +4,7 @@
 
 <section id="main-content">
     <section class="wrapper">
-        <h3>QUẢN LÝ ĐẤT</h3>
+        <h3>QUẢN LÝ TIN ĐĂNG</h3>
 
         <div class="row mt">
             <div class="col-md-12">
@@ -70,9 +70,8 @@
                 <div class="col-md-2">
                     <select class="form-control" id="trangthai" name="trangthai">
                         <option value="4">Trạng thái</option>
-                        <option value="3">Hiện có</option>
+                        <option value="0">Đang đăng bán</option>
                         <option value="1">Đang giao dịch</option>
-                        <option value="0">Hiện có</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -127,8 +126,34 @@
                     ?></td>
                     <td></td>
                     <td>
-                <button class="btn btn-danger btn-xs classXoa" idbd="{{$d->id}}" id="{{$d->id}}"
+                    <button class="btn btn-success btn-xs"
+                        data-iddat="{{$d->id}}"
+                        data-mald="{{$d->KyHieuLoDat}}"
+                        data-dongia="{{number_format($d->DonGia)}}"
+                        data-gia="{{number_format($d->Gia)}}"
+                        data-rong="{{$d->Rong}}"
+                        data-dientich="{{$d->DienTich}}"
+                        data-map="{{$d->Map}}"
+                        data-dai="{{$d->Dai}}"
+                        data-nohau="{{$d->NoHau}}"
+                        data-huong="{{$d->Huong}}"
+                        data-hinh="{{$d->HinhAnh}}"
+                        data-trangthai="{{$d->TrangThai}}"
+                        data-ghichu="{{$d->GhiChu}}"
+                        data-luotxem="{{$d->LuotXem}}"
+                        data-vitri="{{$d->DiaChi}}, {{$d->TenPhuong($d->Phuong)}}, {{$d->TenQuan($d->Phuong)}}, {{$d->TenThanhPho($d->Phuong)}}"
+                        data-ngaytao='
+                        <?php $date = date_create($d->created_at);
+                        echo date_format($date, "d/m/Y H:i:s") ?>'
+                        data-ngaycapnhat='
+                        <?php $date = date_create($d->updated_at);
+                        echo date_format($date, "d/m/Y H:i:s") ?>'
+                        data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i>
+                    </button>
+                    @if ($d->TrangThai == 0)
+                    <button class="btn btn-danger btn-xs classXoa" idbd="{{$d->id}}" id="{{$d->id}}"
                     onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
+                    @endif
                 </td>
             </tr>
         </tbody>
@@ -239,139 +264,6 @@ aria-hidden="true">
 </div>
 </div><!-- /showback -->
 </section>
-<!-- Modal Sửa -->
-<div class="modal fade" id="sua" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-edit" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">SỬA THÔNG TIN LÔ ĐẤT</h4>
-            </div>
-            <div class="modal-body">
-                <!-- BASIC FORM ELELEMNTS -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-panel">
-                            <form class="form-horizontal style-form" method="post" action="{{route('post_SuaDAT')}}"
-                            enctype="multipart/form-data">
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <input type="hidden" name="idnguoitao" value="{{ Auth::user()->id }}">
-                            <input type="hidden" name="iddat" id="iddat">
-                            <input type="hidden" name="map" id="map-edit" value="">
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Ký hiệu lô đất</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='mald' id="mald" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Địa chỉ</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='diachi' id="diachi-edit"
-                                    required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Quận</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" name="quan" id="quan-edit">
-                                        @foreach ($quan as $l)
-                                        <option value="{{$l->id}}">{{$l->TenQuan}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Phường</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" name="phuong" id="phuong-edit">
-                                        @foreach ($phuong as $p)
-                                        <option value="{{$p->id}}">{{$p->TenPhuong}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Thành phố</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" name="tp" id="tp">
-                                        @foreach ($thanhpho as $tp)
-                                        <option value="{{$tp->id}}">{{$tp->TenThanhPho}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Đơn giá</label>
-                                <div class="col-sm-9">
-                                    <input type="number" name="dongia" id="dongia" class="form-control"
-                                    required>
-                                </div>
-                                <label class="col-sm-1 control-label">VND/m2</label>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Chiều rộng</label>
-                                <div class="col-sm-9">
-                                    <input type="number" name="rong" id="rong" class="form-control" required>
-                                </div>
-                                <label class="col-sm-1 control-label">m</label>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Chiều dài</label>
-                                <div class="col-sm-9">
-                                    <input type="number" name="dai" id="dai" class="form-control" required>
-                                </div>
-                                <label class="col-sm-1 control-label">m</label>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Nở hậu</label>
-                                <div class="col-sm-9">
-                                    <input type="number" name="nohau" id="nohau" class="form-control" required>
-                                </div>
-                                <label class="col-sm-1 control-label">m</label>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Hướng</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" name="huong" id="huong">
-                                        <option value="Đông">Đông</option>
-                                        <option value="Tây">Tây</option>
-                                        <option value="Nam">Nam</option>
-                                        <option value="Bắc">Bắc</option>
-                                        <option value="Đông-Nam">Đông-Nam</option>
-                                        <option value="Đông-Bắc">Đông-Bắc</option>
-                                        <option value="Tây-Nam">Tây-Nam</option>
-                                        <option value="Tây-Bắc">Tây-Bắc</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Mô tả</label>
-                                <div class="col-sm-10">
-                                    <textarea type="textarea" name="ghichu" id="ghichu"
-                                    class="form-control"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Hình ảnh</label>
-                                <div class="col-sm-10">
-                                    <input type="file" name="image[]" class="form-control"/>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                            </div>
-                            <button type="submit" id="submitbtn" name="submitbtn" class="btn btn-primary">Cập
-                                nhật
-                            </button>
-                        </form>
-                    </div>
-                </div><!-- col-lg-12-->
-            </div><!-- /row -->
-        </div>
-    </div>
-</div>
-</div>
-</div><!-- /showback -->
 @endsection
 @section('script')
 <!-- js placed at the end of the document so the pages load faster -->
@@ -380,7 +272,9 @@ aria-hidden="true">
 type="text/javascript"></script>
 
 <script type="text/javascript">
-
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
     function initMap(Lat, Lng) {
         var mapCanvas = document.getElementById("map");
         var myCenter = new google.maps.LatLng(Lat, Lng);
@@ -406,16 +300,6 @@ type="text/javascript"></script>
         });
     }
 
-    $("#diachi-add").keyup(function () {
-        var vitri = $("#diachi-add").val();
-        var geocoder = new google.maps.Geocoder();
-        geocodeAddress(geocoder, vitri);
-    });
-    $("#diachi-edit").keyup(function () {
-        var vitri = $("#diachi-edit").val();
-        var geocoder = new google.maps.Geocoder();
-        geocodeAddress(geocoder, vitri);
-    });
         // chi tiết
         $('#chitiet').on('show.bs.modal', function (event) {
             for (var i = 0; i < 3; i++) {
@@ -469,48 +353,6 @@ type="text/javascript"></script>
             modal.find('.modal-body #updated_at').html(updated_at);
             initMap(map[0], map[1]);
         })
-        // sua
-        $('#sua').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var iddat = button.data('iddat') // Extract info from data-* attributes
-            var mald = button.data('mald')
-            var rong = button.data('rong')
-            var dongia = button.data('dongia')
-            var vitri = button.data('vitri')
-            var dai = button.data('dai')
-            var dientich = button.data('dientich')
-            var nohau = button.data('nohau')
-            var huong = button.data('huong')
-            var ghichu = button.data('ghichu')
-            var trangthai = button.data('trangthai')
-            var diachi = button.data('diachi')
-            var quan = button.data('quan')
-            var phuong = button.data('phuong')
-            var thanhpho = button.data('thanhpho')
-            var luotxem = button.data('luotxem')
-            var created_at = button.data('ngaytao')
-            var updated_at = button.data('ngaycapnhat')
-            var hinhanh = button.data('hinh')
-            var map = button.data('map')
-            var gia = button.data('gia')
-            var modal = $(this)
-            modal.find('.modal-body #iddat').val(iddat);
-            modal.find('.modal-body #mald').val(mald);
-            modal.find('.modal-body #dongia').val(dongia)
-            modal.find('.modal-body #gia').val(gia)
-            modal.find('.modal-body #rong').val(rong);
-            modal.find('.modal-body #dai').val(dai);
-            modal.find('.modal-body #nohau').val(nohau);
-            modal.find('.modal-body #huong').val(huong);
-            modal.find('.modal-body #diachi-edit').val(diachi);
-            modal.find('.modal-body #quan-edit').val(quan);
-            modal.find('.modal-body #phuong-edit').val(phuong);
-            modal.find('.modal-body #thanhpho').val(tp);
-            modal.find('.modal-body #ghichu').val(ghichu);
-            modal.find('.modal-body #created_at').val(created_at);
-            modal.find('.modal-body #updated_at').val(updated_at);
-            modal.find('.modal-body #map').val(map);
-        })
         /// ajax
         $.ajaxSetup({
             headers: {
@@ -519,90 +361,14 @@ type="text/javascript"></script>
         });
 
         function reply_click(clicked_id) {
-            var kq = confirm('Bạn muốn xóa không ?');
+            var kq = confirm('Bạn muốn hủy đăng tin này không ?');
             if (kq == true) {
                 var id = clicked_id;
-                location.href = 'xoadat/' + id;
+                location.href = 'xoatin/' + id;
             }
         }
 
         $(document).ready(function () {
-            $('#quan-add').on('change', function () {
-                if (quan) {
-                    $.ajax({
-                        type: 'get',
-                        url: '{{ url("timphuong") }}',
-                        data: {quan: $(this).val()},
-                        async: true,
-                        success: function (html) {
-                            html = html.slice(110)
-                            console.log(html)
-                            $('#phuong-add').html(html);
-                        }
-                    });
-                } else {
-                    $('#phuong-add').html('<option value="0">Chọn quận</option>');
-                }
-            });
-            $('#quan-edit').on('change', function () {
-                if (quan) {
-                    $.ajax({
-                        type: 'get',
-                        url: '{{ url("timphuong") }}',
-                        data: {quan: $(this).val()},
-                        async: true,
-                        success: function (html) {
-                            html = html.slice(110)
-                            console.log(html)
-                            $('#phuong-edit').html(html);
-                        }
-                    });
-                } else {
-                    $('#phuong-edit').html('<option value="0">Chọn quận</option>');
-                }
-            });
-            $('#dongia').on('change', function () {
-                if ($('#dongia').val() <= 0) {
-                    $('#dongia').val('1');
-                }
-            });
-            $('#rong').on('change', function () {
-                if ($('#rong').val() <= 0) {
-                    $('#rong').val('1');
-                }
-            });
-            $('#dai').on('change', function () {
-                if ($('#dai').val() <= 0) {
-                    $('#dai').val('1');
-                }
-            });
-            $('#nohau').on('change', function () {
-                alert($('#nohau').val());
-                if ($('#nohau').val() < 0) {
-                    $('#nohau').val('0');
-                }
-            });
-            $('#dongiathem').on('change', function () {
-                if ($('#dongiathem').val() <= 0) {
-                    $('#dongiathem').val('1');
-                }
-            });
-            $('#daithem').on('change', function () {
-                if ($('#daithem').val() <= 0) {
-                    $('#daithem').val('1');
-                }
-            });
-            $('#nohauthem').on('change', function () {
-                if ($('#nohauthem').val() < 0) {
-                    $('#nohauthem').val('0');
-                }
-            });
-            $('#rongthem').on('change', function () {
-                if ($('#rongthem').val() <= 0) {
-                    $('#rongthem').val('1');
-                }
-            });
-
             $("#search").keyup(function () {
                 $.ajax({
                     type: 'get',

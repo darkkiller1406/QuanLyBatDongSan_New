@@ -15,38 +15,47 @@
           <div class="col-md-2 col-sm-2 col-md-offset-1 box0">
            <div class="box1">
             <i class="fas fa-clipboard" style="font-size: 70px"></i>
-            <h3></h3>
+            <h5>{{$thongke["hopdong"]}} hợp đồng</h5>
           </div>
-          <p>{{$thongke["hopdong"]}} hợp đồng đã được hoành thanh</p>
         </div>
         <div class="col-md-2 col-sm-2 box0">
          <div class="box1">
-          <i class="far fa-clipboard" style="font-size: 70px"></i>
-          <h3></h3>
+          <i class="fas fa-map" style="font-size: 70px"></i>
+          <h5>{{$thongke["dat"]}} lô đất</h5>
         </div>
-        <p>{{$thongke["dat"]}} lô đất</p>
       </div>
       <div class="col-md-2 col-sm-2 box0">
        <div class="box1">
-        <i class="fas fa-building" style="font-size: 70px"></i>
-        <h3></h3>
+        <i class="fas fa-clipboard-list" style="font-size: 70px"></i>
+        <h5>{{$thongke["yeucau"]}} yêu cầu</h5>
       </div>
       <p></p>
     </div>
     <div class="col-md-2 col-sm-2 box0">
      <div class="box1">
       <i class="fas fa-users" style="font-size: 70px"></i>
-      <h3></h3>
+      <h5>{{$thongke["khachhang"]}} khách hàng.</h5>
     </div>
-    <p>{{$thongke["khachhang"]}} khách hàng.</p>
+    <p></p>
   </div>
   <div class="col-md-2 col-sm-2 box0">
    <div class="box1">
     <i class="fas fa-user" style="font-size: 70px"></i>
-    <h3></h3>
+    <h5>{{$thongke["nguoisudung"]}} người dụng.</h5>
   </div>
-  <p>{{$thongke["nguoisudung"]}} người dụng  .</p>
+  <p></p>
 </div>
+</div>
+@if ($thongke["dattondong"] > 0)
+<div class="col-lg-2"></div>
+<div class="col-lg-8">
+<div class="alert alert-warning" role="alert" style="text-align: center;">
+    Đang có <b>{{$thongke["dattondong"]}}</b> lô đất tồn đọng trong hệ thống
+</div>
+</div>
+@endif
+</div>
+
 </div><!-- /row mt -->
 </section>
 </section>

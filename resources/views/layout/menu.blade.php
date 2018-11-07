@@ -36,29 +36,16 @@
             </a>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;" >
+            <li><a href="{{route('view_QLYC')}}" class="{{ (\Request::route()->getName() == 'view_QLYC') ? 'active' : '' }}" >
               <i class="fas fa-clipboard-list"></i>
-              <span>Yêu cầu</span>
+              <span>Yêu cầu giao dịch</span>
             </a>
-            <ul class="sub">
-              <li><a href="{{route('view_QLYC')}}" class="{{ (\Request::route()->getName() == 'view_QLYC') ? 'active' : '' }}" >
-                <i class="fas fa-clipboard-list"></i><span>Quản lý yêu cầu</span>
-              </a></li>
-              <li><a href="{{route('view_QLYCW')}}" class="{{ (\Request::route()->getName() == 'view_QLYCW') ? 'active' : '' }}" >
-                <i class="fas fa-globe"></i><span>Quản lý yêu cầu web</span>
-              </a></li>
-            </ul>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;" >
+            <a href="{{route('view_QLTD')}}" class="{{ (\Request::route()->getName() == 'view_QLTD') ? 'active' : '' }}" >
               <i class="fas fa-bookmark"></i>
               <span>Tin đăng</span>
             </a>
-            <ul class="sub">
-              <li><a href="{{route('view_QLTD')}}" class="{{ (\Request::route()->getName() == 'view_QLTD') ? 'active' : '' }}" ><i class="fas fa-clipboard"></i><span>Quản lý tin đăng</span></a></li>
-              <li><a href="{{route('view_QLXNTD')}}" class="{{ (\Request::route()->getName() == 'view_QLXNTD') ? 'active' : '' }}" ><i class="fas fa-check-square"></i><span>Xác nhận tin đăng</span></a></li>
-               <li><a href="{{route('view_QLTDX')}}" class="{{ (\Request::route()->getName() == 'view_QLTDX') ? 'active' : '' }}" ><i class="fas fa-trash-alt"></i></i><span>Tin đã xóa</span></a></li>
-            </ul>
           </li>
           <li class="sub-menu">
             <a  href="{{route('view_QLDAT')}}" class="{{ (\Request::route()->getName() == 'view_QLDAT') ? 'active' : '' }}">
@@ -67,7 +54,7 @@
           </li>
           <li class="sub-menu">
             <a href="{{route('view_QLHD')}}" class="{{ (\Request::route()->getName() == 'view_QLHD') ? 'active' : '' }}" >
-              <i class="fas fa-clipboard"></i><span>Quản lý hóa đơn</span>
+              <i class="fas fa-clipboard"></i><span>Quản lý hợp đồng</span>
             </a>
           </li>
           <li class="sub-menu">

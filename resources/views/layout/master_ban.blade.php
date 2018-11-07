@@ -18,7 +18,8 @@
     <link rel="stylesheet" href="{{asset('css/style_ban.css')}}">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    
+    <meta property="fb:app_id" content="353941732045822" />
+    <meta property="fb:admins" content="100002872078058"/>
 </head>
 
 <body>
@@ -58,20 +59,27 @@
                                 <li><a href="{{route('view_trangchu')}}" class="{{ (\Request::route()->getName() == 'view_trangchu') ? 'active' : '' }}">Trang chủ</a></li>
                                 <li><a href="{{route('view_dsDat')}}" class="{{ (\Request::route()->getName() == 'view_dsDat') ? 'active' : '' }}">Đất bán</a>
                                     <ul class="dropdown">
-                                        <li><a href="{{route('view_dsDat_map')}}">Xem trên bản đồ</a></li>
+                                        @foreach ($congty as $ct)
+                                        <li><a href="{{asset('danhsachdat/'.$ct->Link)}}">{{$ct->TenCongTy}}</a></li>
+                                        @endforeach
                                     </ul>
                                 </li>
+                                <li><a href="{{route('view_DSCongTy')}}" class="{{ (\Request::route()->getName() == 'view_DSCongTy') ? 'active' : '' }}">Thành viên</a>
+                                </li>
+                                <li><a href="{{route('view_dichvu')}}" class="{{ (\Request::route()->getName() == 'view_dichvu') ? 'active' : '' }}">Phí dịch vụ</a></li>
                                 <li><a href="{{route('view_vechungtoi')}}" class="{{ (\Request::route()->getName() == 'view_vechungtoi') ? 'active' : '' }}">Về chúng tôi</a></li>
                                 <li><a href="{{route('view_lienlac')}}" class="{{ (\Request::route()->getName() == 'view_lienlac') ? 'active' : '' }}">Liên hệ</a></li>
                                 <?php if(Auth::check()) { ?>
                                 <li><a>XIN CHÀO {{Auth::user()->Ten}}</a>
                                     <ul class="dropdown">
-                                        <li><a href="{{route('view_trangcanhan')}}">TÀI KHOẢN</a></li>
-                                        <li><a href="./dangxuat">ĐĂNG XUẤT</a></li>
+                                        <li><a href="{{route('index')}}" target="_blank">QUẢN LÝ</a></li>
+                                        <li><a href="{{route('giahan')}}">GIA HẠN/NÂNG CẤP</a></li>
+                                        <li><a href="{{route('dangxuat')}}">ĐĂNG XUẤT</a></li>
                                     </ul>
                                 </li>
                                 <?php }else { ?>
                                 <li><a data-toggle="modal" data-target="#myModal">ĐĂNG NHẬP</a></li>
+                                <li><a href="{{route('DangKy')}}">ĐĂNG KÝ</a></li>
                                 <?php } ?>
                                 </li>
                             </ul>
@@ -92,6 +100,11 @@
               </div>
               <div class="modal-body">
                 <div class="form-group">
+                    <label style="font-size: 16px;">Địa chỉ truy cập</label>
+                    <input type="text" class="form-control" name="link" id="link" placeholder="Nhập địa chỉ truy cập">
+                    <div id="ktlink" class="sub" style="color: red"></div>
+                </div>
+                <div class="form-group">
                     <label style="font-size: 16px;">ID</label>
                     <input type="text" class="form-control" name="id" id="id" placeholder="Nhập ID">
                     <div id="ktid" class="sub" style="color: red"></div>
@@ -105,12 +118,6 @@
                 <div class="row">
                     <diV class="col-md-4"></diV>
                     <button type="button" class="btn south-btn" style="font-size: 13px;" onclick="dangnhap()">Đăng nhập</button>
-                </div>
-                <div class="row">
-                    <diV class="col-md-4"></diV>
-                    <label>
-                        <a href="{{route('DangKy')}}" style="font-size: 16px;color: #DAA520;margin-left: 30px;text-decoration: underline;">Đăng ký ngay</a>
-                    </label>
                 </div>
                </div>
             </div>
@@ -195,6 +202,7 @@
     {
         var id = $('#id').val();
         var pass = $('#pass').val();
+        var link = $('#link').val();
         var check = 0;
         if(id == '')
             {
@@ -207,6 +215,18 @@
             {
                 document.getElementById("id").style.marginBottom = "20px";
                 $('#ktid').html('');
+            }
+        if(link == '')
+            {
+              document.getElementById("link").style.marginBottom = "0";
+              $('#ktlink').html('*Vui lòng nhập địa chỉ truy cập');
+              check++;
+              return false;
+            }
+            else
+            {
+                document.getElementById("link").style.marginBottom = "20px";
+                $('#ktlink').html('');
             }
         if(pass == '')
             {
@@ -226,7 +246,8 @@
                 url:'{{url("dangnhap")}}',
                 data: {
                     id: id,
-                    pass: pass
+                    pass: pass,
+                    link: link
                 },
                 async: true,
                 success:function(html){

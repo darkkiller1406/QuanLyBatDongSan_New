@@ -221,7 +221,7 @@
               <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">ĐTDD</label>
                 <div class="col-sm-10">
-                  <input type="text" name="dtdd" class="form-control" required>
+                  <input type="text" name="dtdd" id="dtdd-add" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
@@ -244,7 +244,7 @@
               </div>
               <div class="col-md-6">
               </div>
-              <button type="submit" id="submitbtn" name="submitbtn" class="btn btn-primary" >Thêm</button>
+              <button type="submit" id="submitbtn-add" name="submitbtn" class="btn btn-primary" type="hidden">Thêm</button>
             </form>
           </div>
         </div><!-- col-lg-12-->       
@@ -297,7 +297,7 @@
               <div class="form-group">
                 <label class="col-sm-2  control-label">ĐTDD</label>
                 <div class="col-sm-10">
-                  <input type="text" id="dtdd" name="dtdd" class="form-control" required>
+                  <input type="text" id="dtdd-edit" name="dtdd" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
@@ -320,7 +320,7 @@
               </div>
               <div class="col-md-5">
               </div>
-              <button type="submit" id="submitbtn" name="submitbtn" class="btn btn-primary" >Cập nhật</button>
+              <button type="submit" id="submitbtn-edit" name="submitbtn" class="btn btn-primary" type="hidden" >Cập nhật</button>
             </form>
           </div>
         </div><!-- col-lg-12-->       
@@ -388,7 +388,7 @@
         modal.find('.modal-body #email').val(email);
         modal.find('.modal-body #cmnd').val(cmnd);
         modal.find('.modal-body #diachi').val(diachi);
-        modal.find('.modal-body #dtdd').val(dtdd);
+        modal.find('.modal-body #dtdd-edit').val(dtdd);
         modal.find('.modal-body #dtcd').val(dtcd);
       })
         /// ajax
@@ -405,7 +405,26 @@
             location.href='xoakh/'+id;
           }
         }
+        function checkPhoneNumber(phone) {
+            var flag = false;
+            var phone = phone.trim(); // ID của trường Số điện thoại
+            phone = phone.replace('(+84)', '0');
+            phone = phone.replace('+84', '0');
+            phone = phone.replace('0084', '0');
+            phone = phone.replace(/ /g, '');
+            if (phone != '') {
+                var firstNumber = phone.substring(0, 2);
+                if ((firstNumber == '09' || firstNumber == '08' || firstNumber == '03' || firstNumber == '07' || firstNumber == '05') && phone.length == 10) {
+                    if (phone.match(/^\d{10}/)) {
+                        flag = true;
+                    }
+                }
+            }
+            return flag;
+        }
         $(document).ready(function(){
+          $("#submitbtn-add").hide();
+          $("#submitbtn-edit").hide();
           $("#search").keyup(function() {
             $.ajax({
               type:'get',
@@ -417,6 +436,20 @@
               }
             });
           });
+          $('#dtdd-add').keyup('change', function () {
+              if(checkPhoneNumber($('#dtdd-add').val())) {
+                 $("#submitbtn-add").show();
+              } else {
+                 $("#submitbtn-add").hide();
+              }
+          });
+          $('#dtdd-edit').keyup('change', function () {
+              if(checkPhoneNumber($('#dtdd-edit').val())) {
+                 $("#submitbtn-edit").show();
+              } else {
+                 $("#submitbtn-edit").hide();
+              }
+          })
         });
       </script>
       @endsection

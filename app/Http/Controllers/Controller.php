@@ -23,10 +23,12 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     function __construct()
     {
+        $this->update();
     	$khachhang = KhachHang::all();
         $taikhoan = TaiKhoan::all();
         $dat = Dat::all();
         $hopdong = HopDong::all();
+        $congty = CongTy::all();
         $quan = Quan::all();
         $thanhpho = ThanhPho::all();
         $yeucau = YeuCau::all();
@@ -38,10 +40,16 @@ class Controller extends BaseController
         view()->share('dat',$dat);
         view()->share('thanhpho',$thanhpho);
         view()->share('quan',$quan);
+        view()->share('congty', $congty);
         view()->share('hopdong',$hopdong);
         view()->share('yeucau',$yeucau);
         view()->share('phuong',$phuong);
         view()->share('lichsugiaodich',$lichsugiaodich);
         view()->share('thongketimkiem',$thongketimkiem);
+    }
+    function update() 
+    {
+        $taikhoan = new TaiKhoan();
+        $taikhoan->updateLoaiTaiKhoan();
     }
 }

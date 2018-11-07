@@ -93,7 +93,10 @@
         <?php if(isset($yc->dat->TrangThai)){ ?>
           <?php if ($yc->dat->TrangThai == 1){ ?>
             <button class="btn btn-success btn-xs"
-            data-iddat="{{$yc->id_dat}}"
+            data-iddat = "{{$yc->dat->id}}"
+            data-gia = "{{number_format($yc->dat->Gia)}}"
+            data-idyc="{{$yc->id}}"
+            data-kyhieudat = "{{$yc->dat->KyHieuLoDat}}"
             data-toggle="modal" data-target="#sua"><i class="fas fa-check-square"></i></button>
              <button class="btn btn-warning btn-xs classXoa" data-tenkh="{{$yc->TenKhach}}" id="{{$yc->Email}}" onClick="send_Mail(this.id)"><i class="fas fa-envelope"></i></button>
              <input type="hidden" id="name{{$yc->Email}}" value="{{$yc->TenKhach}}">
@@ -199,30 +202,17 @@
           <div class="form-panel">
             <form class="form-horizontal style-form" method="post" action="{{route('post_ThemHD')}}">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
-              <input type="hidden" name="iddat" id="iddat" value="{{$yc->id_dat}}">
-              <input type="hidden" name="sotientam" id="sotientam" value="<?php if(isset($yc->dat->Gia)) { echo $yc->dat->Gia;  } ?>">
+              <input type="hidden" name="iddat" id="iddat" value="">
               <div class="form-group">
                 <label class="col-sm-3 col-sm-3 control-label">Lô đất</label>
                 <div class="col-sm-9">
-                  <label class=" control-label"><?php if(isset($yc->dat->KyHieuLoDat)) { ?> {{$yc->dat->KyHieuLoDat}} <?php } ?></label>
+                  <label class=" control-label" id="kyhieudat"></label>
                 </div>
               </div>
-              <div class="form-group">
-                <label class="col-sm-3 col-sm-3 control-label">Tên người sở hữu đất</label>
-                <div class="col-sm-9">
-                  <label class="control-label">
-                    @foreach ($khachhang as $kh)
-                    <?php if($kh->id == $yc->dat->SoHuu) { 
-                     echo $kh->HoVaTenDem.' '.$kh->Ten;
-                   } ?>
-                   @endforeach
-                 </label>         
-               </div>
-             </div>
              <div class="form-group">
               <label class="col-sm-3 col-sm-3 control-label">Giá lô đất</label>
               <div class="col-sm-9">
-                <label class=" control-label"><?php if(isset($yc->dat->Gia)){ ?> {{number_format($yc->dat->Gia)}} <?php } ?> VNĐ</label>
+                <label class=" control-label" id="gia"></label>
               </div>
             </div>
             <div class="form-group">
@@ -230,17 +220,15 @@
               <div class="col-sm-9">
                 <select class="form-control" name="khmua" id="khmua">
                   @foreach ($khachhang as $kh)
-                  <?php if($kh->id != $yc->dat->SoHuu) { ?>
                     <option value="{{$kh->id}}">{{$kh->HoVaTenDem}} {{$kh->Ten}}</option>
-                  <?php } ?>
                   @endforeach
                 </select>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-3 col-sm-3 control-label">Tiền môi giới</label>
+              <label class="col-sm-3 col-sm-3 control-label">Mã hợp đồng</label>
               <div class="col-sm-9">
-                <input type="number" name="sotien" id="sotien" class="form-control" required>
+                <input type="number" name="maHopDong" id="maHopDong" class="form-control" required>
               </div>
             </div>
             <div class="col-md-5">
@@ -305,6 +293,39 @@
       modal.find('.modal-body #created_at').html(created_at);
       modal.find('.modal-body #updated_at').html(updated_at);
     })
+    $('#sua').on('show.bs.modal', function (event) {
+        console.log('open');
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var idyc = button.data('idyc')
+        var gia = button.data('gia')
+        var iddat = button.data('iddat')
+        var kyhieudat = button.data('kyhieudat')
+        var modal = $(this)
+        if(trangthai == 1)
+        {
+         modal.find('.modal-body #trangthai').html('Đang xử lý');
+       }
+       if(trangthai == 2)
+       {
+         modal.find('.modal-body #trangthai').html('Đã hoàn thành');
+       }
+       if(trangthai == 3)
+       {
+         modal.find('.modal-body #trangthai').html('Đang đợi liên lạc');
+       }
+       if(loaiyc == 1)
+       {
+        modal.find('.modal-body #loaiyc').html('Yêu cầu mua đất');
+      }
+      else
+      {
+        modal.find('.modal-body #loaiyc').html('Yêu cầu liên lạc');
+      }
+      modal.find('.modal-body #idyc').val(idyc);
+      modal.find('.modal-body #gia').html(gia);
+      modal.find('.modal-body #iddat').val(iddat);
+      modal.find('.modal-body #kyhieudat').html(kyhieudat);
+    })
         /// ajax
         $.ajaxSetup({
           headers: {
@@ -335,6 +356,9 @@
               url: '{{ url("page/guimail") }}',
               data: {mail:clicked_id,name:name},
               async: true,
+              beforeSend: function() {
+                alert('Mail đang được gửi, vui lòng đợi !');
+              },
               success: function(data){
                 alert(data);
               }

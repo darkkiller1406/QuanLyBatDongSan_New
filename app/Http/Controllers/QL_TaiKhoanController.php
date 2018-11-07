@@ -10,16 +10,14 @@ use App\CongTy;
 use Illuminate\Support\Facades\DB;
 class QL_TaiKhoanController extends Controller
 {
-    private $tien, $id;
     //
     public function getView()
     {
-    	$t = new TaiKhoan();
-    	return view('page.quanlytaikhoan');
+    	$taikhoan = TaiKhoan::where('ThuocCongTy', Auth::user()->ThuocCongTy)->get();
+    	return view('page.quanlytaikhoan', ['taikhoan' => $taikhoan]);
     }
     public function getXoa($id)
     {
-    	
     	$tk = TaiKhoan::find($id);
     	$tk -> delete();
     	return redirect('page/quanlytaikhoan')->with('thongbao','Bạn đã xóa thành công!'); 
@@ -27,7 +25,7 @@ class QL_TaiKhoanController extends Controller
     public function postThemTaiKhoan(Request $request)
     {
     	$this->validate($request,[
-            'name'=> 'required|unique:users,name',
+            'name'=> 'required',
             'email'=>'required|email|unique:users,email',
             'password'=> 'required',
             'passwordAgain'=>'required|same:password'
@@ -41,12 +39,27 @@ class QL_TaiKhoanController extends Controller
             'passwordAgain.required' => 'Bạn chưa nhập lại mật khẩu',
             'passwordAgain.same' => 'Mật khẩu nhập lại không khớp'
         ]);
-        
+        $username = TaiKhoan::where('name', $request->name)
+                    ->where('ThuocCongTy', Auth::user()->ThuocCongTy)
+                    ->first();
+        if(!empty($username)) {
+            return redirect('page/quanlytaikhoan')->with('canhbao','Tên đăng nhập đã có trong hệ thống');
+        }
+        if(Auth::user()->LoaiTaiKhoan == 2) {
+            $users = DB::table('users')
+                    ->where('ThuocCongTy', Auth::user()->ThuocCongTy)
+                    ->count();
+            if($users >= 3) {
+                return redirect('page/quanlytaikhoan')->with('canhbao','Bạn đang sử dụng tài khoản thường, vui lòng nâng cấp tài khoản để sử dụng nhiều người dùng hơn');
+            }
+        }
         $user = new User;
         $user->name = $request->name; 
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
-        $user->Quyen = '1'; 
+        $user->ThuocCongTy = Auth::user()->ThuocCongTy;
+        $user->LoaiTaiKhoan = Auth::user()->LoaiTaiKhoan;
+        $user->Quyen = 2; 
         $user->save();
         return redirect('page/quanlytaikhoan')->with('thongbao','Chúc mừng bạn đã đăng kí thành công!');
     }
@@ -60,7 +73,7 @@ class QL_TaiKhoanController extends Controller
     public function getTim(Request $r)
     {
         $t = new TaiKhoan;
-        echo $t -> timtk($r->name);
+        echo $t -> timtk($r->name, Auth::user()->ThuocCongTy);
     }
     public function getViewSuaMK()
     {
@@ -103,68 +116,162 @@ class QL_TaiKhoanController extends Controller
         $t = $test->updateMK($id,$passold,$passnew);
         return $t;
     }
-    public function postNapTien(Request $request)
+    public function postKichHoat($check, Request $request)
     {
-        if(isset($request->iduser)) {
-            if(Auth::attempt(['name'=>$request->nameuser,'password'=>$request->pass])) {
-                session(['id' => $request->iduser]);
-                session(['tien' => $request->tien]);    
-                return '0';
-            } else {
-                return '2';        
-            }
-        } 
-        if(!empty($request->session()->get('tien'))) {
-            $taikhoan = new TaiKhoan();
-            $t = $taikhoan->updateTien($request->session()->get('id'), $request->session()->get('tien'));
-            //
+        if(!empty($request->session()->get('id')) && $check == $request->session()->get('checkCreat')) {
+            $taikhoan = TaiKhoan::where('ThuocCongTy', $request->session()->get('id'))->get();
+            $idTaiKhoan = $taikhoan[0]->id;
+            $taikhoan = TaiKhoan::find($idTaiKhoan);
+            $ngayhethan = $taikhoan->NgayHetHan;
+            $now = (new \DateTime())->format('Y-m-d H:i:s');
+            $ngayhethan = date_create($now);
+            date_modify($ngayhethan, "+30 days");
+            $taikhoan->NgayHetHan = $ngayhethan;
+            $taikhoan->LoaiTaiKhoan = $request->session()->get('loaiTaiKhoan');
+            $taikhoan->save();
             $lichsu = new LichSuGiaoDich();
-            $lichsu->TienGiaoDich =  $request->session()->get('tien');
-            $lichsu->LoaiGiaoDich = '2';
-            $lichsu->GiaoDich = 'Nạp thêm tiền';
-            $lichsu->NguoiThucHien = Auth::user()->id;
+            if($request->session()->get('loaiTaiKhoan') == 1) {
+                $tien = 120000;
+            } else {
+                $tien = 180000;
+            }
+            $lichsu->TienGiaoDich = $tien;
+            $lichsu->GiaoDich = 'Kích hoạt tài khoản';
+            $lichsu->LoaiGiaoDich = 1;
+            $lichsu->NguoiThucHien = $idTaiKhoan;
             $lichsu->save();
+            $congty = CongTy::where('id', $request->session()->get('id'))->get();
             $request->session()->forget('id');
-            $request->session()->forget('tien');
-            //
-            $thongtin = TaiKhoan::find(Auth::user()->id);
-            $sobaidang = new TaiKhoan();
-            $sobaidang = $sobaidang->demsobai(Auth::user()->id);
-            return view('trangcanhan',['thongtin'=>$thongtin, 'sobaidang'=>$sobaidang, 'thongbao' => 'Nạp tiền thành công']);
+            $request->session()->forget('loaiTaiKhoan');
+            return view('dangkythanhcong',['congty'=>$congty]);
         }
-        $thongtin = TaiKhoan::find(Auth::user()->id);
-        $sobaidang = new TaiKhoan();
-        $sobaidang = $sobaidang->demsobai(Auth::user()->id);
-        return view('trangcanhan',['thongtin'=>$thongtin, 'sobaidang'=>$sobaidang, 'thongbao' => 'Nạp tiền không thành công']);
+        return redirect('trangchu');
     }
-    public function trangcanhan()
-    {
-        if(isset(Auth::user()->id))
-        {
-            $thongtin = TaiKhoan::find(Auth::user()->id);
-            $sobaidang = new TaiKhoan();
-            $sobaidang = $sobaidang->demsobai(Auth::user()->id);
-            return view('trangcanhan',['thongtin'=>$thongtin,'sobaidang'=>$sobaidang]);
-        }
-    }
-    public function getLichSu($id)
+    public function getGiaHan()
     {
         if(isset(Auth::user()->id)) {
-        $lichsu = new LichSuGiaoDich();
-        $lichsu = $lichsu->getLichSuGiaoDich($id);
-        return view('lichsugiaodich',['lichsugiaodich'=>$lichsu]);
+            return view('giahan', ['ngayhethan' => Auth::user()->NgayHetHan, 'loaitaikhoan' => Auth::user()->LoaiTaiKhoan]);
         }
+        return redirect('trangchu');
+    }
+    public function postGiaHan(Request $request) 
+    {
+        if(isset(Auth::user()->id)) {
+            if(empty($request->session()->get('thuocCongTy'))) {
+                $taikhoan = TaiKhoan::find(Auth::user()->id);
+                $now = (new \DateTime())->format('Y-m-d H:i:s');
+                $ngayhethan = $taikhoan->NgayHetHan;
+                //không chuyển gói
+                if($request->loaiTaiKhoan == $taikhoan->LoaiTaiKhoan) {
+                    if($request->loaiTaiKhoan == 1) {
+                        $tien = 120000;
+                    } else {
+                        $tien = 160000;
+                    }
+                }
+                // chuyển gói sử dụng
+                if($request->loaiTaiKhoan != $taikhoan->LoaiTaiKhoan) {
+                    // trường hợp tài khoản đã hết hạn
+                    if($ngayhethan < $now) {
+                        if($request->loaiTaiKhoan == 1) {
+                            $tien = 120000;
+                        } else {
+                            $tien = 180000;
+                        }
+                    } else { 
+                    // nâng câp
+                        if($request->loaiTaiKhoan > $taikhoan->LoaiTaiKhoan) {
+                          $first_date = strtotime($taikhoan->NgayHetHan);
+                          $second_date = strtotime($now);
+                          $datediff = abs($first_date - $second_date);
+                          $tien = floor($datediff / (60*60*24))*60000 + 180000;
+                        }
+                  }
+              }
+              $random = rand(1000,9999);
+              $url = "https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=NT".date('Ymd')."&price=".$tien."&return_url=".asset('thuchiengiahan/'.$random)."&comments=Nạp tiền";
+              echo "<script>window.open('".$url."', '_blank')</script>";
+              session(['tien' => $tien]);
+              session(['loaiTaiKhoan' => $request->loaiTaiKhoan]);
+              session(['thuocCongTy' => Auth::user()->ThuocCongTy]);
+              $after_5_min = time() + 5*60;
+              session(['check' =>$random]);
+              session(['thoigian' =>$after_5_min]);
+          }
+          if (!empty($request->session()->get('thuocCongTy')) && ($request->session()->get('thoigian') < time())) {
+            $request->session()->forget('loaiTaiKhoan');
+            $request->session()->forget('thuocCongTy');
+            $request->session()->forget('thoigian');
+            $request->session()->forget('check');
+            $request->session()->forget('tien');
+        }
+        return view('giahan', ['ngayhethan' => Auth::user()->NgayHetHan, 'loaitaikhoan' => Auth::user()->LoaiTaiKhoan, 'canhbao' => 'Bạn đang thực hiện gia hạn, nếu chưa hoàn thành bạn sẽ mất 5 phút để thực hiện lại việc gia hạn']);
+      }
+      return redirect('trangchu');
+    }
+    public function thuchiengiahan($check ,Request $request)
+    {
+        if(!empty($request->session()->get('thuocCongTy')) && !empty($request->session()->get('loaiTaiKhoan')) && !empty($request->session()->get('thoigian')) && $check == $request->session()->get('check')) {
+            $taikhoan = TaiKhoan::where('ThuocCongTy', $request->session()->get('thuocCongTy'))->get();
+            $loaiTaiKhoan = $request->session()->get('loaiTaiKhoan');
+            foreach ($taikhoan as $t) {
+                $taikhoan = TaiKhoan::find($t->id);
+                if($t->Quyen == 1) {
+                    $idTaiKhoan = $t->id;
+                }
+                $taikhoan->LoaiTaiKhoan = $loaiTaiKhoan;
+                $now = (new \DateTime())->format('Y-m-d H:i:s');
+                $ngayhethan = $taikhoan->NgayHetHan;
+                if($ngayhethan < $now) {
+                    date_modify($now, "+30 days");
+                    $taikhoan->NgayHetHan = $now;
+                } else {
+                    $ngayhethan = date_create($ngayhethan);
+                    date_modify($ngayhethan, "+30 days");
+                    $taikhoan->NgayHetHan = $ngayhethan;
+                }
+                $taikhoan->save();
+            }
+            $lichsu = new LichSuGiaoDich();
+            $lichsu->TienGiaoDich = $request->session()->get('tien');
+            $lichsu->GiaoDich = 'Gia hạn tài khoản';
+            $lichsu->LoaiGiaoDich = 2;
+            $lichsu->NguoiThucHien = $idTaiKhoan;
+            $lichsu->save();
+            $request->session()->forget('loaiTaiKhoan');
+            $request->session()->forget('thuocCongTy');
+            $request->session()->forget('thoigian');
+            $request->session()->forget('check');
+            $request->session()->forget('tien');
+            if(isset(Auth::user()->id)) {
+                return redirect('giahan') -> with('thongbao', 'Gia hạn thành công');
+            }
+        }
+        return redirect('trangchu');
+    }
+    public function getViewDK(Request $request)
+    {
+        $taikhoan = new TaiKhoan();
+        $taikhoan->xoaKhongKichHoat();
+        return view('dangky');
     }
     public function postDK(Request $request)
     {
+        if (!empty($request->session()->get('id')) && ($request->session()->get('timeCreat') < time())) {
+            $request->session()->forget('id');
+            $request->session()->forget('loaiTaiKhoan');
+            $request->session()->forget('timeCreat');
+            $request->session()->forget('checkCreat');
+        }
          $this->validate($request,[
-            'username'=> 'required|min:3|unique:users,name',
+            'username'=> 'required|min:3',
             'email'=>'required|email|unique:users,email',
             'password'=> 'required|between:6,20',
             'passwordAgain'=> 'required|same:password',
             'tenCongTy' => 'required|unique:congty,TenCongTy',
             'sdt' => 'unique:congty,SDT',
-            'diaChi' => 'unique:congty,DiaChi'
+            'diaChi' => 'unique:congty,DiaChi',
+            'diaChiTruyCap' => 'required|unique:congty,Link'
         ],[
             'username.required'=> 'Bạn chưa nhập tên người dùng',
             'username.min' => 'Tên người dùng phải có ít nhất 3 kí tự',
@@ -186,6 +293,7 @@ class QL_TaiKhoanController extends Controller
         $congty->TenCongTy = $request->tenCongTy;
         $congty->DiaChi = $request->diaChi;
         $congty->SDT = $request->sdt;
+        $congty->Link = $request->diaChiTruyCap;
         $congty->Email = $request->email;
         $now = (new \DateTime())->format('Y-m-d H:i:s');
         $congty->save();
@@ -194,10 +302,44 @@ class QL_TaiKhoanController extends Controller
         $user->name = $request->username; 
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
-        $user->Quyen = '2'; 
+        $user->Quyen = 1;
         $user->Ten = $request->name;
-        $user->ThuocCongTy = $congty->getIdByCreatedAt($now); 
+        $user->ThuocCongTy = $congty->getIdByCreatedAt($now);
+        $user->LoaiTaiKhoan = 4;
+        $user->NgayHetHan = $now;
         $user->save();
-        return true;
+        $congty = CongTy::find($user->ThuocCongTy);
+        $random = rand(1000,9999);
+        session(['id' => $congty->getIdByCreatedAt($now)]);
+        session(['loaiTaiKhoan' => $request->loaiTaiKhoan]);
+        $after_5_min = time() + 5*60;
+        session(['checkCreat' =>$random]);
+        session(['timeCreat' =>$after_5_min]);
+        return $random;
+    }
+    public function checkUnique(Request $request) 
+    {
+        $email = TaiKhoan::where('email', $request->mail)->first();
+        $tenCongTy = CongTy::where('TenCongTy', $request->tenCongTy)->first();
+        $link = CongTy::where('Link', $request->diaChiTruyCap)->first();
+        $diaChi = CongTy::where('DiaChi', $request->diaChi)->first();
+        $sdt = CongTy::where('sdt', $request->sdt)->first();
+        $arrayName = array('email' => 0, 'tenCongTy' => 0, 'link' => 0, 'diaChi' => 0, 'sdt' => 0 );
+        if(!empty($email)){
+            $arrayName['email'] = 1;
+        }
+        if(!empty($tenCongTy)){
+            $arrayName['tenCongTy'] = 1;
+        }
+        if(!empty($link)){
+            $arrayName['link'] = 1;
+        }
+        if(!empty($diaChi)){
+            $arrayName['diaChi'] = 1;
+        }
+        if(!empty($sdt)){
+            $arrayName['sdt'] = 1;
+        }
+        return $arrayName;
     }
 }

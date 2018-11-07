@@ -16,17 +16,10 @@ class AdminLogin
     public function handle($request, Closure $next)
     {
         if(Auth::check())
-            if(Auth::user()->Quyen==1)
-                {
-                    return $next($request);
-                }
-                else
-                {
-                    return redirect('page/dangnhap');
-                }
+            return $next($request);
         else
         {
-            return redirect('page/dangnhap');
+            return redirect('trangchu');
         }
     }
 

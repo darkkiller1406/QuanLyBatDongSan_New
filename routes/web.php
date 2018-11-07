@@ -21,11 +21,13 @@ Route::get('chitiet/{id}','ChiTietController@getView');
 
 Route::get('chitietphong/{id}','ChiTietController@getViewRoom');
 
-Route::get('chitietdat/{link}','ChiTietController@getViewFromOtherWeb');
-
 Route::get('chinhsuatindang/{id}','QL_ChoThueController@getChinhSua');
 
 Route::get('danhsachdat','QL_DatController@getView_DSDat')->name('view_dsDat');
+
+Route::get('danhsachdat/{link}','QL_DatController@getView_DSDat_CTy');
+
+Route::get('danhsachthanhvien','QL_CongTyController@getView_DSCongTy')->name('view_DSCongTy');
 
 Route::get('danhsachphong_map','QL_ChoThueController@getView_DSPhongMap')->name('view_dsPhong_map');
 
@@ -35,21 +37,25 @@ Route::get('lienlac','TrangChuController@getView_lienlac')->name('view_lienlac')
 
 Route::get('vechungtoi','TrangChuController@getView_vechungtoi')->name('view_vechungtoi');
 
-Route::any('timdat_ban', 'QL_DatController@timDat_ban')->name('timDat_ban');
+Route::get('phidichvu','TrangChuController@getView_dichvu')->name('view_dichvu');
+
+Route::any('timdatban', 'QL_DatController@timDat_ban')->name('timDat_ban');
 
 Route::post('guiyeucau', 'QL_YeuCauController@ThemYeuCau')->name('ThemYeuCau');
 
-Route::post('guiyeucau_web', 'QL_YeuCauController@ThemYeuCau_Web')->name('ThemYeuCau_Web');
-
 Route::post('guiyeucaull', 'QL_YeuCauController@ThemYeuCauLL')->name('ThemYeuCauLL');
 
-Route::get('dangky', 'QL_DangNhapController@getViewDK')->name('DangKy');
+Route::get('dangky', 'QL_TaiKhoanController@getViewDK')->name('DangKy');
 
 Route::any('postdangky', 'QL_TaiKhoanController@postDK')->name('postDangKy');
 
+Route::post('kiemtradangky', 'QL_TaiKhoanController@ktDangKy');
+
+Route::any('dangkythanhcong','QL_TaiKhoanController@getDangKyThanhCong');
+
 Route::post('dangnhap', 'QL_DangNhapController@getDN');
 
-Route::get('dangxuat', 'QL_DangNhapController@getDX');
+Route::get('dangxuat', 'QL_DangNhapController@getDX')->name('dangxuat');
 
 Route::get('danhsachtin','QL_ChoThueController@getView' )->name('view_dsPhong');
 
@@ -65,25 +71,27 @@ Route::any('timquan','QL_DatController@timQuan');
 
 Route::any('timphuong','QL_DatController@timPhuong');
 
-Route::any('tindadang','QL_ChoThueController@getViewTinDaDang')->name('view_tindadang');
-
-Route::any('timphong', 'QL_ChoThueController@timPhong')->name('timPhong');
-
 Route::any('quanlytrangcanhan', 'QL_TaiKhoanController@trangcanhan')->name('view_trangcanhan');
 
-Route::any('naptien','QL_TaiKhoanController@postNapTien')->name('post_naptien');
+Route::any('kichhoat/{check}','QL_TaiKhoanController@postKichHoat');
 
 Route::any('capnhatmk','QL_TaiKhoanController@postCapNhatMK')->name('post_CapNhatMK');
 
-Route::get('lichsugiaodich/{id}','QL_TaiKhoanController@getLichSu');
+Route::get('giahan','QL_TaiKhoanController@getGiaHan')->name('giahan');
+
+Route::post('giahan','QL_TaiKhoanController@postGiaHan')->name('postgiahan');
+
+Route::any('thuchiengiahan/{check}','QL_TaiKhoanController@thuchiengiahan');
+
+Route::any('checkunique','QL_TaiKhoanController@checkUnique');
 // page admin
-Route::get('page/dangnhap', 'QL_DangNhapController@getView');
-Route::post('page/dangnhap', 'QL_DangNhapController@getDangNhap');
+Route::get('page/dangnhap/{id}', 'QL_DangNhapController@getView');
+Route::any('page/dangnhap', 'QL_DangNhapController@getDangNhap');
 Route::get('page/dangxuat', 'QL_DangNhapController@getDangXuat');
 Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     
     Route::get('index','TrangChuController@getIndex')->name('index');
-
+    Route::get('indexadmin','TrangChuController@getIndexAdmin')->name('index_sub');
     //quản lý khách hàng
     Route::get('quanlykhachhang','QL_KhachHangController@getView')->name('view_QLKH');
     Route::post('themkhachhang','QL_KhachHangController@postThemKhachHang')->name('post_ThemKH');
@@ -104,6 +112,8 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::post('themdat','QL_DatController@postThem')->name('post_ThemDAT');
     Route::post('suadat','QL_DatController@postSua')->name('post_SuaDAT');;
     Route::get('xoadat/{id}','QL_DatController@getXoa');
+    Route::get('xoatin/{id}','QL_DatController@getXoaTin');
+    Route::get('dangtin/{id}','QL_DatController@getDangTin');
     Route::any('timdat', 'QL_DatController@getTim');
     Route::any('locdat' , 'QL_DatController@getLoc')->name('post_Loc');
     //quản lý hợp đồng
@@ -118,7 +128,6 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::get('xoaycweb/{id}','QL_YeuCauController@getXoaWeb');
     Route::any('timyeucau', 'QL_YeuCauController@timYC')->name('TKYC');
     Route::any('guimail','QL_YeuCauController@guiMail');
-    Route::get('quanlyyeucauweb','QL_YeuCauController@getViewWeb')->name('view_QLYCW');
     // Quan ly tin dang thue phong 
     Route::get('quanlytindang','QL_TinDangController@getView')->name('view_QLTD');
     Route::get('xacnhantindang','QL_TinDangController@getView_XacNhan')->name('view_QLXNTD');
@@ -134,5 +143,8 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::any('pdfgiaodich','PDFController@pdf_giaodich')->name('inGD');
     Route::any('pdfdoanhthu','PDFController@pdf_doanhthu')->name('inDT');
     //
-
+    Route::get('quanlycongty','QL_CongTyController@getView')->name('view_QLCT');
+    Route::get('huykichhoat/{id}','QL_CongTyController@huyKichHoat');
+    Route::get('resetpass/{id}','QL_CongTyController@resetPass');
+    Route::post('timcongty', 'QL_CongTyController@timCongTy');
  });

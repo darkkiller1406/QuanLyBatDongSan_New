@@ -34,26 +34,7 @@
 				</div>
 			</div>
 		</div>
-		<br>
-		<div class="row">
-			<div class="col-12 col-lg-12">
-					<h3>Bảng Giá Đăng Tin</h3>
-					<table class="table-gia">
-						<tr>
-							<th>Loại tin</th>
-							<th>Thông tin</th>
-							<th>Giá</th> 
-						</tr>
-						@foreach($loaitin as $l)
-						<tr>
-							<td>{{$l->LoaiTin}}</td>
-							<td>{{$l->ThongTin}}</td>
-							<td>{{number_format($l->Gia)}} VNĐ</td>
-						</tr>
-						@endforeach
-					</table>
-			</div>
-		</div>
 	</div>
+	
 </section>
 @endsection

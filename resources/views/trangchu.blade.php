@@ -57,14 +57,14 @@
                 </div>
             </div>
         </div>
-
         <div class="row">
             @foreach ($dat as $d)
             <!-- Single Featured Property -->
-            <?php if ($d->TrangThai != 2) { ?>
+            
             <div class="col-12 col-md-6 col-xl-4">
                 <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
                     <!-- Property Thumbnail -->
+                    <a href="chitiet/{{$d->id}}">
                     <div class="property-thumb">
                         <?php $array =  (explode(';', $d->HinhAnh)); $hinh = $array[0]; ?>
                         <img src="<?php echo asset('img/'.$hinh) ?>" alt="" style="height: 250px; width: 100%">
@@ -72,7 +72,7 @@
                             <?php if ($d->TrangThai === 1) { ?> <span>Đang giao dịch</span> <?php } else {?><span>Đang bán</span> <?php } ?>
                         </div>
                         <div class="list-price">
-                            <a href="chitiet/{{$d->id}}"><p>{{number_format(($d->DienTich)*($d->DonGia))}} VNĐ</p></a>
+                            <p>{{number_format(($d->DienTich)*($d->DonGia))}} VNĐ</p>
                         </div>
                     </div>
                     <!-- Property Content -->
@@ -82,9 +82,9 @@
                         <p class="location"><img src="img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->phuong->TenPhuong}}, {{$tenQuan}}</p>
                         <p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}</p>
                     </div>
+                    </a>
                 </div>
             </div>
-            <?php } ?>
             @endforeach
         </div>
     </div>
@@ -97,7 +97,7 @@
         <div class="row align-items-center h-100">
             <div class="col-12">
                 <div class="cta-content text-center">
-                    <h2 class="wow fadeInUp" data-wow-delay="300ms">Bạn đang tìm phòng cho thuê ?</h2>
+                    <h2 class="wow fadeInUp" data-wow-delay="300ms">Tham gia ngay với chúng tôi</h2>
                 </div>
             </div>
         </div>
@@ -111,13 +111,33 @@
         <div class="row">
             <div class="col-12">
                 <div class="section-heading wow fadeInUp">
-                    <h2>PHÒNG CHO THUÊ</h2>
-                    <p>Có nhất nhiều phòng trọ đang đợi bạn chọn.</p>
+                    <h2>THÀNH VIÊN CỦA SÀN GIAO DỊCH</h2>
+                    <p>Có nhất nhiều công ty đã tin tưởng sử dụng sàn giao dịch của chúng tôi.</p>
                 </div>
             </div>
         </div>
-
         <div class="row">
+            @foreach ($congty as $ct)
+            <!-- Single Featured Property -->
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
+                    <!-- Property Thumbnail -->
+                    <a href="chitiet/{{$ct->id}}">
+                    <div class="property-thumb">
+                        <img src="<?php echo asset('img/logo/'.$ct->Logo) ?>" alt="" style="height: 250px; width: 100%">
+                    </div>
+                    </a>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+            </div>
+            <!-- Submit -->
+            <div class="form-group">
+                <button type="submit" class="btn south-btn btn-3">Xem thêm</button>
+            </div>
         </div>
     </div>
 </section>

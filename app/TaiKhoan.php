@@ -10,9 +10,9 @@ class TaiKhoan extends Model
     //
 	protected $table = 'users';
   
-	public function timtk($name)
+	public function timtk($name, $thuocCongTy)
 	{
-		$k = DB::select('select *,users.id as idtk,users.created_at as cr, users.updated_at as up from users where name like "%'.$name.'%"');
+		$k = DB::select('select *,users.id as idtk,users.created_at as cr, users.updated_at as up from users where name like "%'.$name.'%" and ThuocCongTy ='.$thuocCongTy);
 		$string='<thead>
     <tr>
     <th>STT</th>
@@ -73,5 +73,19 @@ class TaiKhoan extends Model
         $tam = DB::update("UPDATE `users` SET `tien`='".$tien."' WHERE id = '".$check->id."'");
         return '1';
       }
+    }
+    public function xoaKhongKichHoat() 
+    {
+      $users = DB::select("SELECT * FROM users WHERE hour(TIMEDIFF(NOW(), updated_at)) > 1 and LoaiTaiKhoan = 3");
+      if(!empty($users)) {
+          foreach ($users as $user) {
+          DB::delete("DELETE FROM users WHERE id = ".$user->id);
+          }
+          DB::delete("DELETE FROM congty WHERE id = ".$users[0]->ThuocCongTy);
+      }
+    }
+    public function updateLoaiTaiKhoan()
+    {
+       DB::update("UPDATE users SET LoaiTaiKhoan = 3 WHERE NOW() >= NGAYHETHAN and LoaiTaiKhoan > 0");
     }
   }

@@ -397,13 +397,13 @@ img {
       color: #ffffff;
       background-color: #947054; }
   .south-btn.btn-3 {
-    border: 2px solid #000000;
-    background-color: transparent;
-    color: #000000;
+    background-color: #000000;
+    color: #ffffff;
     line-height: 46px; }
     .south-btn.btn-3:hover, .south-btn.btn-3:focus {
-      color: #ffffff;
-      background-color: #000000; }
+      color: #000000;
+      border: 2px solid #000000;
+      background-color: transparent; }
 
 /* :: 8.0 Header Area CSS */
 .dark .classynav ul li .dropdown,
@@ -859,6 +859,21 @@ img {
       line-height: 1;
       -webkit-transition-duration: 500ms;
       transition-duration: 500ms; }
+  .single-featured-property .property-thumb .list-company p {
+      background-color: #F8F8FF;
+      padding: 10px 20px;
+      color: #947054;
+      font-size: 24px;
+      font-weight: 600;
+      display: inline-block;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      z-index: 10;
+      margin-bottom: 0;
+      line-height: 1;
+      -webkit-transition-duration: 500ms;
+      transition-duration: 500ms; }
   .single-featured-property .property-content {
     padding: 30px;
     border: 1px solid #e1dddd; }
@@ -893,6 +908,9 @@ img {
       background-color: #000000;
       color: #ffffff; }
     .single-featured-property:hover .list-price p, .single-featured-property:focus .list-price p {
+      background-color: #947054;
+      color: #ffffff; }
+    .single-featured-property:hover .list-company p, .single-featured-property:focus .list-company p {
       background-color: #947054;
       color: #ffffff; }
 
@@ -1318,6 +1336,11 @@ img {
 .listings-content {
   margin-top: 70px; }
   .listings-content .list-price p {
+    margin-bottom: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #947054; }
+  .listings-content .list-company p {
     margin-bottom: 0;
     font-size: 24px;
     font-weight: 600;

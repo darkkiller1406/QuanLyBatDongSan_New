@@ -16,11 +16,6 @@ class HopDong extends Model
     {
         return $this->belongsTo('App\KhachHang','ID_KhachHang_Mua','id');
     }
-    public function timmax()
-    {
-        $k = DB::select('select MAX(id) as Ma from hopdong');
-        return $k;
-    }
     public function layNam($id)
     {
         $k = DB::select('select created_at from hopdong where id='.$id);
@@ -40,20 +35,19 @@ class HopDong extends Model
             return 0;
         }
     }
-    public function timhd($id)
+    public function timhd($id, $congty)
     {
-        $k = DB::select('SELECT *,hopdong.id as idhd, hopdong.created_at as ngaytao FROM hopdong,khachhang,dat WHERE hopdong.MaHopDong LIKE "%'.$id.'%" and hopdong.ID_KhachHang_Mua = khachhang.id and hopdong.ID_Dat = dat.id ORDER BY hopdong.id');
+        $k = DB::select('SELECT *,hopdong.id as idhd, hopdong.created_at as ngaytao FROM hopdong,khachhang,dat WHERE hopdong.MaHopDong LIKE "%'.$id.'%" and hopdong.ID_KhachHang_Mua = khachhang.id and hopdong.ID_Dat = dat.id and dat.SoHuu = '.$congty.' ORDER BY hopdong.id');
         $khachhang = DB::select('select * from khachhang');
         $string = '
         <thead>
         <tr>
          <th>STT</th>
-         <th>Mã hóa đơn</th>
+         <th>Mã hợp đồng</th>
          <th>Lô đất</th>
-         <th>Tên khách hàng bán</th>
          <th>Tên khách hàng mua</th>
-         <th>Phí môi giới</th>
          <th>Ngày lập</th>
+         <th>File hợp đồng</th>
          <th></th>
         </tr>
         </thead>
@@ -65,17 +59,10 @@ class HopDong extends Model
             $string.=  '<td>'.++$i.'</td>';
             $string.=  '<td>'.$hd->MaHopDong.'</td>';
             $string.=  '<td>'.$hd->KyHieuLoDat.'</td>';
-            foreach ($khachhang as $kh)
-            {
-                if($kh->id == $hd->SoHuu)
-                {
-                    $string.=  '<td>'.$kh->HoVaTenDem.' '.$kh->Ten.'</td>';
-                }
-            }
             $string.=  '<td>'.$hd->HoVaTenDem.' '.$hd->Ten.'</td>';
-            $string.=  '<td>'.number_format($hd->PhiMoiGioi).'</td>';
             $date=date_create($hd->ngaytao);
             $string.=  '<td>'.date_format($date,"d/m/Y H:i:s").'</td>';
+            $string.=  '<td>'.$hd->FileHopDong.'</td>';
             $string.= '<td><button class="btn btn-danger btn-xs classXoa" id="'.$hd->idhd.'" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
             </td>
             </tr>

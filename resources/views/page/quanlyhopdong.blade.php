@@ -46,12 +46,11 @@
        <thead>
         <tr>
          <th>STT</th>
-         <th>Mã hóa đơn</th>
+         <th>Mã hợp đồng</th>
          <th>Lô đất</th>
-         <th>Tên khách hàng bán</th>
          <th>Tên khách hàng mua</th>
-         <th>Phí môi giới</th>
          <th>Ngày lập</th>
+         <th>File hợp đồng</th>
          <th></th>
        </tr>
      </thead>
@@ -62,14 +61,8 @@
          <td>{{++$i}}</td>
          <td>{{$hd->MaHopDong}}</td>
          <td>{{$hd->dat->KyHieuLoDat}}</td>
-         <td>@foreach ($khachhang as $kh)
-                      <?php if($kh->id == $hd->dat->SoHuu) { 
-                         echo $kh->HoVaTenDem.' '.$kh->Ten;
-                      } ?>
-                      @endforeach</td>
          <td>{{$hd->khachhang->HoVaTenDem}} {{$hd->khachhang->Ten}}</td>
-         <td>{{number_format($hd->PhiMoiGioi)}}</td>
-         <td><?php $date=date_create($hd->created_at);
+                  <td><?php $date=date_create($hd->created_at);
           echo date_format($date,"d/m/Y H:i:s") ?></td>
          <td></td>
          <td>

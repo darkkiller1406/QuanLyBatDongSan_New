@@ -23,7 +23,7 @@
           @endif
           @if(session('canhbao'))
           <div class="alert alert-danger" style="font-size: 0.9em;text-align: center;margin-top: 20px;">
-            {{ session('canhbao') }}
+          {{ session('canhbao') }}
           </div>
           @endif
           <div class="form-group">
@@ -65,7 +65,7 @@
          <td>{{$tk->updated_at}}</td>
          <td></td>
          <td>
-          <button class="btn btn-warning btn-xs classReset" idrs="{{$tk->id}}" id="{{$tk->id}}" onClick="reset_click(this.id)"><i class="fas fa-redo"></i></button>
+          <button class="btn btn-warning btn-xs classReset" idrs="{{$tk->id}}" id="{{$tk->id}}" onClick="reset_click(this.id)" data-toggle="tooltip" data-placement="top" title="Reset password"><i class="fas fa-redo"></i></button>
           <button class="btn btn-danger btn-xs classXoa" idbd="{{$tk->id}}" id="{{$tk->id}}" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
         </td>
       </tr>
@@ -85,7 +85,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">THÊM NHÂN VIÊN</h4>
+        <h4 class="modal-title" id="myModalLabel">THÊM TÀI KHOẢN</h4>
       </div>
       <div class="modal-body">
        <!-- BASIC FORM ELELEMNTS -->
@@ -135,41 +135,42 @@
 <!-- js placed at the end of the document so the pages load faster -->
 <script src="{{asset('js/common-scripts.js')}}"></script>
 <script type="text/javascript">
-      // chi tiết
-        /// ajax
-        $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
-        function reply_click(clicked_id)
-        {
-          var kq=  confirm('Bạn muốn xóa không ?');
-          if(kq==true){
-            var id = clicked_id;
-            location.href='xoatk/'+id;
-          }
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+  });
+  function reply_click(clicked_id)
+  {
+    var kq=  confirm('Bạn muốn xóa không ?');
+    if(kq==true){
+      var id = clicked_id;
+      location.href='xoatk/'+id;
+    }
+  }
+  function reset_click(clicked_id)
+  {
+    var kq=  confirm('Bạn muốn reset lại mật khẩu không ?');
+    if(kq==true){
+      var id = clicked_id;
+      location.href='resettk/'+id;
+    }
+  }
+  $(document).ready(function(){
+    $("#search").keyup(function() {
+      $.ajax({
+        type:'get',
+        url: '{{ url("page/timtk") }}',
+        data: {name:$("#search").val()},
+        async: true,
+        success: function(data){
+          $("#dtable").html(data);
         }
-        function reset_click(clicked_id)
-        {
-          var kq=  confirm('Bạn muốn reset lại mật khẩu không ?');
-          if(kq==true){
-            var id = clicked_id;
-            location.href='resettk/'+id;
-          }
-        }
-        $(document).ready(function(){
-          $("#search").keyup(function() {
-            $.ajax({
-              type:'get',
-              url: '{{ url("page/timtk") }}',
-              data: {name:$("#search").val()},
-              async: true,
-              success: function(data){
-                $("#dtable").html(data);
-              }
-            });
-          });
-        });
-      </script>
-      @endsection
+      });
+    });
+  });
+</script>
+@endsection

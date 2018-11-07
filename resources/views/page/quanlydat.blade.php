@@ -132,6 +132,10 @@
                     ?></td>
                     <td></td>
                     <td>
+                        <?php if ($d->TrangThai == 3) { ?>
+                            <button class="btn btn-warning btn-xs" id="{{$d->id}}"
+                                onClick="dangtin(this.id)" ata-toggle="tooltip" data-placement="top" title="Đăng tin"><i class="fas fa-caret-square-up"></i></button>
+                        <?php } ?>
                         <button class="btn btn-success btn-xs"
                         data-iddat="{{$d->id}}"
                         data-mald="{{$d->KyHieuLoDat}}"
@@ -156,7 +160,7 @@
                         echo date_format($date, "d/m/Y H:i:s") ?>'
                         data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i>
                     </button>
-                    <?php if ($d->TrangThai == 0) { ?>
+                    <?php if ($d->TrangThai == 3 || $d->TrangThai == 0) { ?>
                         <button class="btn btn-primary btn-xs"
                         data-iddat="{{$d->id}}"
                         data-mald="{{$d->KyHieuLoDat}}"
@@ -588,7 +592,10 @@ aria-hidden="true">
 type="text/javascript"></script>
 
 <script type="text/javascript">
-
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+    
     function initMap(Lat, Lng) {
         var mapCanvas = document.getElementById("map");
         var myCenter = new google.maps.LatLng(Lat, Lng);
@@ -731,6 +738,13 @@ type="text/javascript"></script>
             if (kq == true) {
                 var id = clicked_id;
                 location.href = 'xoadat/' + id;
+            }
+        }
+        function dangtin(clicked_id) {
+            var kq = confirm('Bạn muốn đăng tin này không ?');
+            if (kq == true) {
+                var id = clicked_id;
+                location.href = 'dangtin/' + id;
             }
         }
 

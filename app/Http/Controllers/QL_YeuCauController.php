@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers;
 use App\YeuCau;
-use App\Dat_Web;
 use Illuminate\Http\Request;
 use App\Dat;
+use App\KhachHang;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMailable;
+use Illuminate\Support\Facades\Auth;
 class QL_YeuCauController extends Controller
 {
     //
     public function getView()
     {
-    	return view('page.quanlyyeucau');
-    }
-    public function getViewWeb()
-    {
-        return view('page.quanlyyeucau_web');
+        $khachhang = new KhachHang;
+        $khachhang = KhachHang::where('ThuocCongTy', Auth::user()->ThuocCongTy)->get();
+        $yeucau = YeuCau::where('sohuu', Auth::user()->ThuocCongTy)
+                 ->from('dat')
+                 ->join('yeucau', 'id_dat', '=', 'dat.id')
+                 ->get();
+    	return view('page.quanlyyeucau', ['khachhang' => $khachhang, 'yeucau' => $yeucau]);
     }
     public function getXoa($id)
     {
@@ -32,15 +35,6 @@ class QL_YeuCauController extends Controller
         $hd = YeuCau::find($id);
         $hd -> delete();
         return redirect('page/quanlyyeucau')->with('thongbao','Bạn đã xóa 1 yêu cầu liên lạc!');
-    }
-    public function getXoaWeb($id)
-    {
-        $hd = Dat_Web::find($id);
-        $dat_web->TrangThai = 0;
-        $dat_web->TenKhach = null;
-        $dat_web->DienThoai = null;
-        $dat_web->Email = null;
-        return redirect('page/quanlyyeucauweb')->with('thongbao','Bạn đã xóa thành công!');
     }
     public function ThemYeuCau(Request $r)
     {
@@ -70,19 +64,6 @@ class QL_YeuCauController extends Controller
         $dat->TrangThai = '1';
         $dat->save();
          return redirect('chitiet/'.$r->iddat)->with('thongbao','Gửi yêu cầu thành công !');
-    }
-
-    public function ThemYeuCau_Web(Request $r)
-    {
-        $Dat_Web = new Dat_Web();
-        $id = $Dat_Web->findIdByLink($r->iddat);
-        $yeucau = Dat_Web::find($id);
-        $yeucau->TenKhach = $r->ten;
-        $yeucau->Email = $r->email;
-        $yeucau->DienThoai = $r->dt;
-        $yeucau->TrangThai = '1';
-        $yeucau->save();
-         return redirect('chitietdat/'.str_replace('http://www.muabannhadat.vn/dat-ban-dat-tho-cu-3532/','',$r->iddat))->with('thongbao','Gửi yêu cầu thành công !');
     }
 
     public function ThemYeuCauLL(Request $r)

@@ -30,7 +30,11 @@
     @yield('css')
   </head>
   <body>
-  @include('layout.menu')
+  @if(Auth::user()->LoaiTaiKhoan == 0)
+    @include('layout.menu_sub')
+  @else
+    @include('layout.menu')
+  @endif
 	@yield('content')
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

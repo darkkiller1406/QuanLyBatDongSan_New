@@ -1,7 +1,6 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\KhachHang;
 class QL_KhachHangController extends Controller
@@ -9,22 +8,21 @@ class QL_KhachHangController extends Controller
     //
     public function getView()
     {
-        return view('page.quanlykhachhang');
+        $khachhang = new KhachHang();
+        $khachhang = KhachHang::where('ThuocCongTy', Auth::user()->ThuocCongTy)->get();
+        return view('page.quanlykhachhang', ['khachhang' => $khachhang]);
     }
     public function postThemKhachHang(Request $request)
     {
         $this->validate($request,[
             'email'=>'email|unique:KhachHang,Email',
-            'dtdd'=> 'required|digits_between:9,11|unique:KhachHang,DTDD',
-            'dtcd'=> 'required|digits_between:9,11|unique:KhachHang,DTCD|max:15',
-            'cmnd'=> 'digits:9'
+            'dtdd'=> 'required|digits_between:9,11',
+            'dtcd'=> 'required|digits_between:9,11',
+            'cmnd'=> 'required|digits:9'
         ],[
             'email.required'=> 'Bạn chưa nhập email',
             'email.email'=> 'Bạn chưa nhập đúng định dạng email',
-            'email.unique'=>'Email đã tồn tại',
-            'dtdd.unique'=>'SĐT đã tồn tại',
-            'dtcd.unique'=>'SĐT đã tồn tại',
-            'cmnd.unique'=>'CMND đã tồn tại',
+            'cmnd.required' => 'Vui lòng nhập CMND',
             'dtdd.digits_between'=>'Vui lòng nhập đúng dạng SĐT ',
             'dtcd.digits_between'=>'Vui lòng nhập đúng dạng SĐT ',
             'cmnd.digits'=>'Vui lòng nhập đúng dạng CMND'
@@ -32,7 +30,7 @@ class QL_KhachHangController extends Controller
         
         $kh = new KhachHang;
         $m = new KhachHang;
-        $max = $m->timmax();
+        $max = $m->timmax(Auth::user()->ThuocCongTy);
         foreach ($max as $t)
         {
             $makh = $t->Ma;
@@ -46,10 +44,6 @@ class QL_KhachHangController extends Controller
             $kh->MaKhachHang = 'KH00'.($makh+1);
         }
         // xử lý ảnh
-        //$image = $_FILES[$request->image]['name'];
-        //$path = "public/img/".basename($image);
-        //
-        //move_uploaded_file($_FILES['image']['tmp_name'], $path);
         $kh->HoVaTenDem = $request->hokh;
         $kh->Ten = $request->tenkh;
         $kh->CMND = $request->cmnd;
@@ -58,6 +52,7 @@ class QL_KhachHangController extends Controller
         $kh->DTDD = $request->dtdd;
         $kh->DTCD = $request->dtcd;
         $kh->XungHo = $request->xungho;
+        $kh->ThuocCongTy = (Auth::user()->ThuocCongTy);
         $kh->save();
        return redirect('page/quanlykhachhang')->with('thongbao','Thêm thành công khách hàng mới !');
     }
@@ -72,8 +67,8 @@ class QL_KhachHangController extends Controller
         $this->validate($request,[
             'email'=>'email',
             'dtdd'=> 'required|digits_between:9,11',
-            'dtcd'=> 'required|digits_between:9,11',
-            'cmnd'=> 'digits:9',
+            'dtcd'=> 'digits_between:9,11',
+            'cmnd'=> 'digits:9'
         ],[
             'email.required'=> 'Bạn chưa nhập email',
             'email.email'=> 'Bạn chưa nhập đúng định dạng email',
@@ -96,6 +91,6 @@ class QL_KhachHangController extends Controller
     public function getTim(Request $r)
     {
         $kh = new KhachHang;
-        echo $kh ->timkh($r->name);
+        echo $kh ->timkh($r->name, Auth::user()->ThuocCongTy);
     }
 }

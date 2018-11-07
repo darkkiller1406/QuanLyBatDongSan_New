@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Dat;
+use App\CongTy;
 use Illuminate\Support\Facades\Auth;
 use App\Phuong;
 use App\Quan;
 use App\ThongKeTimKiem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-include('Help/simple_html_dom.php');
 class QL_DatController extends Controller {
 	//
 	public function getView() {
@@ -131,7 +131,7 @@ class QL_DatController extends Controller {
 			$dat->DienTich = $dt;
 			$dat->Huong = $request->huong;
 			$dat->GhiChu = $request->ghichu;
-			//$dat->save();
+			$dat->save();
 
 			return redirect('page/quanlydat')->with('thongbao', 'Cập nhật thành công thông tin lô đất !');
 		}
@@ -139,11 +139,12 @@ class QL_DatController extends Controller {
 	}
 	public function getTim(Request $r) {
 		$dat = new Dat;
-		echo $dat->timdat($r->name);
+		echo $dat->timdat($r->name, Auth::user()->ThuocCongTy);
 	}
 	public function getView_DSDat() {
-		$dat = new Dat;
-		return view('danhsachdat');	
+		$dat = new Dat();
+		$dat = Dat::where('TrangThai', '<', '2' )->get();
+		return view('danhsachdat', ['dat' => $dat]);	
 	}
 	public function timDat_ban(Request $r) {
 		$dt = $r->dt;
@@ -153,8 +154,6 @@ class QL_DatController extends Controller {
 		$tp = 1;
 		$quan = $r->quan;
 		//search dat
-		$dat = new Dat();
-		$kq = $dat->timdat_ban($quan, $tp, $gia, $dt, $huong);
 		// update db thongketimkiem
 		if ($quan != 0 || $huong != "A") {
 			$thongketimkiem = new ThongKeTimKiem();
@@ -163,7 +162,21 @@ class QL_DatController extends Controller {
 			$thongketimkiem->save();
 			$thongketimkiem->deleteAfterOneYear();
 		}
-		return view('danhsachdat_kqtim', ['kq'=>$kq]);
+		if(isset($r->congty)) {
+			$dat = new Dat();
+			$kq = $dat->timdat_ban($quan, $tp, $gia, $dt, $huong, $r->congty);
+			if(!empty($kq)) {
+				return view('danhsachdat_kqtim', ['kq'=>$kq]);
+			}
+			$congty = CongTy::find($r->congty)->get();
+			return view('danhsachdat_kqtim', ['kq'=>$congty]);
+		} else {
+			$dat = new Dat();
+			$kq = $dat->timdat_ban($quan, $tp, $gia, $dt, $huong);
+			return view('danhsachdat_kqtim', ['kq'=>$kq]);
+		}
+		
+		
 	}
 	public function timQuan(Request $r) {
 		$quan = new Quan;
@@ -177,5 +190,29 @@ class QL_DatController extends Controller {
 		$dat = new Dat();
 		$dat = $dat->locdat($r->quan, $r->giatien, $r->trangthai, $r->thang);
 		return view('page/quanlydat_loc')->with('dat_loc', $dat);
+	}
+	public function getXoaTin($id) {
+		$dat = Dat::find($id);
+		if ($dat->TrangThai == 1) {
+			return redirect('page/quanlydat')->with('canhbao', 'Lô đất đang đợi giao dịch, không thể xóa !');
+		}
+		$dat->TrangThai = 3;
+		$dat->save();
+		return redirect('page/quanlytindang')->with('thongbao', 'Bạn đã hủy đăng tin thành công!');
+	}
+	public function getDangTin($id) {
+		$dat = Dat::find($id);
+		$dat->TrangThai = 0;
+		$dat->save();
+		return redirect('page/quanlydat')->with('thongbao', 'Bạn đã đăng tin thành công!');
+	}
+	public function getView_DSDat_CTy($link) {
+		$dat = new Dat();
+		$dat = Dat::where('Link', $link )
+				->from('CongTy')
+				->join('dat', 'SoHuu', '=', 'congty.id')
+				->where('TrangThai', '=', '3')
+				->get();
+		return view('danhsachdat', ['dat' => $dat]);
 	}
 }

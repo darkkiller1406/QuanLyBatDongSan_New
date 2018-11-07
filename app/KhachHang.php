@@ -8,14 +8,14 @@ class KhachHang extends Model
 {
     //
     protected $table = 'khachhang';
-    public function timmax()
+    public function timmax($thuocCongTy)
     {
-        $k = DB::select('select MAX(id) as Ma from KhachHang');
+        $k = DB::select('select MAX(id) as Ma from KhachHang where ThuocCongTy ='. $thuocCongTy);
         return $k;
     }
-    public function timkh($id)
+    public function timkh($id, $thuocCongTy)
     {
-        $k = DB::select('SELECT *,khachhang.id as idkh, khachhang.DiaChi as dckh FROM khachhang WHERE khachhang.Ten like "%'.$id.'%" ORDER BY khachhang.id');
+        $k = DB::select('SELECT *,khachhang.id as idkh, khachhang.DiaChi as dckh FROM khachhang WHERE khachhang.Ten like "%'.$id.'%" and ThuocCongTy = '.$thuocCongTy.' ORDER BY khachhang.id');
         $string = '
         <thead>
         <tr>

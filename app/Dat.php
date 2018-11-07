@@ -50,9 +50,9 @@ class Dat extends Model
             return $key->TenThanhPho;
         }
     }
-    public function timdat($id)
+    public function timdat($id, $congty)
     {
-        $k = DB::select('SELECT *, dat.id as iddat, thanhpho.id as idtp, quan.id as idquan FROM dat,khachhang,phuong,quan,thanhpho WHERE KyHieuLoDat LIKE "%'.$id.'%" and dat.SoHuu = khachhang.id and dat.Phuong = phuong.id and phuong.ThuocQuan = quan.id and quan.ThuocThanhPho = thanhpho.id ORDER BY dat.id');
+        $k = DB::select('SELECT *, dat.id as iddat, thanhpho.id as idtp, quan.id as idquan FROM dat,phuong,quan,thanhpho WHERE KyHieuLoDat LIKE "%'.$id.'%" and dat.SoHuu = '.$congty.' and dat.Phuong = phuong.id and phuong.ThuocQuan = quan.id and quan.ThuocThanhPho = thanhpho.id ORDER BY dat.id');
         $string = '
         <thead>
         <tr>
@@ -78,7 +78,7 @@ class Dat extends Model
             $string.=  '<td>'.$dat->DiaChi.','.$dat->TenQuan.','.$dat->TenThanhPho.'</td>';
             if($dat->TrangThai == 0)
             {
-                 $string.=  '<td> Hiện có </td>';
+                 $string.=  '<td> Đang đăng tin </td>';
             }
             if($dat->TrangThai == 1)
             {
@@ -87,6 +87,10 @@ class Dat extends Model
             if($dat->TrangThai == 2)
             {
                  $string.=  '<td> Đã bán </td>';
+            }
+            if($dat->TrangThai == 3)
+            {
+                 $string.=  '<td> Hiện có </td>';
             }
             $string.=  '<td></td>';
             $string.=  '<td>';
@@ -99,7 +103,6 @@ class Dat extends Model
             $string.= 'data-dai="'.$dat->Dai.'"';
             $string.= 'data-nohau="'.$dat->NoHau.'"';
             $string.= 'data-huong="'.$dat->Huong.'"';
-            $string.= 'data-sohuu="'.$dat->HoVaTenDem.' '.$dat->Ten.'"';
             $string.= 'data-hinh="'.$dat->HinhAnh.'"';
             $string.= 'data-map="'.$dat->Map.'"';
             $string.= 'data-trangthai="'.$dat->TrangThai.'"';
@@ -123,7 +126,6 @@ class Dat extends Model
             $string.= 'data-dai="'.$dat->Dai.'"';
             $string.= 'data-nohau="'.$dat->NoHau.'"';
             $string.= 'data-huong="'.$dat->Huong.'"';
-            $string.= 'data-sohuu="'.$dat->SoHuu.'"';
             $string.= 'data-hinh="'.$dat->HinhAnh.'"';
             $string.= 'data-trangthai="'.$dat->TrangThai.'"';
             $string.= 'data-ghichu="'.$dat->GhiChu.'"';
@@ -145,7 +147,7 @@ class Dat extends Model
         }
         return $string;
     }
-    public function timdat_ban($quan,$tp,$gia,$dt,$huong)
+    public function timdat_ban($quan,$tp,$gia,$dt,$huong,$congty = null)
     {
         //
         switch ($huong) {
@@ -211,19 +213,26 @@ class Dat extends Model
                 $gia = 'Gia>0';
                 break;
         }
+        if (is_null($congty)) {
+            $congty = '> 0';
+            $from = 'Dat,Phuong,ThanhPho,Quan';
+        } else {
+            $congty = '= '.$congty.' and congty.id = dat.SoHuu';
+            $from = 'Dat,Phuong,ThanhPho,Quan,CongTy';
+        }
         if($tp == 0)
         {
-            $k = DB::select('select *, dat.id as iddat from Dat,Phuong,ThanhPho,Quan where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id');
+            $k = DB::select('select *, dat.id as iddat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and dat.SoHuu'.$congty.' and dat.TrangThai = 3');
             return $k;
         }
         elseif($quan == 0)
         {
-            $k = DB::select('select *, dat.id as iddat from Dat,Phuong,ThanhPho,Quan where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = '.$tp);
+            $k = DB::select('select *, dat.id as iddat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = '.$tp.' and dat.SoHuu'.$congty.' and dat.TrangThai = 3');
             return $k;
         }
         else
         {
-            $k = DB::select('select *, dat.id as iddat from Dat,Phuong,ThanhPho,Quan where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and quan.id = '.$quan);
+            $k = DB::select('select *, dat.id as iddat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and quan.id = '.$quan. ' and dat.SoHuu'.$congty.' and dat.TrangThai = 3');
             return $k;
         }
     }
@@ -288,12 +297,12 @@ class Dat extends Model
         }
         if($quan == 0)
         {
-            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi from Dat,Phuong,ThanhPho,Quan,KhachHang where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and quan.ThuocThanhPho = 1 and dat.SoHuu = khachhang.id and '.$trangthai.' and '.$thang);
+            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi from Dat,Phuong,ThanhPho,Quan,CongTy where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and quan.ThuocThanhPho = 1 and dat.SoHuu = congty.id and '.$trangthai.' and '.$thang);
             return $k;
         }
         else
         {
-            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi from Dat,Phuong,ThanhPho,Quan,KhachHang where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and dat.SoHuu = khachhang.id and quan.ThuocThanhPho = 1 and '.$trangthai.' and quan.id= '.$quan.' and '.$thang);
+            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi from Dat,Phuong,ThanhPho,Quan,CongTy where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and dat.SoHuu = congty.id and quan.ThuocThanhPho = 1 and '.$trangthai.' and quan.id= '.$quan.' and '.$thang);
             return $k;
         }
     }

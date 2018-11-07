@@ -30,7 +30,7 @@
           <form method="post" action="{{route('TKDT')}}">
             {{csrf_field()}}
             <div class="form-group">
-              <div class="col-md-3 col-sm-3 control-label"></div>
+              <div class="col-md-4 col-sm-4 control-label"></div>
               <div class="col-md-2">
                 <div class="form-group">
                   <select class="form-control" name="thang">
@@ -72,12 +72,11 @@
            <thead>
             <tr>
              <th>STT</th>
-             <th>Mã hóa đơn</th>
+             <th>Mã hợp đồng</th>
              <th>Lô đất</th>
              <th>Tên khách hàng mua</th>
-             <th>Tên khách hàng mua</th>
              <th>Ngày lập</th>
-             <th>Phí môi giới</th>
+             <th>Giá đất</th>
            </tr>
          </thead>
          <tbody>
@@ -87,19 +86,14 @@
            <td>{{++$i}}</td>
            <td>{{$hd->MaHopDong}}</td>
            <td>{{$hd->KyHieuLoDat}}</td>
-           <td>@foreach ($khachhang as $kh)
-            <?php if($kh->id == $hd->SoHuu) { 
-             echo $kh->HoVaTenDem.' '.$kh->Ten;
-           } ?>
-         @endforeach</td>
-         <td>{{$hd->HoVaTenDem}} {{$hd->Ten}}</td>
+           <td>{{$hd->HoVaTenDem}} {{$hd->Ten}}</td>
          <td><?php $date=date_create($hd->ngaylap);
          echo date_format($date,"d/m/Y H:i:s") ?></td>
-         <td>{{number_format($hd->PhiMoiGioi)}}VNĐ</td>
+         <td>{{number_format($hd->Gia)}} VNĐ</td>
           </tr>
-          <?php $tong = $tong + ($hd->PhiMoiGioi) ?>
+          <?php $tong = $tong + ($hd->Gia) ?>
           @endforeach
-          <td colspan="6" style="font-weight: bold;text-align: right;">Tổng doanh thu:</td>
+          <td colspan="5" style="font-weight: bold;text-align: right;">Tổng doanh thu:</td>
           <td colspan="1" style="font-weight: bold;font-style: italic;">{{number_format($tong)}}VNĐ</td>
         </tbody>
     

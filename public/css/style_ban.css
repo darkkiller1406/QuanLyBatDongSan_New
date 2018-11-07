@@ -414,13 +414,13 @@ img {
       color: #ffffff;
       background-color: #947054; }
   .south-btn.btn-3 {
-    border: 2px solid #000000;
-    background-color: transparent;
-    color: #000000;
+    background-color: #000000;
+    color: #ffffff;
     line-height: 46px; }
     .south-btn.btn-3:hover, .south-btn.btn-3:focus {
-      color: #ffffff;
-      background-color: #000000; }
+      color: #000000;
+      border: 2px solid #000000;
+      background-color: transparent; }
 
 /* :: 8.0 Header Area CSS */
 .dark .classynav ul li .dropdown,
@@ -1840,4 +1840,17 @@ img {
 }
 .table-gia tr:hover{
     background-color: #ddd;
+}
+.pricing-table {
+  width: 96%;
+  margin: 50px auto;
+  min-height: 400px;
+  border: 2px solid rgba(151, 160, 175, 0.2);
+  border-radius: 7px;
+  padding: 30px 10px;
+  transition: all 0.27s cubic-bezier(0, 0, 0.58, 1);
+}
+
+.pricing-table:hover {
+  border-color: #97a0af;
 }
