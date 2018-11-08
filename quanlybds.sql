@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 01, 2018 lúc 10:43 AM
+-- Thời gian đã tạo: Th10 08, 2018 lúc 10:58 AM
 -- Phiên bản máy phục vụ: 10.1.34-MariaDB
 -- Phiên bản PHP: 7.2.8
 
@@ -31,6 +31,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `congty` (
   `id` int(11) NOT NULL,
   `TenCongTy` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Link` varchar(50) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Logo` varchar(50) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `DiaChi` varchar(500) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `SDT` varchar(15) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Email` varchar(50) COLLATE utf8mb4_vietnamese_ci NOT NULL,
@@ -42,8 +44,11 @@ CREATE TABLE `congty` (
 -- Đang đổ dữ liệu cho bảng `congty`
 --
 
-INSERT INTO `congty` (`id`, `TenCongTy`, `DiaChi`, `SDT`, `Email`, `created_at`, `updated_at`) VALUES
-(7, 'test', 'test', '01869885811', 'test@gmail.com', '2018-11-01 14:54:34', '2018-11-01 07:54:34');
+INSERT INTO `congty` (`id`, `TenCongTy`, `Link`, `Logo`, `DiaChi`, `SDT`, `Email`, `created_at`, `updated_at`) VALUES
+(0, 'admin', 'admin', NULL, 'admin', '0569885811', 'minh.1406@gmail.com', '2018-11-07 00:00:00', '2018-11-06 08:19:08'),
+(7, 'LightZ Real Estate', 'test', 'logo_test.jpg', 'test', '01869885811', 'test@gmail.com', '2018-11-01 14:54:34', '2018-11-08 03:21:31'),
+(12, 'New Real Estate', 'test2', 'logo_test2.jpg', '212 phương sài', '0569885812', 'minh.1402.nt@gmail.com', '2018-11-03 12:28:41', '2018-11-08 03:21:35'),
+(13, 'HCMGroup', 'test3', 'logo_test3.jpg', 'test3', '0569885813', 'test3@gmail.com', '2018-11-03 12:31:11', '2018-11-08 03:21:38');
 
 -- --------------------------------------------------------
 
@@ -78,13 +83,12 @@ CREATE TABLE `dat` (
 --
 
 INSERT INTO `dat` (`id`, `KyHieuLoDat`, `Rong`, `Dai`, `NoHau`, `DienTich`, `DonGia`, `Gia`, `SoHuu`, `TrangThai`, `Huong`, `DiaChi`, `Map`, `Phuong`, `HinhAnh`, `GhiChu`, `LuotXem`, `created_at`, `updated_at`) VALUES
-(1, '1234', 5, 10, 0, 50, 600000, 30000000, 7, 2, 'Đông', '163/24/92B Tô Hiến Thành', '10.782843;106.67134699999997', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', NULL, 77, '2018-05-24 07:42:00', '2018-11-01 08:08:37'),
-(3, 'LK07', 5, 18, 0, 90, 20000000, 1800000000, 7, 1, 'Bắc', '169/24/92B Tô Hiến Thành', '10.782621; 106.6716778', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 89, '2018-08-07 10:07:54', '2018-11-01 08:08:41'),
-(4, 'LK08', 4, 20, 0, 80, 15000000, 1200000000, 7, 1, 'Đông', '169/24/92B Tô Hiến Thành', '10.782621; 106.6716778', 14, 'LK06_1.jpg;LK06_2.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 19, '2018-08-07 10:07:54', '2018-11-01 08:08:44'),
-(5, 'LK09', 5, 18, 0, 90, 22000000, 1980000000, 7, 0, 'Bắc', '169/24/92B Tô Hiến Thành', '10.782621; 106.6716778', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 49, '2018-08-07 10:07:54', '2018-11-01 08:08:46'),
-(6, 'LK10', 4, 20, 0, 80, 15000000, 1200000000, 7, 0, 'Đông', '169/24/92B Tô Hiến Thành', '10.782621; 106.6716778', 14, 'LK06_1.jpg;LK06_2.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 53, '2018-08-07 10:07:54', '2018-11-01 08:08:49'),
-(7, 'LK013', 4, 15, 0, 60, 12000000, 720000000, 7, 0, 'Nam', '163/24/92B Tô Hiến Thành', '10.782621; 106.6716778', 14, 'LK013_3.jpg;LK013_2.jpg;LK013_1.jpg;', NULL, 8, '2018-08-07 10:07:54', '2018-11-01 08:08:51'),
-(8, '123', 10, 120, 0, 1200, 6230250, 7476300000, 7, 0, 'Đông', '256 Trần Văn Đang', '10.7842142;106.67331469999999', 13, '123_1.jpg;', NULL, 6, '2018-10-20 05:44:55', '2018-11-01 08:08:54');
+(1, '1234', 5, 10, 0, 50, 600000, 30000000, 7, 1, 'Đông', '163/24/92B Tô Hiến Thành', '10.782843;106.67134699999997', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', NULL, 77, '2018-05-24 07:42:00', '2018-11-08 02:46:45'),
+(3, 'LK07', 5, 18, 0, 90, 20000000, 1800000000, 7, 1, 'Bắc', '169/24/92B Tô Hiến Thành', '10.782621; 106.6716778', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 174, '2018-08-07 10:07:54', '2018-11-08 09:40:45'),
+(4, 'LK08', 4, 20, 0, 80, 15000000, 1200000000, 12, 1, 'Đông', '169/24/92B Tô Hiến Thành', '10.782621; 106.6716778', 14, 'LK06_1.jpg;LK06_2.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 84, '2018-08-07 10:07:54', '2018-11-06 08:02:03'),
+(5, 'LK09', 5, 18, 0, 90, 22000000, 1980000000, 7, 1, 'Bắc', '169/24/92B Tô Hiến Thành', '10.782621; 106.6716778', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 97, '2018-08-07 10:07:54', '2018-11-08 02:46:52'),
+(6, 'LK10', 4, 20, 0, 80, 15000000, 1200000000, 12, 1, 'Đông', '169/24/92B Tô Hiến Thành', '10.782621; 106.6716778', 14, 'LK06_1.jpg;LK06_2.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 79, '2018-08-07 10:07:54', '2018-11-08 08:34:30'),
+(8, '123', 10, 120, 0, 1200, 6230250, 7476300000, 7, 0, 'Đông', '256 Trần Văn Đang', '10.7842142;106.67331469999999', 13, '123_1.jpg;', NULL, 7, '2018-10-20 05:44:55', '2018-11-03 06:03:00');
 
 -- --------------------------------------------------------
 
@@ -97,22 +101,10 @@ CREATE TABLE `hopdong` (
   `MaHopDong` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `ID_Dat` int(11) NOT NULL,
   `ID_KhachHang_Mua` int(11) NOT NULL,
-  `PhiMoiGioi` int(11) NOT NULL,
+  `FileHopDong` varchar(100) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
-
---
--- Đang đổ dữ liệu cho bảng `hopdong`
---
-
-INSERT INTO `hopdong` (`id`, `MaHopDong`, `ID_Dat`, `ID_KhachHang_Mua`, `PhiMoiGioi`, `created_at`, `updated_at`) VALUES
-(6, 'HD04', 4, 3, 10000000, '2018-06-01 06:38:51', '2018-06-01 06:38:51'),
-(7, 'HD07', 1, 1, 10000000, '2018-06-01 10:28:48', '2018-06-01 10:28:48'),
-(8, 'HD08', 3, 3, 15000000, '2018-06-01 11:57:49', '2018-06-01 11:57:49'),
-(9, 'HD09', 6, 3, 10000, '2018-08-07 07:29:17', '2018-08-07 07:29:17'),
-(11, 'HD010', 1, 4, 9000000, '2018-10-28 08:12:58', '2018-10-28 08:12:58'),
-(12, 'HD12', 1, 4, 123, '2018-10-28 08:15:34', '2018-10-28 08:15:34');
 
 -- --------------------------------------------------------
 
@@ -127,10 +119,11 @@ CREATE TABLE `khachhang` (
   `HoVaTenDem` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Ten` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `DTDD` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `DTCD` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `DTCD` varchar(20) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `CMND` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `DiaChi` varchar(200) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Email` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `ThuocCongTy` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
@@ -139,11 +132,12 @@ CREATE TABLE `khachhang` (
 -- Đang đổ dữ liệu cho bảng `khachhang`
 --
 
-INSERT INTO `khachhang` (`id`, `MaKhachHang`, `XungHo`, `HoVaTenDem`, `Ten`, `DTDD`, `DTCD`, `CMND`, `DiaChi`, `Email`, `created_at`, `updated_at`) VALUES
-(1, 'KH001', 'Ông', 'Nguyễn Công', 'Minh', '01869885811', '02583812656', '225582114', '163/24/92B Tô Hiến Thành, P13, Q10', 'minh.1406@gmail.com', '2018-05-21 04:50:13', '2018-05-21 08:28:16'),
-(3, 'KH002', 'Ông', 'Nguyễn Quang', 'Huy', '0905456781', '02583812654', '22552119', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1406@yahoo.com', '2018-05-21 09:04:31', '2018-05-21 09:04:31'),
-(4, 'KH004', 'Bà', 'Trà', 'Giang', '0905456789', '02583812657', '22552118', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1407@yahoo.com', '2018-05-21 09:47:00', '2018-05-21 09:47:00'),
-(5, 'KH005', 'ông', 'Nguyễn Công', 'Minh', '0905456733', '02583812122', '225522118', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1423@yahoo.com', '2018-06-28 06:31:04', '2018-06-28 06:31:04');
+INSERT INTO `khachhang` (`id`, `MaKhachHang`, `XungHo`, `HoVaTenDem`, `Ten`, `DTDD`, `DTCD`, `CMND`, `DiaChi`, `Email`, `ThuocCongTy`, `created_at`, `updated_at`) VALUES
+(1, 'KH001', 'Ông', 'Nguyễn Công', 'Minh', '01869885811', '02583812656', '225582114', '163/24/92B Tô Hiến Thành, P13, Q10', 'minh.1406@gmail.com', 7, '2018-05-21 04:50:13', '2018-11-02 04:46:41'),
+(3, 'KH002', 'Ông', 'Nguyễn Quang', 'Huy', '0905456781', '02583812654', '22552119', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1406@yahoo.com', 7, '2018-05-21 09:04:31', '2018-11-02 04:46:43'),
+(4, 'KH004', 'Bà', 'Trà', 'Giang', '0905456789', '02583812657', '22552118', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1407@yahoo.com', 7, '2018-05-21 09:47:00', '2018-11-05 06:46:55'),
+(5, 'KH005', 'ông', 'Nguyễn Công', 'Minh', '0905456733', '02583812122', '225522118', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1423@yahoo.com', 7, '2018-06-28 06:31:04', '2018-11-05 06:46:58'),
+(6, 'KH004', 'ông', 'Nguyễn Công', 'Minh', '123456781', '123456781', '225582114', '212 Phương Sài', 'minh.1406.nt@gmail.com', 7, '2018-11-02 07:38:55', '2018-11-02 07:41:46');
 
 -- --------------------------------------------------------
 
@@ -166,54 +160,19 @@ CREATE TABLE `lichsugiaodich` (
 --
 
 INSERT INTO `lichsugiaodich` (`id`, `TienGiaoDich`, `GiaoDich`, `LoaiGiaoDich`, `created_at`, `updated_at`, `NguoiThucHien`) VALUES
-(1, 80000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-08 13:51:51', '2018-07-12 05:05:52', 2),
-(2, 20000, 'Thực hiện thay đổi loại tin', 1, '2018-07-08 15:20:22', '2018-07-12 05:05:52', 2),
-(3, 250000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-08 15:26:19', '2018-07-12 05:05:52', 2),
-(4, 120000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-08 15:43:27', '2018-07-12 05:05:52', 2),
-(5, 30000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-09 12:00:52', '2018-07-12 05:05:52', 2),
-(6, 20000, 'Nạp thêm tiền', 2, '2018-07-12 12:06:56', '2018-07-12 05:06:56', 2),
-(7, 50000, 'Nạp thêm tiền', 2, '2018-07-12 12:07:05', '2018-07-12 05:07:05', 2),
-(8, 100000, 'Nạp thêm tiền', 2, '2018-07-12 12:07:14', '2018-07-12 05:07:14', 2),
-(9, 500000, 'Nạp thêm tiền', 2, '2018-07-12 12:07:23', '2018-07-12 05:07:23', 2),
-(10, 250000, 'Thực hiện đăng tin mới', 1, '2018-07-12 16:14:38', '2018-07-12 09:14:38', 2),
-(11, 250000, 'Thực hiện đăng tin mới', 1, '2018-07-12 16:17:41', '2018-07-12 09:17:41', 2),
-(12, 50000, 'Thực hiện đăng tin mới', 1, '2018-07-12 16:20:47', '2018-07-12 09:20:47', 2),
-(13, 50000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-12 16:24:39', '2018-07-12 09:24:39', 2),
-(14, 50000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-12 16:28:59', '2018-07-12 09:28:59', 2),
-(15, 30000, 'Thực hiện đăng tin mới', 1, '2018-07-12 16:41:15', '2018-07-12 09:41:15', 2),
-(16, 30000, 'Thực hiện đăng tin mới', 1, '2018-07-12 16:41:44', '2018-07-12 09:41:44', 2),
-(17, 30000, 'Thực hiện đăng tin mới', 1, '2018-07-12 16:42:45', '2018-07-12 09:42:45', 2),
-(18, 30000, 'Thực hiện đăng tin mới', 1, '2018-07-12 16:43:03', '2018-07-12 09:43:03', 2),
-(37, 120000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-13 11:27:55', '2018-07-13 04:27:55', 2),
-(38, 80000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-13 13:27:50', '2018-07-13 06:27:50', 2),
-(39, 160000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-16 20:15:24', '2018-07-16 13:15:24', 2),
-(40, 200000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-16 20:16:04', '2018-07-16 13:16:04', 2),
-(41, 200000, 'Thực hiện gia hạn ngày đăng', 1, '2018-07-16 20:19:12', '2018-07-16 13:19:12', 2),
-(42, 90000, 'Thực hiện gia hạn ngày đăng', 1, '2018-08-07 07:55:19', '2018-08-07 00:55:19', 2),
-(43, 80000, 'Thực hiện gia hạn ngày đăng', 1, '2018-08-07 14:09:49', '2018-08-07 07:09:49', 2),
-(44, 20000, 'Thực hiện thay đổi loại tin', 1, '2018-08-07 14:18:25', '2018-08-07 07:18:25', 2),
-(45, 80000, 'Thực hiện gia hạn ngày đăng', 1, '2018-09-06 18:38:44', '2018-09-06 11:38:44', 2),
-(46, 280000, 'Thực hiện gia hạn ngày đăng', 1, '2018-09-16 09:27:01', '2018-09-16 02:27:01', 2),
-(47, 350000, 'Thực hiện gia hạn ngày đăng', 1, '2018-09-16 09:27:25', '2018-09-16 02:27:25', 2),
-(48, 210000, 'Thực hiện gia hạn ngày đăng', 1, '2018-09-16 09:27:39', '2018-09-16 02:27:39', 2),
-(49, 400000, 'Thực hiện gia hạn ngày đăng', 1, '2018-09-27 19:45:40', '2018-09-27 12:45:40', 2),
-(50, 50000, 'Nạp thêm tiền', 2, '2018-10-06 12:35:44', '2018-10-06 05:35:44', 2),
-(51, 20000, 'Nạp thêm tiền', 2, '2018-10-06 13:10:07', '2018-10-06 06:10:07', 2),
-(52, 50000, 'Nạp thêm tiền', 2, '2018-10-06 13:43:35', '2018-10-06 06:43:35', 2),
-(53, 20000, 'Nạp thêm tiền', 2, '2018-10-06 14:49:34', '2018-10-06 07:49:34', 2),
-(54, 20000, 'Nạp thêm tiền', 2, '2018-10-06 15:29:30', '2018-10-06 08:29:30', 2),
-(55, 20000, 'Nạp thêm tiền', 2, '2018-10-06 15:30:22', '2018-10-06 08:30:22', 2),
-(56, 0, 'Nạp thêm tiền', 2, '2018-10-06 16:37:08', '2018-10-06 09:37:08', 2),
-(57, 20000, 'Nạp thêm tiền', 2, '2018-10-06 17:28:25', '2018-10-06 10:28:25', 2),
-(58, 100000, 'Nạp thêm tiền', 2, '2018-10-06 17:37:27', '2018-10-06 10:37:27', 2),
-(59, 50000, 'Nạp thêm tiền', 2, '2018-10-06 17:39:02', '2018-10-06 10:39:02', 2),
-(60, 20000, 'Nạp thêm tiền', 2, '2018-10-06 17:40:52', '2018-10-06 10:40:52', 2),
-(61, 20000, 'Nạp thêm tiền', 2, '2018-10-06 17:42:31', '2018-10-06 10:42:31', 2),
-(62, 100000, 'Thực hiện đăng tin mới', 1, '2018-10-26 09:40:48', '2018-10-26 02:40:48', 2),
-(63, 20000, 'Nạp thêm tiền', 2, '2018-10-30 13:41:02', '2018-10-30 06:41:02', 2),
-(64, 20000, 'Nạp thêm tiền', 2, '2018-10-30 13:44:36', '2018-10-30 06:44:36', 2),
-(65, 20000, 'Nạp thêm tiền', 2, '2018-10-30 13:47:03', '2018-10-30 06:47:03', 2),
-(66, 20000, 'Nạp thêm tiền', 2, '2018-10-30 13:48:19', '2018-10-30 06:48:19', 2);
+(67, 120000, 'Gia hạn tài khoản', 2, '2018-11-07 11:55:57', '2018-11-07 04:55:57', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -362,7 +321,19 @@ INSERT INTO `thongketimkiem` (`id`, `Quan`, `Huong`, `created_at`, `updated_at`)
 (49, 2, 'A', '2018-10-31 11:40:44', '2018-10-31 11:40:44'),
 (50, 5, 'A', '2018-10-31 11:41:15', '2018-10-31 11:41:15'),
 (51, 4, 'A', '2018-10-31 11:41:57', '2018-10-31 11:41:57'),
-(52, 2, 'A', '2018-10-31 12:08:08', '2018-10-31 12:08:08');
+(52, 2, 'A', '2018-10-31 12:08:08', '2018-10-31 12:08:08'),
+(53, 1, 'A', '2018-11-04 04:00:37', '2018-11-04 04:00:37'),
+(54, 1, 'A', '2018-11-04 04:06:00', '2018-11-04 04:06:00'),
+(55, 1, 'A', '2018-11-04 04:08:29', '2018-11-04 04:08:29'),
+(56, 1, 'A', '2018-11-04 04:09:06', '2018-11-04 04:09:06'),
+(57, 1, 'A', '2018-11-04 04:09:39', '2018-11-04 04:09:39'),
+(58, 1, 'A', '2018-11-04 04:09:56', '2018-11-04 04:09:56'),
+(59, 1, 'A', '2018-11-04 04:10:48', '2018-11-04 04:10:48'),
+(60, 1, 'A', '2018-11-04 04:11:35', '2018-11-04 04:11:35'),
+(61, 1, 'A', '2018-11-04 04:12:13', '2018-11-04 04:12:13'),
+(62, 1, 'A', '2018-11-04 04:12:48', '2018-11-04 04:12:48'),
+(63, 1, 'A', '2018-11-04 04:13:07', '2018-11-04 04:13:07'),
+(64, 3, 'A', '2018-11-04 04:26:23', '2018-11-04 04:26:23');
 
 -- --------------------------------------------------------
 
@@ -381,6 +352,7 @@ CREATE TABLE `users` (
   `Quyen` int(11) NOT NULL,
   `Ten` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ThuocCongTy` int(11) NOT NULL,
+  `LoaiTaiKhoan` int(11) NOT NULL,
   `NgayHetHan` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -388,10 +360,12 @@ CREATE TABLE `users` (
 -- Đang đổ dữ liệu cho bảng `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`, `Quyen`, `Ten`, `ThuocCongTy`, `NgayHetHan`) VALUES
-(1, 'admin', 'minh.1406.nt@gmail.com', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', 'PcUbJU57IzGo5McoNvHtMOOSQN9wqa85YdZOCJ8qMb06k4WdAWpi4yI5b8kv', '2018-05-21 09:03:26', '2018-11-01 08:12:59', 1, 'Admin', 7, '0000-00-00 00:00:00'),
-(2, 'congminh', 'darkkiller1406@yahoo.com', '$2y$10$IuHVECWVhbUpFbMGYMm/UOoLKEVWphneTMvmB6sDGhJj/Q41XIoPS', 'gkgXQJWwgqz28DsVITJKfUTkvhvgon1ZatFEw83lclcnNIv6cc80xToLJgc6', '2018-05-21 09:20:52', '2018-11-01 08:13:03', 2, 'Công Minh', 7, '0000-00-00 00:00:00'),
-(4, 'congminh123', 'test@gmail.com', '$2y$10$i7Y8edEvPkebMmAraerAKO96S6fZEzYOhHqLrJpShNJMheCvuD6w2', NULL, '2018-11-01 07:54:34', '2018-11-01 07:54:34', 2, 'Nguyễn Công Minh', 7, NULL);
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`, `Quyen`, `Ten`, `ThuocCongTy`, `LoaiTaiKhoan`, `NgayHetHan`) VALUES
+(0, 'admin', 'minh.1406.nt@gmail.com', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', 'XSdJOQQYZb5wGkWsjFjuoHLr0nAeg7Qagv7ojGICu45eiY3KllGvSeit2KdJ', '2018-05-21 09:03:26', '2018-11-07 08:29:37', 0, 'Admin', 0, 0, '2020-01-29 00:00:00'),
+(1, 'congminh', 'kisivodanh1406@gmail.com', '$2y$10$mY9k0CwUBAsJtc7dbrmCHOVJ5yIV.xKCgPKFzDeDE0FWql6tNru5y', 'MDLmDEgBYzovMreYdKWR7ldm3UlkWSHPbqBjovDfH9YNypa8NKhh1efnvzzY', '2018-05-21 09:20:52', '2018-11-08 02:36:58', 1, 'Công Minh', 7, 1, '2019-01-29 00:00:00'),
+(2, 'congminh123', 'test@gmail.com', '$2y$10$i7Y8edEvPkebMmAraerAKO96S6fZEzYOhHqLrJpShNJMheCvuD6w2', NULL, '2018-11-01 07:54:34', '2018-11-07 03:38:30', 1, 'Nguyễn Công Minh', 12, 1, '2018-12-03 00:00:00'),
+(3, 'admin', 'test4@gmail.com', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', 'LVWUFqKsCfuiS5Bd0x64B6eLEEG4Cu6SN3VjYPqEOU7EEiIddWcfnLqAEt9r', '2018-11-04 08:19:01', '2018-11-07 03:38:35', 1, 'Nguyễn Công Minh', 13, 1, '2018-12-29 00:00:00'),
+(4, 'test4', 'test4', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', NULL, NULL, '2018-11-07 04:55:57', 2, 'test4', 7, 1, '2019-01-29 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -450,7 +424,8 @@ ALTER TABLE `hopdong`
 -- Chỉ mục cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ThuocCongTy` (`ThuocCongTy`);
 
 --
 -- Chỉ mục cho bảng `lichsugiaodich`
@@ -490,7 +465,8 @@ ALTER TABLE `thongketimkiem`
 -- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ThuocCongTy` (`ThuocCongTy`);
 
 --
 -- Chỉ mục cho bảng `yeucau`
@@ -507,7 +483,7 @@ ALTER TABLE `yeucau`
 -- AUTO_INCREMENT cho bảng `congty`
 --
 ALTER TABLE `congty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT cho bảng `dat`
@@ -519,19 +495,19 @@ ALTER TABLE `dat`
 -- AUTO_INCREMENT cho bảng `hopdong`
 --
 ALTER TABLE `hopdong`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `lichsugiaodich`
 --
 ALTER TABLE `lichsugiaodich`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT cho bảng `phuong`
@@ -555,7 +531,7 @@ ALTER TABLE `thanhpho`
 -- AUTO_INCREMENT cho bảng `thongketimkiem`
 --
 ALTER TABLE `thongketimkiem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
@@ -577,7 +553,8 @@ ALTER TABLE `yeucau`
 -- Các ràng buộc cho bảng `dat`
 --
 ALTER TABLE `dat`
-  ADD CONSTRAINT `dat_ibfk_5` FOREIGN KEY (`Phuong`) REFERENCES `phuong` (`id`);
+  ADD CONSTRAINT `dat_ibfk_5` FOREIGN KEY (`Phuong`) REFERENCES `phuong` (`id`),
+  ADD CONSTRAINT `dat_ibfk_6` FOREIGN KEY (`SoHuu`) REFERENCES `congty` (`id`);
 
 --
 -- Các ràng buộc cho bảng `hopdong`
@@ -587,10 +564,10 @@ ALTER TABLE `hopdong`
   ADD CONSTRAINT `hopdong_ibfk_4` FOREIGN KEY (`ID_KhachHang_Mua`) REFERENCES `khachhang` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Các ràng buộc cho bảng `lichsugiaodich`
+-- Các ràng buộc cho bảng `khachhang`
 --
-ALTER TABLE `lichsugiaodich`
-  ADD CONSTRAINT `lichsugiaodich_ibfk_1` FOREIGN KEY (`NguoiThucHien`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `khachhang`
+  ADD CONSTRAINT `khachhang_ibfk_1` FOREIGN KEY (`ThuocCongTy`) REFERENCES `congty` (`id`);
 
 --
 -- Các ràng buộc cho bảng `phuong`
@@ -609,6 +586,12 @@ ALTER TABLE `quan`
 --
 ALTER TABLE `thongketimkiem`
   ADD CONSTRAINT `thongketimkiem_ibfk_1` FOREIGN KEY (`Quan`) REFERENCES `quan` (`id`);
+
+--
+-- Các ràng buộc cho bảng `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`ThuocCongTy`) REFERENCES `congty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `yeucau`
