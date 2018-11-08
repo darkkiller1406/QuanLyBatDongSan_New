@@ -84,7 +84,16 @@ Route::post('giahan','QL_TaiKhoanController@postGiaHan')->name('postgiahan');
 Route::any('thuchiengiahan/{check}','QL_TaiKhoanController@thuchiengiahan');
 
 Route::any('checkunique','QL_TaiKhoanController@checkUnique');
-// page admin
+
+//reset password
+Route::group(['namespace' => 'Auth'],function(){
+    // Password Reset Routes...
+    Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+    Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset.token');
+    Route::post('password/reset', 'ResetPasswordController@reset');
+});
+//login
 Route::get('page/dangnhap/{id}', 'QL_DangNhapController@getView');
 Route::any('page/dangnhap', 'QL_DangNhapController@getDangNhap');
 Route::get('page/dangxuat', 'QL_DangNhapController@getDangXuat');

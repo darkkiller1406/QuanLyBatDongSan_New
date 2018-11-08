@@ -1,10 +1,11 @@
 <?php
 
 namespace App;
-
+use App\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Illuminate\Auth\Passwords\CanResetPassword;
+//use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -26,8 +27,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    public function nv()
+
+    /**
+ * Send the password reset notification.
+ *
+ * @param  string  $token
+ * @return void
+ */
+    public function sendPasswordResetNotification($token)
     {
-        return $this->belongsTo('App\NhanVien','SoHuu','id');
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

@@ -70,6 +70,10 @@ class QL_TaiKhoanController extends Controller
         $user->save();
         return redirect('page/quanlytaikhoan')->with('thongbao','Thay đổi thông tin tài khoản thành công!');
     }
+    public function sendReset(Request $r) 
+    {
+        $email = $r->email;
+    }
     public function getTim(Request $r)
     {
         $t = new TaiKhoan;
@@ -189,7 +193,7 @@ class QL_TaiKhoanController extends Controller
                   }
               }
               $random = rand(1000,9999);
-              $url = "https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=NT".date('Ymd')."&price=".$tien."&return_url=".asset('thuchiengiahan/'.$random)."&comments=Nạp tiền";
+              $url = "https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=NT".date('Ymdhis')."&price=".$tien."&return_url=".asset('thuchiengiahan/'.$random)."&comments=Gia hạn";
               echo "<script>window.open('".$url."', '_blank')</script>";
               session(['tien' => $tien]);
               session(['loaiTaiKhoan' => $request->loaiTaiKhoan]);
@@ -288,6 +292,13 @@ class QL_TaiKhoanController extends Controller
             'sdt.unique' => 'SDT đã được sử dụng',
             'diaChi.unique' => 'Địa chỉ đã tồn tại trong hệ thống'
         ]);
+
+        // // img
+         $image =  $request->logo;
+         $input['imagename'] = 'logo_'.$request->diaChiTruyCap.'.'.$image->getClientOriginalExtension();
+         $destinationPath = public_path('/img/logo');
+         $image->move($destinationPath, $input['imagename']);
+
         //thêm cty
         $congty = new CongTy;
         $congty->TenCongTy = $request->tenCongTy;
@@ -296,7 +307,9 @@ class QL_TaiKhoanController extends Controller
         $congty->Link = $request->diaChiTruyCap;
         $congty->Email = $request->email;
         $now = (new \DateTime())->format('Y-m-d H:i:s');
+        $congty->Logo = $input['imagename'];
         $congty->save();
+
         //thêm người dùng
         $user = new User;
         $user->name = $request->username; 
@@ -308,14 +321,18 @@ class QL_TaiKhoanController extends Controller
         $user->LoaiTaiKhoan = 4;
         $user->NgayHetHan = $now;
         $user->save();
+
+        // create session
         $congty = CongTy::find($user->ThuocCongTy);
         $random = rand(1000,9999);
+        $tien = $request->tien;
         session(['id' => $congty->getIdByCreatedAt($now)]);
         session(['loaiTaiKhoan' => $request->loaiTaiKhoan]);
         $after_5_min = time() + 5*60;
         session(['checkCreat' =>$random]);
         session(['timeCreat' =>$after_5_min]);
-        return $random;
+        $url = "https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=NT".date('Ymdhis')."&price=".$tien."&return_url=".asset('kichhoat/'.$random)."&comments=Nạp tiền";
+        return $url;
     }
     public function checkUnique(Request $request) 
     {

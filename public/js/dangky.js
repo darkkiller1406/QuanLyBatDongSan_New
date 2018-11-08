@@ -6,6 +6,7 @@ $.ajaxSetup({
   });
   function dangky()
   {
+      var data = new FormData()
       var loaiTaiKhoan = $('#loaiTaiKhoan').val();
       var name = $('#ten').val();
       var id = $('#username').val();
@@ -17,6 +18,18 @@ $.ajaxSetup({
       var diaChi = $('#diaChi').val();
       var diaChiTruyCap = $('#diaChiTruyCap').val();
       var check = 0;
+      data.append("logo", $("#img")[0].files[0]);
+      data.append("username", id);
+      data.append("name", name);
+      data.append("password", pass);
+      data.append("passwordAgain", repass);
+      data.append("email", emailCongTy);
+      data.append("sdt", sdt);
+      data.append("tenCongTy", tenCongTy);
+      data.append("diaChi", diaChi);
+      data.append("diaChiTruyCap", diaChiTruyCap);
+      data.append("loaiTaiKhoan", loaiTaiKhoan);
+      data.append("tien", tien);
       if(name == '')
       {
         document.getElementById("ten").style.marginBottom = "0";
@@ -106,10 +119,31 @@ $.ajaxSetup({
       }
       else
       {
+        re1 = /[0-9]/;
+        re2 = /[a-z]/;
+        re3 = /[A-Z]/;
         if(pass.length < 6)
         {
           document.getElementById("password").style.marginBottom = "0";
           $('#ktMatKhau').html('*Vui lòng nhập mật khẩu lớn hơn hoặc bằng 6 ký tự');
+          check++;
+        } 
+        else if(!re1.test(pass))
+        {
+          document.getElementById("password").style.marginBottom = "0";
+          $('#ktMatKhau').html('*Vui lòng nhập mật khẩu có ít nhất một số (0-9)');
+          check++;
+        } 
+        else if(!re2.test(pass))
+        {
+          document.getElementById("password").style.marginBottom = "0";
+          $('#ktMatKhau').html('*Vui lòng nhập mật khẩu có ít nhất một kí tự viết thường (a-z)');
+          check++;
+        }
+        else if(!re3.test(pass))
+        {
+          document.getElementById("password").style.marginBottom = "0";
+          $('#ktMatKhau').html('*Vui lòng nhập mật khẩu có ít nhất một kí tự viết hoa (A-Z)');
           check++;
         }
         else
@@ -215,26 +249,15 @@ $.ajaxSetup({
               $.ajax({
                 type:'post',
                 url:"postdangky",
-                data: {
-                  name: name,
-                  username: id,
-                  password: pass,
-                  passwordAgain: repass,
-                  email: emailCongTy,
-                  sdt: sdt,
-                  tenCongTy: tenCongTy,
-                  diaChi: diaChi,
-                  diaChiTruyCap: diaChiTruyCap,
-                  loaiTaiKhoan: loaiTaiKhoan
-                },
+                data: data,
+                processData: false, contentType: false,
                 async: true,
                 success:function(html){
-                  var return_url = window.location.href.replace('dangky', 'kichhoat/' + html);
-                  window.open("https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=NT"+ Date.now() +"&price=" + tien + "&return_url="+return_url+"&comments=Nạp tiền", '_blank');
+                  window.open(html, '_blank');
                   location.reload();
                 },
                 error : function() {
-                  alert('Bạn nhập hoặc tên công ty hoặc email hoặc SDT đã có trong hệ thống');
+                  alert('Không kết nối được với máy chủ ! Vui lòng thử lại sau');
                 }
               });
             }

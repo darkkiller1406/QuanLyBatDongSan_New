@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+
 class TaiKhoan extends Model
 {
     //
@@ -57,35 +58,46 @@ class TaiKhoan extends Model
       }
     }
   }
-    public function demsobai($id)
-    {
-      $kq = DB::select("SELECT count(id) as dem from phongthue where NguoiDang = ".$id);
-      foreach ($kq as $key) {
-        $a = $key->dem;
-        return $a;
-      }
-    }
-    public function updateTien($id,$tien)
-    {
-      $kq = DB::select("select * from users where  id='".$id."'");
-      foreach($kq as $check) {
-        $tien = ($check->Tien)+$tien;
-        $tam = DB::update("UPDATE `users` SET `tien`='".$tien."' WHERE id = '".$check->id."'");
-        return '1';
-      }
-    }
-    public function xoaKhongKichHoat() 
-    {
-      $users = DB::select("SELECT * FROM users WHERE hour(TIMEDIFF(NOW(), updated_at)) > 1 and LoaiTaiKhoan = 3");
-      if(!empty($users)) {
-          foreach ($users as $user) {
-          DB::delete("DELETE FROM users WHERE id = ".$user->id);
-          }
-          DB::delete("DELETE FROM congty WHERE id = ".$users[0]->ThuocCongTy);
-      }
-    }
-    public function updateLoaiTaiKhoan()
-    {
-       DB::update("UPDATE users SET LoaiTaiKhoan = 3 WHERE NOW() >= NGAYHETHAN and LoaiTaiKhoan > 0");
+
+  public function demsobai($id)
+  {
+    $kq = DB::select("SELECT count(id) as dem from phongthue where NguoiDang = ".$id);
+    foreach ($kq as $key) {
+      $a = $key->dem;
+      return $a;
     }
   }
+
+  public function updateTien($id,$tien)
+  {
+    $kq = DB::select("select * from users where  id='".$id."'");
+    foreach($kq as $check) {
+      $tien = ($check->Tien)+$tien;
+      $tam = DB::update("UPDATE `users` SET `tien`='".$tien."' WHERE id = '".$check->id."'");
+      return '1';
+    }
+  }
+
+  public function xoaKhongKichHoat() 
+  {
+    $users = DB::select("SELECT * FROM users WHERE hour(TIMEDIFF(NOW(), updated_at)) >= 1 and LoaiTaiKhoan = 4");
+    if(!empty($users)) {
+      foreach ($users as $user) {
+        DB::delete("DELETE FROM users WHERE id = ".$user->id);
+      }
+      DB::delete("DELETE FROM congty WHERE id = ".$users[0]->ThuocCongTy);
+    }
+  }
+
+  public function updateLoaiTaiKhoan()
+  {
+   DB::update("UPDATE users SET LoaiTaiKhoan = 3 WHERE NOW() >= NGAYHETHAN and LoaiTaiKhoan > 0 and LoaiTaiKhoan < 4");
+   $users = DB::select("SELECT * FROM users WHERE hour(DATEDIFF(NOW(), updated_at)) > 365 and LoaiTaiKhoan = 3");
+    if(!empty($users)) {
+      foreach ($users as $user) {
+        DB::delete("DELETE FROM users WHERE id = ".$user->id);
+      }
+      DB::delete("DELETE FROM congty WHERE id = ".$users[0]->ThuocCongTy);
+    }
+  }
+}

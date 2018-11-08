@@ -99,6 +99,12 @@
               <div class="col-lg-2"></div>
               <div id="ktEmailCongTy" class="sub"></div>
             </div>
+            <div class="col-lg-12" style="margin-top: -10px;">
+              <label>Logo công ty</label>
+              <input type="file" name="image[]" class="form-control" id="img" required/>
+              <div class="col-lg-2"></div>
+              <div id="ktLogo" class="sub"></div>
+            </div>
               <div class="col-sm-5"></div>
               <div class="col-sm-3"><button type="button" class="btn south-btn" name="Submit" onclick="dangky()" style="width: 50%;font-size: 18px">Đăng ký</button>  
               </div>

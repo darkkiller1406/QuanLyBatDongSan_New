@@ -46,6 +46,9 @@ class Controller extends BaseController
         view()->share('phuong',$phuong);
         view()->share('lichsugiaodich',$lichsugiaodich);
         view()->share('thongketimkiem',$thongketimkiem);
+        $menuCongTy = new CongTy;
+        $menuCongTy = $menuCongTy->getCongTy();
+        view()->share('menuCongTy',$menuCongTy);
     }
     function update() 
     {

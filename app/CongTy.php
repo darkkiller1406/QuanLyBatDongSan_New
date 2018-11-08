@@ -21,6 +21,7 @@ class CongTy extends Model
             ->leftJoin('users', 'congty.id', '=', 'users.ThuocCongTy')
             ->select(DB::raw('*, congty.id as idCongTy'))
             ->where('users.Quyen', '=', 1)
+            ->where('users.LoaiTaiKhoan', '<', 4)
             ->get();
         return $congty;
     }

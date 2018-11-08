@@ -11,7 +11,8 @@ class QL_CongTyController extends Controller
     //
     public function getView_DSCongTy()
     {
-    	$congty = CongTy::where('id', '>', 0)->get();
+    	$congty = new CongTy;
+        $congty = $congty->getCongTy();
     	return view('danhsachcongty', ['congty' => $congty]);
     }
 

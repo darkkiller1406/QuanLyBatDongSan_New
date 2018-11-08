@@ -59,7 +59,7 @@
                                 <li><a href="{{route('view_trangchu')}}" class="{{ (\Request::route()->getName() == 'view_trangchu') ? 'active' : '' }}">Trang chủ</a></li>
                                 <li><a href="{{route('view_dsDat')}}" class="{{ (\Request::route()->getName() == 'view_dsDat') ? 'active' : '' }}">Đất bán</a>
                                     <ul class="dropdown">
-                                        @foreach ($congty as $ct)
+                                        @foreach ($menuCongTy as $ct)
                                         <li><a href="{{asset('danhsachdat/'.$ct->Link)}}">{{$ct->TenCongTy}}</a></li>
                                         @endforeach
                                     </ul>

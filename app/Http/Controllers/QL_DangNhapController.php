@@ -13,6 +13,10 @@ class QL_DangNhapConTroller extends Controller
         $link = $id;
     	return view('page.dangnhap', ['link' => $link]);
     }
+    public function getViewReset() 
+    {
+        return view('page.resetpassword');
+    }
     public function getDangNhap(Request $r)
     {
     	$this->validate($r,[

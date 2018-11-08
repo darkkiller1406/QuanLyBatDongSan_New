@@ -24,20 +24,22 @@
       <!-- **********************************************************************************************************************************************************
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
-
       <div id="login-page">
       	<div class="container">
 
-      		<form class="form-login" action="../../page/dangnhap" method="post">
+      		<form class="form-login" action="{{asset('page/dangnhap')}}" method="post">
       			<h2 class="form-login-heading">Đăng nhập</h2>
       			<div class="login-wrap">
-                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                         {{ csrf_field() }}
                          <input type="text" name="id" class="form-control" placeholder="User ID" autofocus>
                          <br>
                          <input type="hidden" name="link" value="{{$link}}">
                          <input type="password" name="pass" class="form-control" placeholder="Password">
                          <label class="checkbox">
-                         </label>
+                          <span class="pull-right">
+                            <a href="{{route('password.reset')}}"> Quên mật khẩu ?</a>
+                          </span>
+                        </label>
                          <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i>ĐĂNG NHẬP NGAY</button>
                          @if(count($errors) > 0)
                          <div class="alert alert-danger" style="font-size: 0.9em;text-align: center;margin-top: 20px;">

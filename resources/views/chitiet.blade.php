@@ -176,7 +176,7 @@
                     <div class="property-content">
                         <?php $tenQuan = $d->TenQuan($d->Phuong) ?>
                         <h5>Đất quận {{$tenQuan}}</h5>
-                        <p class="location"><img src="img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->phuong->TenPhuong}}, {{$tenQuan}}</p>
+                        <p class="location"><img src="../img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->phuong->TenPhuong}}, {{$tenQuan}}</p>
                         <p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}</p>
                     </div>
                   </a>
@@ -199,11 +199,7 @@
 @endsection
 @section('script')
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzlVX517mZWArHv4Dt3_JVG0aPmbSE5mE&callback=initMap" type="text/javascript"></script>
-<script type="text/javascript">
-  <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzlVX517mZWArHv4Dt3_JVG0aPmbSE5mE&callback=initMap"
-            type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzlVX517mZWArHv4Dt3_JVG0aPmbSE5mE&libraries=places&callback=initMap" async defer></script>
     <script type="text/javascript">
         var checkMap = false;
         $("#change-map").click(function () {
@@ -218,28 +214,83 @@
                 initMap();
             }
         });
+        var map2;
+        var infowindow;
 
+      function callback(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            console.log(results[i]);
+            createMarker(results[i]);
+
+          }
+        }
+      }
+
+      function createMarker(place) {
+        var iconBase = '../img/icons/';
+        var icons = {
+          hospital: {
+            icon: iconBase + 'hospital.png'
+          },
+          school: {
+            icon: iconBase + 'school.png'
+          },
+          info: {
+            icon: iconBase + 'shopping.png'
+          }
+        };
+        var placeLoc = place.geometry.location;
+        var type = place.types;
+        var index1 = type.indexOf("establishment");
+        if (index1 !== -1) type.splice(index1, 1);
+        var index2 = type.indexOf("point_of_interest");
+        if (index2 !== -1) type.splice(index2, 1);
+        var marker = new google.maps.Marker({
+          map: map2,
+          position: place.geometry.location,
+          icon: icons[place.types[0]].icon
+        });
+
+
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
         function initMap() {
             if (checkMap === false) {
                 var arrlatlng = $('#pos').val();
                 var vitri = $('#vitri').val();
                 arrlatlng = arrlatlng.split(";");
-                var mapCanvas = document.getElementById("map");
+
+                var pyrmont = {lat: 10.782843, lng: 106.67134699999997};
+
+                map2 = new google.maps.Map(document.getElementById('map'), {
+                  center: pyrmont,
+                  zoom: 17
+                });
+                infowindow = new google.maps.InfoWindow();
                 var myCenter = new google.maps.LatLng(arrlatlng[0], arrlatlng[1]);
                 var mapOptions = {center: myCenter, zoom: 17};
-                var map = new google.maps.Map(mapCanvas, mapOptions);
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: myCenter,
-                    icon: "../img/gps.png",
-                    animation: google.maps.Animation.BOUNCE
+                var marker2 = new google.maps.Marker({
+                  map: map2,
+                  position: myCenter,
+                  icon: "../img/gps.png",
+                  animation: google.maps.Animation.BOUNCE
                 });
-                var infowindow = new google.maps.InfoWindow({
-                    content: 'Địa chỉ ' + vitri
-                });
-                marker.addListener('click', function () {
-                    infowindow.open(map, marker);
-                });
+                var service = new google.maps.places.PlacesService(map2);
+                service.nearbySearch({
+                  location: pyrmont,
+                  radius: 500,
+                  type: ["school"]
+                }, callback);
+                service.nearbySearch({
+                  location: pyrmont,
+                  radius: 500,
+                  type: ["hospital"]
+                }, callback);
             }
             else {
                 var directionsService = new google.maps.DirectionsService;
