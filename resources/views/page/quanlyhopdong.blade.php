@@ -1,9 +1,9 @@
-@section('title','Quản lý hóa đơn')
+@section('title','Quản lý hợp đồng')
 @extends('layout.master')
 @section('content')
 <section id="main-content">
   <section class="wrapper">
-    <h3>QUẢN LÝ HÓA ĐƠN</h3>
+    <h3>QUẢN LÝ HỢP ĐỒNG</h3>
 
     <div class="row mt">
       <div class="col-md-12">
@@ -75,7 +75,9 @@
 </div><!-- /content-panel -->
 </div><!-- /col-md-12 -->
 </div><!-- /row -->
-
+@if(!empty($hopdong->links()))
+{{ $hopdong->links() }}
+@endif
 </section><! --/wrapper -->
 </section><!-- /MAIN CONTENT -->
 

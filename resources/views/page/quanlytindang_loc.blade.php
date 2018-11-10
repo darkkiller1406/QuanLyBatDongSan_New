@@ -1,163 +1,163 @@
 @section('title','Quản lý tin đăng')
 @extends('layout.master')
 @section('content')
-
 <section id="main-content">
-    <section class="wrapper">
-        <h3>QUẢN LÝ TIN ĐĂNG</h3>
-        <div class="row mt">
-            <div class="col-md-12">
-                <div class="content-panel">
-                    @if(count($errors) > 0)
-                    <div class="alert alert-danger"
-                    style="font-size: 0.9em;text-align: center;margin-top: 20px;">
-                    @foreach($errors->all() as $err)
-                    {{ $err }}<br>
-                    @endforeach
-                </div>
-                @endif
+  <section class="wrapper">
+    <h3>QUẢN LÝ TIN ĐĂNG</h3>
 
-                @if(session('thongbao'))
-                <div class="alert alert-success"
-                style="font-size: 0.9em;text-align: center;margin-top: 20px;">
-                {{ session('thongbao') }}
-            </div>
-            @endif
-            @if(session('canhbao'))
-            <div class="alert alert-danger"
-            style="font-size: 0.9em;text-align: center;margin-top: 20px;">
+    <div class="row mt">
+      <div class="col-md-12">
+        <div class="content-panel">
+          @if(count($errors) > 0)
+          <div class="alert alert-danger" style="font-size: 0.9em;text-align: center;margin-top: 20px;">
+            @foreach($errors->all() as $err)
+            {{ $err }}<br>
+            @endforeach
+          </div>
+          @endif
+
+          @if(session('thongbao'))
+          <div class="alert alert-success" style="font-size: 0.9em;text-align: center;margin-top: 20px;">
+            {{ session('thongbao') }}
+          </div>
+          @endif
+          @if(session('canhbao'))
+          <div class="alert alert-danger" style="font-size: 0.9em;text-align: center;margin-top: 20px;">
             {{ session('canhbao') }}
-        </div>
-        @endif
-        <div class="form-group">
+          </div>
+          @endif
+          <div class="form-group">
             <div class="col-md-4 col-sm-4 control-label"></div>
-            <div class="col-md-4 col-sm-4 ">
-                <div id="custom-search-input">
-                    <div class="input-group col-md-12">
-                        <input type="text" id="search" class="form-control input-md"
-                        placeholder="Tìm kiếm"/>  
-                        <span class="input-group-btn">
-                            <button class="btn btn-info btn-lg">
-                               <i class="glyphicon glyphicon-search"></i>
-                           </button>
-                       </span>
-                   </div>
-               </div>
+            <div class="col-md-4">
+             <div id="custom-search-input">
+              <div class="input-group col-md-12">
+               <input type="text" id="search" class="form-control input-md" placeholder="Tìm kiếm" />
+               <span class="input-group-btn">
+                <button class="btn btn-info btn-lg">
+                 <i class="glyphicon glyphicon-search"></i>
+               </button>
+             </span>
            </div>
+         </div>
+       </div>
+     </div>
+     <form method="post" action="{{route('post_LocTin')}}">
+      {{csrf_field()}}
+      <div class="form-group">
+        <div class="col-md-3"></div>
+        <div class="col-md-2">
+          <select class="form-control" id="quan" name="quan">
+            <option value="0">Tất cả quận</option>
+            @foreach ($quan as $q)
+            <option value="{{$q->id}}">{{$q->TenQuan}}</option>
+            @endforeach 
+          </select>
         </div>
-        <form method="post" action="{{route('post_LocTin')}}">
-            {{csrf_field()}}
-            <div class="form-group">
-                <div class="col-md-3"></div>
-                <div class="col-md-2">
-                    <select class="form-control" id="quan" name="quan">
-                        <option value="0">Tất cả quận</option>
-                        @foreach ($quan as $q)
-                        <option value="{{$q->id}}">{{$q->TenQuan}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-control" id="trangthai" name="trangthai">
-                        <option value="4">Trạng thái</option>
-                        <option value="0">Đang đăng bán</option>
-                        <option value="1">Đang giao dịch</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-control" id="giatien" name="giatien">
-                        <option value="0">Khoảng giá</option>
-                        <option value="1">Dưới 800 triệu</option>
-                        <option value="2">800 triệu - 1,5 tỷ</option>
-                        <option value="3">1,5 tỷ - 2,5 tỷ</option>
-                        <option value="4">2,5 tỷ - 4 tỷ</option>
-                    </select>
-                </div>
-                <div class="col-md-1 col-sm-1 control-label">
-                    <button type="submit" class="btn btn-theme"><i class="fas fa-search"></i></button>
-                </div>
-            </div>
-        </form>
-        <table id="dtable" class="table table-striped table-advance table-hover table-ed">
-            <hr>
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Ký hiệu lô đất</th>
-                    <th>Đơn giá đất</th>
-                    <th>Tổng giá trị lô đất</th>
-                    <th>Vị trí</th>
-                    <th>Trạng thái</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $i = 0;?>
-                @foreach( $dat as $d )
-                <tr>
-                    <td>{{++$i}}</td>
-                    <td>{{$d->KyHieuLoDat}}</td>
-                    <td>{{number_format($d->DonGia)}} VND/m2</td>
-                    <td>{{number_format($d->Gia)}} VND</td>
-                    <td>{{$d->DiaChi}}, {{$d->TenPhuong($d->Phuong)}}, {{$d->TenQuan($d->Phuong)}}, {{$d->TenThanhPho($d->Phuong)}}</td>
-                    <td><?php
-                    if ($d->TrangThai == 0) {
-                        echo 'Đang đăng bán';
-                    }
-                    if ($d->TrangThai == 1) {
-                        echo 'Đang giao dịch';
-                    }
-                    if ($d->TrangThai == 2) {
-                        echo 'Đã bán';
-                    }
-                    if ($d->TrangThai == 3) {
-                        echo 'Hiện có';
-                    }
-                    ?></td>
-                    <td></td>
-                    <td>
-                    <button class="btn btn-success btn-xs"
-                        data-iddat="{{$d->id}}"
-                        data-mald="{{$d->KyHieuLoDat}}"
-                        data-dongia="{{number_format($d->DonGia)}}"
-                        data-gia="{{number_format($d->Gia)}}"
-                        data-rong="{{$d->Rong}}"
-                        data-dientich="{{$d->DienTich}}"
-                        data-map="{{$d->Map}}"
-                        data-dai="{{$d->Dai}}"
-                        data-nohau="{{$d->NoHau}}"
-                        data-huong="{{$d->Huong}}"
-                        data-hinh="{{$d->HinhAnh}}"
-                        data-trangthai="{{$d->TrangThai}}"
-                        data-ghichu="{{$d->GhiChu}}"
-                        data-luotxem="{{$d->LuotXem}}"
-                        data-vitri="{{$d->DiaChi}}, {{$d->TenPhuong($d->Phuong)}}, {{$d->TenQuan($d->Phuong)}}, {{$d->TenThanhPho($d->Phuong)}}"
-                        data-ngaytao='
-                        <?php $date = date_create($d->created_at);
-                        echo date_format($date, "d/m/Y H:i:s") ?>'
-                        data-ngaycapnhat='
-                        <?php $date = date_create($d->updated_at);
-                        echo date_format($date, "d/m/Y H:i:s") ?>'
-                        data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i>
-                    </button>
-                    @if ($d->TrangThai == 0)
-                    <button class="btn btn-danger btn-xs classXoa" idbd="{{$d->id}}" id="{{$d->id}}"
-                    onClick="reply_click(this.id)" data-toggle="tooltip" data-placement="top" title="Hủy đăng tin"><i class="fas fa-trash"></i></button>
-                    @endif
-                </td>
-            </tr>
-        </tbody>
-        @endforeach
-    </table>
+        <div class="col-md-2">
+          <select class="form-control" id="trangthai" name="trangthai">
+            <option value="4">Trạng thái</option>
+            <option value="0">Đang đăng bán</option>
+            <option value="1">Đang giao dịch</option>
+            <option value="2">Đã bán</option>
+            <option value="3">Hiện có</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select class="form-control" id="giatien" name="giatien">
+            <option value="0">Khoảng giá</option>
+            <option value="1">Dưới 800 triệu</option>
+            <option value="2">800 triệu - 1,5 tỷ</option>
+            <option value="3">1,5 tỷ - 2,5 tỷ</option>
+            <option value="4">2,5 tỷ - 4 tỷ</option>
+          </select>
+        </div>
+        <div class="col-md-1 col-sm-1 control-label"><button type="submit" class="btn btn-theme"><i class="fas fa-search"></i></button></div>
+      </div>
+    </form>
+    <table id="dtable" class="table table-striped table-advance table-hover table-ed">
+     <hr>
+     <thead>
+      <tr>
+       <th>STT</th>
+       <th>Ký hiệu lô đất</th>
+       <th>Đơn giá đất</th>
+       <th>Tổng giá trị lô đất</th>
+       <th>Vị trí</th>
+       <th>Trạng thái</th>
+       <th></th>
+     </tr>
+   </thead>
+   <tbody>
+    <?php $i = 0; ?>
+  @foreach($dat_loc as $d)
+   <tr>
+     <td>{{++$i}}</td>
+     <td>{{$d->KyHieuLoDat}}</td>
+     <td>{{number_format($d->DonGia)}} VND/m2</td>
+     <td>{{number_format($d->Gia)}} VND</td>
+     <td>{{$d->diaChi}}, {{$d->TenPhuong}}, {{$d->TenQuan}}, {{$d->TenThanhPho}}</td>
+     <td><?php 
+       if ($d->TrangThai == 0) {
+        echo 'Đang đăng bán';
+      }
+      if ($d->TrangThai == 1) {
+        echo 'Đang giao dịch';
+      }
+      if ($d->TrangThai == 2) {
+        echo 'Đã bán';
+      }
+      if ($d->TrangThai == 3) {
+        echo 'Hiện có';
+      }
+     ?></td>
+     <td></td>
+     <td>
+      <?php if ($d->TrangThai == 3) { ?>
+        <button class="btn btn-warning btn-xs" id="{{$d->id}}"
+          onClick="dangtin(this.id)" ata-toggle="tooltip" data-placement="top" title="Đăng tin"><i class="fas fa-caret-square-up"></i></button>
+        <?php } ?>
+      <button class="btn btn-success btn-xs" 
+      data-iddat="{{$d->iddat}}"
+      data-mald="{{$d->KyHieuLoDat}}"
+      data-map = "{{$d->Map}}"
+      data-dongia="{{number_format($d->DonGia)}}"
+      data-gia = "{{number_format($d->Gia)}}"
+      data-rong="{{$d->Rong}}"
+      data-dientich= "{{$d->DienTich}}"
+      data-dai="{{$d->Dai}}"
+      data-nohau="{{$d->NoHau}}"
+      data-huong="{{$d->Huong}}"
+      data-sohuu="{{$d->TenCongTy}}"
+      data-hinh="{{$d->HinhAnh}}"
+      data-trangthai="{{$d->TrangThai}}"
+      data-ghichu="{{$d->GhiChu}}"
+      data-luotxem="{{$d->LuotXem}}"
+      data-vitri="{{$d->diaChi}},{{$d->TenPhuong}},{{$d->TenQuan}},{{$d->TenThanhPho}}"
+      data-ngaytao='
+      <?php $date=date_create($d->ngaytao);
+      echo date_format($date,"d/m/Y H:i:s") ?>'
+      data-ngaycapnhat='
+      <?php $date=date_create($d->ngaycapnhat);
+      echo date_format($date,"d/m/Y H:i:s") ?>'
+      data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
+      
+      @if ($d->TrangThai == 0)
+      <button class="btn btn-danger btn-xs classXoa" idbd="{{$d->iddat}}" id="{{$d->iddat}}"
+        onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
+        @endif
+    </td>
+  </tr>
+</tbody>
+@endforeach
+</table>
 </div><!-- /content-panel -->
 </div><!-- /col-md-12 -->
 </div><!-- /row -->
-@if(!empty($dat->links()))
-{{ $dat->links() }}
+@if(!empty($dat_loc->links()))
+{{ $dat_loc->links() }}
 @endif
-</section>
 </section><!-- /MAIN CONTENT -->
-
+</section>
 <!--main content end-->
 <!-- Modal chi tiết -->
 <div class="modal fade" id="chitiet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-detail"
@@ -226,11 +226,11 @@ aria-hidden="true">
                             </tr>
                             <tr>
                                 <td class="col-md-2">Ngày tạo</td>
-                                <td id="ngaytao"></td>
+                                <td id="created_at"></td>
                             </tr>
                             <tr>
                                 <td class="col-md-2">Ngày cập nhật</td>
-                                <td id="ngaycapnhat"></td>
+                                <td id="updated_at"></td>
                             </tr>
                             <tr>
                                 <td class="col-md-2">Hình ảnh</td>
@@ -382,5 +382,6 @@ type="text/javascript"></script>
             });
         });
     </script>
+
 
     @endsection

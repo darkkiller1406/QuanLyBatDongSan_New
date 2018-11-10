@@ -15,18 +15,25 @@ class QL_HopDongController extends Controller
         $hopdong = HopDong::where('sohuu', Auth::user()->ThuocCongTy)
                  ->from('dat')
                  ->join('hopdong', 'ID_Dat', '=', 'dat.id')
-                 ->get();
+                 ->paginate(15);
     	return view('page.quanlyhopdong', ['hopdong' => $hopdong]);
     }
     public function getXoa($id)
     {
     	$hd = HopDong::find($id);
+        $MaHopDong = $hd->MaHopDong;
         $check = new HopDong;
-        //
-         $tglap = $check->layNam($id);
+        $tglap = $check->layNam($id);
         if($tglap == 1)
         {
             $hd->delete();
+
+            activity()
+            ->useLog('2')
+            ->performedOn($hd)
+            ->causedBy(Auth::user()->id)
+            ->log('Xóa hợp đồng '.$MaHopDong);
+            
             return redirect('page/quanlyhopdong')->with('thongbao','Bạn đã xóa thành công!');
         }
         else
@@ -53,6 +60,13 @@ class QL_HopDongController extends Controller
         $d->TrangThai = 2;
         $d->save();
         $hd->save();
+
+        activity()
+        ->useLog('1')
+        ->performedOn($hd)
+        ->causedBy(Auth::user()->id)
+        ->log('Thêm hợp đồng '.$request->maHopDong);
+
         return redirect('page/quanlyyeucau')->with('thongbao','Cập nhật thành công thông tin hợp đồng !');
     }
     public function getTim(Request $r)

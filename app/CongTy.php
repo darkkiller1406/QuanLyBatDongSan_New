@@ -22,7 +22,7 @@ class CongTy extends Model
             ->select(DB::raw('*, congty.id as idCongTy'))
             ->where('users.Quyen', '=', 1)
             ->where('users.LoaiTaiKhoan', '<', 4)
-            ->get();
+            ->paginate(15);
         return $congty;
     }
 

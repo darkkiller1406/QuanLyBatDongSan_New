@@ -1,7 +1,7 @@
 @section('title','Đăng ký')
 @extends('layout.master_ban')
 @section('content')
-<section class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/hero1.jpg);">
+<section class="breadcumb-area bg-img" style="background-image: url({{asset('img/bg-img/hero1.jpg')}});">
 	<div class="container h-100">
 		<div class="row h-100 align-items-center">
 			<div class="col-12">
@@ -16,9 +16,15 @@
 	<div class="spacer">
 		<div class="row register">
 			<section class="south-contact-area section-padding-100">
+				@if(isset($canhbao))
+				<div class="alert alert-warning"
+				style="font-size: 0.9em;text-align: center;margin-top: 20px;">
+				{{$canhbao}}
+				</div>
+				@endif
 				<div class="container">
 					<div class="row">
-						<h5>Chúc mừng bạn đã đăng ký thành công. Bạn đã trở thành một trong những thành viên của sàn giao dịch. Click vào <a href="{{asset('page/dangnhap/'.$congty[0]->Link)}}">ĐÂY</a> để bắt đầu đăng nhập vào hệ thống. Hệ thống sẽ tự chuyển về trang chủ sau 10 giây.</h5>
+						<h5>Mail kích hoạt đã được gửi vào email của bạ. Vui lòng check email để kích hoạt tài khoản. Nếu bạn chưa nhận được mail, click vào <a href="{{asset('guimail')}}">ĐÂY</a> để gửi lại mail.</h5>
 					</div>
 				</div>
 			</section>
@@ -28,11 +34,6 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    window.setTimeout(function(){
 
-        // Move to a new location or you can do something else
-        window.location.href = "{{route('index')}}";
-
-    }, 10000);
 </script>
 @endsection

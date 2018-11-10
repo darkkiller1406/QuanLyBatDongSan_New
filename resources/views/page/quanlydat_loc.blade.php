@@ -27,7 +27,7 @@
           </div>
           @endif
           <div class="form-group">
-            <div class="col-md-2 col-sm-2 control-label"></div>
+            <div class="col-md-3 col-sm-3 control-label"></div>
             <div class="col-md-6">
              <div id="custom-search-input">
               <div class="input-group col-md-12">
@@ -45,7 +45,7 @@
      <form method="post" action="{{route('post_Loc')}}">
       {{csrf_field()}}
       <div class="form-group">
-        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
         <div class="col-md-2">
           <select class="form-control" name="thang">
             <option value="13">Tất cả tháng</option>
@@ -127,7 +127,7 @@
           onClick="dangtin(this.id)" ata-toggle="tooltip" data-placement="top" title="Đăng tin"><i class="fas fa-caret-square-up"></i></button>
         <?php } ?>
       <button class="btn btn-success btn-xs" 
-      data-iddat="{{$d->id}}"
+      data-iddat="{{$d->iddat}}"
       data-mald="{{$d->KyHieuLoDat}}"
       data-map = "{{$d->Map}}"
       data-dongia="{{number_format($d->DonGia)}}"
@@ -144,15 +144,15 @@
       data-luotxem="{{$d->LuotXem}}"
       data-vitri="{{$d->diaChi}},{{$d->TenPhuong}},{{$d->TenQuan}},{{$d->TenThanhPho}}"
       data-ngaytao='
-      <?php $date=date_create($d->created_at);
+      <?php $date=date_create($d->ngaytao);
       echo date_format($date,"d/m/Y H:i:s") ?>'
       data-ngaycapnhat='
-      <?php $date=date_create($d->updated_at);
+      <?php $date=date_create($d->ngaycapnhat);
       echo date_format($date,"d/m/Y H:i:s") ?>'
       data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
       <?php if ($d->TrangThai == 3 || $d->TrangThai == 0) { ?>
         <button class="btn btn-primary btn-xs"
-        data-iddat="{{$d->id}}"
+        data-iddat="{{$d->iddat}}"
         data-mald="{{$d->KyHieuLoDat}}"
         data-dongia="{{($d->DonGia)}}"
         data-gia = "{{($d->Gia)}}"
@@ -165,6 +165,7 @@
         data-hinh="{{$d->HinhAnh}}"
         data-trangthai="{{$d->TrangThai}}"
         data-ghichu="{{$d->GhiChu}}"
+        data-map="{{$d->Map}}"
         data-luotxem="{{$d->LuotXem}}"
         data-diachi="{{$d->diaChi}}"
         data-quan="{{$d->idQuan}}"
@@ -178,7 +179,7 @@
         echo date_format($date,"d/m/Y H:i:s") ?>'
         data-toggle="modal" data-target="#sua"><i class="fas fa-edit"></i></button>
       <?php } ?>
-      <button class="btn btn-danger btn-xs classXoa" idbd="{{$d->id}}" id="{{$d->id}}" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
+      <button class="btn btn-danger btn-xs classXoa" idbd="{{$d->iddat}}" id="{{$d->iddat}}" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
     </td>
   </tr>
 </tbody>
@@ -187,9 +188,11 @@
 </div><!-- /content-panel -->
 </div><!-- /col-md-12 -->
 </div><!-- /row -->
-
+@if(!empty($dat_loc->links()))
+{{ $dat_loc->links() }}
+@endif
 </section><!-- /MAIN CONTENT -->
-
+</section>
 <!--main content end-->
 <!-- Modal chi tiết -->
 <div class="modal fade" id="chitiet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-detail"
@@ -711,7 +714,7 @@ type="text/javascript"></script>
             modal.find('.modal-body #ghichu').val(ghichu);
             modal.find('.modal-body #created_at').val(created_at);
             modal.find('.modal-body #updated_at').val(updated_at);
-            modal.find('.modal-body #map').val(map);
+            modal.find('.modal-body #map-edit').val(map);
         })
         /// ajax
         $.ajaxSetup({

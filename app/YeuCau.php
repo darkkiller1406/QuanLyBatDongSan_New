@@ -17,10 +17,10 @@ class YeuCau extends Model
     {
         return $this->belongsTo('App\Dat','id_dat','id');
     }
-    public function getYeuCau($tg)
+    public function getYeuCau($tg, $congty)
     {
         if(isset($tg)){
-            return DB::select("SELECT *,yeucau.created_at as created_at  FROM yeucau,dat WHERE yeucau.created_at like '%".$tg."%' and yeucau.id_dat = dat.id");
+            return DB::select("SELECT *,yeucau.created_at as created_at  FROM yeucau,dat WHERE yeucau.created_at like '%".$tg."%' and yeucau.id_dat = dat.id and dat.SoHuu = ".$congty);
         }
     }
 }

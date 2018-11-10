@@ -49,6 +49,7 @@
             </div>
             @endif
             <div class="row">
+            @if(isset($dat[0]->DiaChi) && isset($dat[0]->Map))
             @foreach ($dat as $d)
                 <!-- Single Featured Property -->
                     <div class="col-12 col-md-6 col-xl-4">
@@ -86,29 +87,27 @@
                                         } ?>
                                     @endforeach
                                 </h5>
-                                <p class="location"><img src="{{asset('img/icons/location.png')}}" alt="">{{$d->phuong->TenPhuong}}
-                                    , {{$tenQuan}}</p>
+                                <p class="location"><img src="{{asset('img/icons/location.png')}}" alt="">{{$d->DiaChi}}</p>
                                 <p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}
                                 </p>
                             </div>
                         </div>
                     </div>
                 @endforeach
+                @endif
             </div>
 
-<!--             <div class="row">
+            <div class="row">
                 <div class="col-12">
                     <div class="south-pagination d-flex justify-content-end">
                         <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link active" href="#">01</a></li>
-                                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                            </ul>
+                            @if(isset($dat[0]->DiaChi) && isset($dat[0]->Map))
+                            {{ $dat->links() }}
+                            @endif
                         </nav>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </section>
     <!-- ##### Listing Content Wrapper Area End ##### -->

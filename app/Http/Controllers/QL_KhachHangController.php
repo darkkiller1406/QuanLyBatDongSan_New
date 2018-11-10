@@ -3,13 +3,14 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\KhachHang;
+use Spatie\Activitylog\Models\Activity;
 class QL_KhachHangController extends Controller
 {
     //
     public function getView()
     {
         $khachhang = new KhachHang();
-        $khachhang = KhachHang::where('ThuocCongTy', Auth::user()->ThuocCongTy)->get();
+        $khachhang = KhachHang::where('ThuocCongTy', Auth::user()->ThuocCongTy)->paginate(15);
         return view('page.quanlykhachhang', ['khachhang' => $khachhang]);
     }
     public function postThemKhachHang(Request $request)
@@ -38,10 +39,12 @@ class QL_KhachHangController extends Controller
         if($makh >10)
         {
             $kh->MaKhachHang = 'KH0'.($makh+1);
+            $MaKhachHang = 'KH0'.($makh+1);
         }
         else
         {
             $kh->MaKhachHang = 'KH00'.($makh+1);
+            $MaKhachHang = 'KH00'.($makh+1);
         }
         // xử lý ảnh
         $kh->HoVaTenDem = $request->hokh;
@@ -54,12 +57,28 @@ class QL_KhachHangController extends Controller
         $kh->XungHo = $request->xungho;
         $kh->ThuocCongTy = (Auth::user()->ThuocCongTy);
         $kh->save();
+
+        activity()
+        ->useLog('3')
+        ->performedOn($kh)
+        ->causedBy(Auth::user()->id)
+        ->withProperties($fieldChange)
+        ->log('Thêm khách hàng '.$MaKhachHang);
+
        return redirect('page/quanlykhachhang')->with('thongbao','Thêm thành công khách hàng mới !');
     }
     public function getXoa($id)
     {
         $kh = KhachHang::find($id);
+        $MaKhachHang = $kh->MaKhachHang;
         $kh -> delete();
+
+        activity()
+        ->useLog('2')
+        ->performedOn($kh)
+        ->causedBy(Auth::user()->id)
+        ->log('Xóa khách hàng '.$MaKhachHang);
+
         return redirect('page/quanlykhachhang')->with('thongbao','Bạn đã xóa thành công khách hàng !');
     }
     public function postSuaKhachHang(Request $request)
@@ -77,6 +96,7 @@ class QL_KhachHangController extends Controller
             'cmnd.digits'=>'Vui lòng nhập đúng dạng CMND'
         ]);
         $kh = KhachHang::find($request->id);
+        $kh_old = KhachHang::find($request->id);
         $kh->HoVaTenDem = $request->hokh;
         $kh->Ten = $request->tenkh;
         $kh->CMND = $request->cmnd;
@@ -86,6 +106,30 @@ class QL_KhachHangController extends Controller
         $kh->DTCD = $request->dtcd;
         $kh->XungHo = $request->xungho;
         $kh->save();
+
+        $kh_new = KhachHang::find($request->id);
+        $arrays = array('HoVaTenDem', 'Ten', 'CMND', 'DiaChi', 'Email', 'DTDD', 'DTCD', 'XungHo');
+
+            // check field change
+        $change = false;
+        $fieldChange = [];
+        foreach ($arrays as $array) {
+            if ($kh_old->$array != $kh_new->$array) {
+                $fieldChange[$array] =  $kh_new->$array;
+                $change = true;
+            }
+        }
+
+            // log activity
+        if($change) {
+            activity()
+            ->useLog('3')
+            ->performedOn($kh)
+            ->causedBy(Auth::user()->id)
+            ->withProperties($fieldChange)
+            ->log('cập nhật thông tin khách hàng '.$kh_new->MaKhachHang);
+        }
+
         return redirect('page/quanlykhachhang')->with('thongbao','Cập nhật thành công thông tin khách hàng !');
     }
     public function getTim(Request $r)

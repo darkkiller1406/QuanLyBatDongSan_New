@@ -31,7 +31,7 @@
         <h3>GÓI CƠ BẢN</h3>
         <div class="plan-content">
           <p>KHÔNG GIỚI HẠN TÍNH NĂNG</p>
-          <p>KHÔNG GIỚI PHÍ KHỎI TẠO</p>
+          <p>MIỄN PHÍ THÁNG ĐẦU TIÊN</p>
           <p>GIỚI HẠN NGƯỜI DÙNG (3 người/account)</p>
         </div>
         <div class="pricing"><span>120.000 VND</span>
@@ -46,7 +46,7 @@
         <h3>GÓI NÂNG CAO</h3>
         <div class="plan-content">
           <p>KHÔNG GIỚI HẠN TÍNH NĂNG</p>
-          <p>KHÔNG GIỚI PHÍ KHỎI TẠO</p>
+          <p>MIỄN PHÍ THÁNG ĐẦU TIÊN</p>
           <p>KHÔNG GIỚI HẠN NGƯỜI DÙNG</p>
         </div>
         <div class="pricing"><span>180.000 VND</span>

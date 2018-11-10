@@ -8,18 +8,29 @@ use Illuminate\Support\Facades\Auth;
 use App\LichSuGiaoDich;
 use App\CongTy;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMailable;
 class QL_TaiKhoanController extends Controller
 {
     //
     public function getView()
     {
-    	$taikhoan = TaiKhoan::where('ThuocCongTy', Auth::user()->ThuocCongTy)->get();
+    	$taikhoan = TaiKhoan::where('ThuocCongTy', Auth::user()->ThuocCongTy)->paginate(15);
     	return view('page.quanlytaikhoan', ['taikhoan' => $taikhoan]);
     }
     public function getXoa($id)
     {
     	$tk = TaiKhoan::find($id);
+        $email = $tk->email;
     	$tk -> delete();
+
+        activity()
+        ->useLog('2')
+        ->performedOn($tk)
+        ->causedBy(Auth::user()->id)
+        ->log('Xóa tài khoản '.$email);
+
     	return redirect('page/quanlytaikhoan')->with('thongbao','Bạn đã xóa thành công!'); 
     }
     public function postThemTaiKhoan(Request $request)
@@ -61,18 +72,21 @@ class QL_TaiKhoanController extends Controller
         $user->LoaiTaiKhoan = Auth::user()->LoaiTaiKhoan;
         $user->Quyen = 2; 
         $user->save();
+
+        activity()
+        ->useLog('1')
+        ->performedOn($kh)
+        ->causedBy(Auth::user()->id)
+        ->log('Thêm tài khoản '.$request->email);
+
         return redirect('page/quanlytaikhoan')->with('thongbao','Chúc mừng bạn đã đăng kí thành công!');
     }
     public function getReset($id)
     {
     	$user = TaiKhoan::find($id);
-    	$user->password = bcrypt('123456');
+    	$user->password = bcrypt('12345678x@X');
         $user->save();
         return redirect('page/quanlytaikhoan')->with('thongbao','Thay đổi thông tin tài khoản thành công!');
-    }
-    public function sendReset(Request $r) 
-    {
-        $email = $r->email;
     }
     public function getTim(Request $r)
     {
@@ -122,7 +136,7 @@ class QL_TaiKhoanController extends Controller
     }
     public function postKichHoat($check, Request $request)
     {
-        if(!empty($request->session()->get('id')) && $check == $request->session()->get('checkCreat')) {
+        if(!empty($request->session()->get('id')) && $check == $request->session()->get('token')) {
             $taikhoan = TaiKhoan::where('ThuocCongTy', $request->session()->get('id'))->get();
             $idTaiKhoan = $taikhoan[0]->id;
             $taikhoan = TaiKhoan::find($idTaiKhoan);
@@ -133,23 +147,14 @@ class QL_TaiKhoanController extends Controller
             $taikhoan->NgayHetHan = $ngayhethan;
             $taikhoan->LoaiTaiKhoan = $request->session()->get('loaiTaiKhoan');
             $taikhoan->save();
-            $lichsu = new LichSuGiaoDich();
-            if($request->session()->get('loaiTaiKhoan') == 1) {
-                $tien = 120000;
-            } else {
-                $tien = 180000;
-            }
-            $lichsu->TienGiaoDich = $tien;
-            $lichsu->GiaoDich = 'Kích hoạt tài khoản';
-            $lichsu->LoaiGiaoDich = 1;
-            $lichsu->NguoiThucHien = $idTaiKhoan;
-            $lichsu->save();
             $congty = CongTy::where('id', $request->session()->get('id'))->get();
             $request->session()->forget('id');
             $request->session()->forget('loaiTaiKhoan');
+            $request->session()->forget('email');
             return view('dangkythanhcong',['congty'=>$congty]);
+        } else {
+            return redirect('trangchu');
         }
-        return redirect('trangchu');
     }
     public function getGiaHan()
     {
@@ -192,7 +197,7 @@ class QL_TaiKhoanController extends Controller
                         }
                   }
               }
-              $random = rand(1000,9999);
+              $random = rand(10000,99999);
               $url = "https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=NT".date('Ymdhis')."&price=".$tien."&return_url=".asset('thuchiengiahan/'.$random)."&comments=Gia hạn";
               echo "<script>window.open('".$url."', '_blank')</script>";
               session(['tien' => $tien]);
@@ -261,12 +266,6 @@ class QL_TaiKhoanController extends Controller
     }
     public function postDK(Request $request)
     {
-        if (!empty($request->session()->get('id')) && ($request->session()->get('timeCreat') < time())) {
-            $request->session()->forget('id');
-            $request->session()->forget('loaiTaiKhoan');
-            $request->session()->forget('timeCreat');
-            $request->session()->forget('checkCreat');
-        }
          $this->validate($request,[
             'username'=> 'required|min:3',
             'email'=>'required|email|unique:users,email',
@@ -321,17 +320,17 @@ class QL_TaiKhoanController extends Controller
         $user->LoaiTaiKhoan = 4;
         $user->NgayHetHan = $now;
         $user->save();
-
+        $random = rand(10000,99999);
+        $token = ($request->header('X-CSRF-TOKEN')).$random;
         // create session
         $congty = CongTy::find($user->ThuocCongTy);
-        $random = rand(1000,9999);
         $tien = $request->tien;
         session(['id' => $congty->getIdByCreatedAt($now)]);
         session(['loaiTaiKhoan' => $request->loaiTaiKhoan]);
-        $after_5_min = time() + 5*60;
-        session(['checkCreat' =>$random]);
-        session(['timeCreat' =>$after_5_min]);
-        $url = "https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=NT".date('Ymdhis')."&price=".$tien."&return_url=".asset('kichhoat/'.$random)."&comments=Nạp tiền";
+        session(['email' => $request->email]);
+        session(['ten' => $request->name]);
+        session(['token' => $token]);
+        $url = asset('guimail');
         return $url;
     }
     public function checkUnique(Request $request) 
@@ -358,5 +357,39 @@ class QL_TaiKhoanController extends Controller
             $arrayName['sdt'] = 1;
         }
         return $arrayName;
+    }
+    public function guiMail(Request $request)
+    {
+        if ($request->session()->get('email')) {
+            $mail = $request->session()->get('email');
+            $name = $request->session()->get('ten');
+            // return $mail;
+            $this->mail = $mail;
+            $after_5_min = time() + 5*60;
+            if(!empty($request->session()->get('thoigian')) && $request->session()->get('thoigian') < time()) {
+                Mail::send('mail', array('name'=>$name, 'token'=>$request->session()->get('token')), function($message){
+                    $message->from('minh.1406.nt@gmail.com', 'LightZ Real Estate');
+                    $message->to($this->mail)->subject('Đăng ký tài khoản LightZ Real Estate');
+                });
+                session(['thoigian' =>$after_5_min]);
+                return view('thongbaoguimail');
+            } 
+            if(empty($request->session()->get('thoigian'))) {
+                Mail::send('mail', array('name'=>$name, 'token'=>$request->session()->get('token')), function($message){
+                    $message->from('minh.1406.nt@gmail.com', 'LightZ Real Estate');
+                    $message->to($this->mail)->subject('Đăng ký tài khoản LightZ Real Estate');
+                });
+                session(['thoigian' =>$after_5_min]);
+                return view('thongbaoguimail');
+            }
+            if(!empty($request->session()->get('thoigian')) && $request->session()->get('thoigian') > time()) {
+                return view('thongbaoguimail', ['canhbao' => "Bạn vừa gửi mail, vui lòng thử lại sau 5 phút"]);
+            } 
+        } else {
+            return redirect('trangchu');
+        }
+        
+        
+        // Mail::to('kisivodanh1406@gmail.com')->send(new SendMailable($name));
     }
 }

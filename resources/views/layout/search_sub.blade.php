@@ -10,8 +10,10 @@
                     </div>
                     <!-- Search Form -->
                     <?php 
-                    if(isset($dat[0]->SoHuu)) {
+                    if(isset($dat[0]->DiaChi) && isset($dat[0]->Map)) {
                         $idCongTy = $dat[0]->SoHuu;
+                    } else {
+                        $idCongTy = $dat[0]->id;
                     }
                     if(isset($kq[0]->SoHuu)) {
                         $idCongTy = $kq[0]->SoHuu;

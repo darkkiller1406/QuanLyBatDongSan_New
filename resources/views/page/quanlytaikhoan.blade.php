@@ -75,7 +75,9 @@
 </div><!-- /content-panel -->
 </div><!-- /col-md-12 -->
 </div><!-- /row -->
-
+@if(!empty($taikhoan->links()))
+{{ $taikhoan->links() }}
+@endif
 </section><! --/wrapper -->
 </section><!-- /MAIN CONTENT -->
 

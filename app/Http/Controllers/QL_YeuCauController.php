@@ -9,6 +9,8 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMailable;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
+use App\CongTy;
 class QL_YeuCauController extends Controller
 {
     //
@@ -17,23 +19,40 @@ class QL_YeuCauController extends Controller
         $khachhang = new KhachHang;
         $khachhang = KhachHang::where('ThuocCongTy', Auth::user()->ThuocCongTy)->get();
         $yeucau = YeuCau::where('sohuu', Auth::user()->ThuocCongTy)
+                 ->where('yeucau.created_at', 'like', '%'.date('Y-m-d').'%')
                  ->from('dat')
                  ->join('yeucau', 'id_dat', '=', 'dat.id')
-                 ->get();
+                 ->paginate(15);
     	return view('page.quanlyyeucau', ['khachhang' => $khachhang, 'yeucau' => $yeucau]);
     }
     public function getXoa($id)
     {
-    	$hd = YeuCau::find($id);
-        $d = new Dat();
-        $d->capnhat_trangthai($id);
-        $hd -> delete();
+    	$yc = YeuCau::find($id);
+        $MaYeuCau = $yc->MaYeuCau;
+        $d = Dat::find($yc->id_dat);
+        $d->capnhat_trangthai($d->id);
+
+        $yc -> delete();
+
+        activity()
+        ->useLog('2')
+        ->performedOn($yc)
+        ->causedBy(Auth::user()->id)
+        ->log('Xóa yêu cầu mua đất - '.$d->KyHieuLoDat);
+
         return redirect('page/quanlyyeucau')->with('thongbao','Bạn đã xóa thành công!');
     }
     public function getXoaLL($id)
     {
-        $hd = YeuCau::find($id);
-        $hd -> delete();
+        $yc = YeuCau::find($id);
+        $yc -> delete();
+
+        activity()
+        ->useLog('3')
+        ->performedOn($yc)
+        ->causedBy(Auth::user()->id)
+        ->log('Xóa yêu cầu liên lạc');
+
         return redirect('page/quanlyyeucau')->with('thongbao','Bạn đã xóa 1 yêu cầu liên lạc!');
     }
     public function ThemYeuCau(Request $r)
@@ -93,22 +112,15 @@ class QL_YeuCauController extends Controller
     }
     public function timYC(Request $r)
     {
-        $yc = new YeuCau();
-        $yeucau = $yc->getYeuCau($r->ngay);
-        return view('page.quanlyyeucau', ['yeucau'=>$yeucau]);
-    }
-    public function guiMail(Request $r)
-    {
-        $mail = $r->mail;
-        $name = $r->name;
-        // return $mail;
-        $this->mail =$mail;
-        Mail::send('mail', array('name'=>$name), function($message){
-            $message->from('minh.1406.nt@gmail.com', 'LightZ RealEsate');
-            $message->to($this->mail)->subject('Công ty LightZ RealEsate thông báo');
-        });
-        return 'Gửi mail thành công !';
-        // Mail::to('kisivodanh1406@gmail.com')->send(new SendMailable($name));
-
+                $khachhang = new KhachHang;
+        $khachhang = KhachHang::where('ThuocCongTy', Auth::user()->ThuocCongTy)->get();
+        $yeucau = YeuCau::where('sohuu', Auth::user()->ThuocCongTy)
+                 ->where('yeucau.created_at', 'like', '%'.$r->ngay.'%')
+                 ->from('dat')
+                 ->join('yeucau', 'id_dat', '=', 'dat.id')
+                 ->paginate(15);;
+        return view('page.quanlyyeucau', ['khachhang' => $khachhang, 'yeucau' => $yeucau, 'ngay' => $r->ngay]);
     }
 }
+
+

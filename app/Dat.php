@@ -8,17 +8,21 @@ class Dat extends Model
 {
     //
     protected $table = 'dat';
+
     public function getDatBySoHuu($id) {
         return DB::table('dat')->where('SoHuu', $id)->get();
     }
+
     public function phuong()
     {
         return $this->belongsTo('App\Phuong','Phuong','id');
     }
+
     public function congty()
     {
         return $this->belongsTo('App\CongTy','SoHuu','id');
     }
+
     public function tenPhuong($idPhuong)
     {
         $k = DB::select("SELECT TenPhuong FROM phuong, dat where phuong.id = dat.Phuong and phuong.id = '$idPhuong'");
@@ -26,16 +30,19 @@ class Dat extends Model
             return $key->TenPhuong;
         }
     }
+
     public function idQuan($idPhuong)
     {
         $k = DB::select("SELECT quan.id as id FROM phuong, quan where quan.id = phuong.ThuocQuan and phuong.id = '$idPhuong'");
         return $k[0]->id;
     }
+
     public function idThanhPho($idPhuong)
     {
         $k = DB::select("SELECT thanhpho.id as id FROM phuong, quan, thanhpho where quan.ThuocThanhPho = thanhpho.id and quan.id = phuong.ThuocQuan and phuong.id = '$idPhuong'");
         return $k[0]->id;
     }
+
     public function tenQuan($idPhuong)
     {
         $k = DB::select("SELECT TenQuan FROM phuong, quan where quan.id = phuong.ThuocQuan and phuong.id = '$idPhuong'");
@@ -43,6 +50,7 @@ class Dat extends Model
             return $key->TenQuan;
         }
     }
+
     public function tenThanhPho($idPhuong)
     {
         $k = DB::select("SELECT TenThanhPho FROM phuong, quan, thanhpho where quan.ThuocThanhPho = thanhpho.id and quan.id = phuong.ThuocQuan and phuong.id = '$idPhuong'");
@@ -50,6 +58,7 @@ class Dat extends Model
             return $key->TenThanhPho;
         }
     }
+
     public function timdat($id, $congty)
     {
         $k = DB::select('SELECT *, dat.id as iddat, thanhpho.id as idtp, quan.id as idquan FROM dat,phuong,quan,thanhpho WHERE KyHieuLoDat LIKE "%'.$id.'%" and dat.SoHuu = '.$congty.' and dat.Phuong = phuong.id and phuong.ThuocQuan = quan.id and quan.ThuocThanhPho = thanhpho.id ORDER BY dat.id');
@@ -75,7 +84,7 @@ class Dat extends Model
             $string.=  '<td>'.number_format($dat->DonGia).' VN
             /m2</td>';
             $string.=  '<td>'.number_format($dat->Gia).' VND</td>';
-            $string.=  '<td>'.$dat->DiaChi.','.$dat->TenQuan.','.$dat->TenThanhPho.'</td>';
+            $string.=  '<td>'.$dat->DiaChi.'</td>';
             if($dat->TrangThai == 0)
             {
                  $string.=  '<td> Đang đăng tin </td>';
@@ -108,38 +117,14 @@ class Dat extends Model
             $string.= 'data-trangthai="'.$dat->TrangThai.'"';
             $string.= 'data-ghichu="'.$dat->GhiChu.'"';
             $string.= 'data-luotxem="'.$dat->LuotXem.'"';
-            $string.= 'data-vitri="'.$dat->DiaChi.','.$dat->TenPhuong.','.$dat->TenQuan.','.$dat->TenThanhPho.'"';
+            $string.= 'data-vitri="'.$dat->DiaChi.'"';
             $string.= 'data-ngaytao="'
             .date_format(date_create($dat->created_at),"d/m/Y H:i:s").'"';
             $string.= 'data-ngaycapnhat="'
             .date_format(date_create($dat->updated_at),"d/m/Y H:i:s").'"';
             $string.= 'data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
             ';
-            $string.= '<button class="btn btn-primary btn-xs"';
-            $string.= 'data-iddat="'.$dat->iddat.'"';
-            $string.= 'data-map="'.$dat->Map.'"';
-            $string.= 'data-mald="'.$dat->KyHieuLoDat.'"';
-            $string.= 'data-dongia="'.$dat->DonGia.'"';
-            $string.= 'data-gia="'.$dat->Gia.'"';
-            $string.= 'data-dientich="'.$dat->DienTich.'"';
-            $string.= 'data-rong="'.$dat->Rong.'"';
-            $string.= 'data-dai="'.$dat->Dai.'"';
-            $string.= 'data-nohau="'.$dat->NoHau.'"';
-            $string.= 'data-huong="'.$dat->Huong.'"';
-            $string.= 'data-hinh="'.$dat->HinhAnh.'"';
-            $string.= 'data-trangthai="'.$dat->TrangThai.'"';
-            $string.= 'data-ghichu="'.$dat->GhiChu.'"';
-            $string.= 'data-luotxem="'.$dat->LuotXem.'"';
-            $string.= 'data-diachi="'.$dat->DiaChi.'"';
-            $string.= 'data-quan="'.$dat->idquan.'"';
-            $string.= 'data-phuong="'.$dat->Phuong.'"';
-            $string.= 'data-thanhpho="'.$dat->idtp.'"';
-            $string.= 'data-ngaytao="'
-            .date_format(date_create($dat->created_at),"d/m/Y H:i:s").'"';
-            $string.= 'data-ngaycapnhat="'
-            .date_format(date_create($dat->updated_at),"d/m/Y H:i:s").'"';
-            $string.= 'data-toggle="modal" data-target="#sua"><i class="fas fa-edit"></i></button>
-            ';
+            $string.= '<a type="button" class="btn btn-info btn-xs" href="sualodat/'.$dat->id.'" ><i class="fas fa-edit"></i></a> ';
             $string.= '<button class="btn btn-danger btn-xs classXoa" id="'.$dat->iddat.'" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
             </td>
             </tr>
@@ -147,6 +132,7 @@ class Dat extends Model
         }
         return $string;
     }
+
     public function timdat_ban($quan,$tp,$gia,$dt,$huong,$congty = null)
     {
         //
@@ -222,20 +208,21 @@ class Dat extends Model
         }
         if($tp == 0)
         {
-            $k = DB::select('select *, dat.id as iddat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and dat.SoHuu'.$congty.' and dat.TrangThai = 3');
+            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and dat.SoHuu'.$congty.' and dat.TrangThai = 0');
             return $k;
         }
         elseif($quan == 0)
         {
-            $k = DB::select('select *, dat.id as iddat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = '.$tp.' and dat.SoHuu'.$congty.' and dat.TrangThai = 3');
+            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = '.$tp.' and dat.SoHuu'.$congty.' and dat.TrangThai = 0');
             return $k;
         }
         else
         {
-            $k = DB::select('select *, dat.id as iddat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and quan.id = '.$quan. ' and dat.SoHuu'.$congty.' and dat.TrangThai = 3');
+            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and quan.id = '.$quan. ' and dat.SoHuu'.$congty.' and dat.TrangThai = 0');
             return $k;
         }
     }
+
     public function tangluotxem($id)
     {
         $k  = DB::select('select * from dat where id = '.$id);
@@ -245,22 +232,20 @@ class Dat extends Model
             $kq = DB::update('update dat set LuotXem  = '.$a.' where id='.$id);
         }
     }
+
     public function capnhat_trangthai($id)
     {
-        $k  = DB::select('select * from yeucau where id = '.$id);
-        foreach ($k as $m) {
-            $a = $m->id_dat;
-            $kq = DB::update('update dat set TrangThai  = 0 where id='.$a);
-        }
-        
+        DB::update('update dat set TrangThai  = 1 where id='.$id);
     }
+
     public function topdat()
     {
         $k = DB::select("SELECT *, dat.id as iddat FROM dat,khachhang,quan,thanhpho WHERE dat.SoHuu = khachhang.id and dat.Quan = quan.id and quan.ThuocThanhPho = thanhpho.id and TrangThai = '0'
             ORDER BY `dat`.`LuotXem`  DESC LIMIT 5");
         return $k;
     }
-    public function locdat($quan,$gia,$trangthai,$thang)
+
+    public function locdat($quan,$gia,$trangthai,$thang,$congty)
     {
         switch ($gia) {
             case '1':
@@ -297,20 +282,98 @@ class Dat extends Model
         }
         if($quan == 0)
         {
-            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi from Dat,Phuong,ThanhPho,Quan,CongTy where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and quan.ThuocThanhPho = 1 and dat.SoHuu = congty.id and '.$trangthai.' and '.$thang);
+            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi, dat.created_at as ngaytao, dat.updated_at as ngaycapnhat from Dat,Phuong,ThanhPho,Quan,CongTy where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and quan.ThuocThanhPho = 1 and dat.SoHuu = congty.id and '.$trangthai.' and '.$thang.' and dat.SoHuu = '.$congty);
             return $k;
         }
         else
         {
-            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi from Dat,Phuong,ThanhPho,Quan,CongTy where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and dat.SoHuu = congty.id and quan.ThuocThanhPho = 1 and '.$trangthai.' and quan.id= '.$quan.' and '.$thang);
+            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi, dat.created_at as ngaytao, dat.updated_at as ngaycapnhat from Dat,Phuong,ThanhPho,Quan,CongTy where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and dat.SoHuu = congty.id and quan.ThuocThanhPho = 1 and '.$trangthai.' and quan.id= '.$quan.' and '.$thang.' and dat.SoHuu = '.$congty);
             return $k;
         }
     }
-    public function kiemtraMap($diaChi) {
-        $k = DB::select("SELECT * from dat where Map = '$diaChi'");
-        if(empty($k)) {
+
+    public function kiemtraMap($map, $diaChi) {
+        $k1 = DB::select("SELECT * from dat where Map = '$map'");
+        $k2 = DB::select("SELECT * from dat where DiaChi = '$diaChi'");
+        if(empty($k1) && empty($k2)) {
             return true;
         }
         return false;
+    }
+
+    public function timtindang($id, $congty)
+    {
+        $k = DB::select('SELECT *, dat.id as iddat, thanhpho.id as idtp, quan.id as idquan, , dat.created_at as ngaytao, dat.updated_at as ngaycapnhat FROM dat,phuong,quan,thanhpho WHERE KyHieuLoDat LIKE "%'.$id.'%" and dat.SoHuu = '.$congty.' and dat.Phuong = phuong.id and phuong.ThuocQuan = quan.id and quan.ThuocThanhPho = thanhpho.id ORDER BY dat.id');
+        $string = '
+        <thead>
+        <tr>
+        <th>STT</th>
+         <th>Ký hiệu lô đất</th>
+         <th>Đơn giá đất</th>
+         <th>Tổng giá trị lô đất</th>
+         <th>Vị trí</th>
+         <th>Trạng thái</th>
+         <th></th>
+        </tr>
+        </thead>
+        <tbody>';
+        $i=0;
+        foreach($k as $dat)
+        {
+            $string.= '<tr>';
+            $string.=  '<td>'.++$i.'</td>';
+            $string.=  '<td>'.$dat->KyHieuLoDat.'</td>';
+            $string.=  '<td>'.number_format($dat->DonGia).' VN
+            /m2</td>';
+            $string.=  '<td>'.number_format($dat->Gia).' VND</td>';
+            $string.=  '<td>'.$dat->DiaChi.','.$dat->TenQuan.','.$dat->TenThanhPho.'</td>';
+            if($dat->TrangThai == 0)
+            {
+                 $string.=  '<td> Đang đăng tin </td>';
+            }
+            if($dat->TrangThai == 1)
+            {
+                 $string.=  '<td> Đang giao dịch </td>';
+            }
+            if($dat->TrangThai == 2)
+            {
+                 $string.=  '<td> Đã bán </td>';
+            }
+            if($dat->TrangThai == 3)
+            {
+                 $string.=  '<td> Hiện có </td>';
+            }
+            $string.=  '<td></td>';
+            $string.=  '<td>';
+            $string.= '<button class="btn btn-success btn-xs"';
+            $string.= 'data-mald="'.$dat->KyHieuLoDat.'"';
+            $string.= 'data-dongia="'.number_format($dat->DonGia).'"';
+            $string.= 'data-gia="'.number_format($dat->Gia).'"';
+            $string.= 'data-dientich="'.$dat->DienTich.'"';
+            $string.= 'data-rong="'.$dat->Rong.'"';
+            $string.= 'data-dai="'.$dat->Dai.'"';
+            $string.= 'data-nohau="'.$dat->NoHau.'"';
+            $string.= 'data-huong="'.$dat->Huong.'"';
+            $string.= 'data-hinh="'.$dat->HinhAnh.'"';
+            $string.= 'data-map="'.$dat->Map.'"';
+            $string.= 'data-trangthai="'.$dat->TrangThai.'"';
+            $string.= 'data-ghichu="'.$dat->GhiChu.'"';
+            $string.= 'data-luotxem="'.$dat->LuotXem.'"';
+            $string.= 'data-vitri="'.$dat->DiaChi.','.$dat->TenPhuong.','.$dat->TenQuan.','.$dat->TenThanhPho.'"';
+            $string.= 'data-ngaytao="'
+            .date_format(date_create($dat->ngaytao),"d/m/Y H:i:s").'"';
+            $string.= 'data-ngaycapnhat="'
+            .date_format(date_create($dat->ngaycapnhat),"d/m/Y H:i:s").'"';
+            $string.= 'data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
+            ';
+            if($dat->TrangThai == 0) {
+                $string.= '<button class="btn btn-danger btn-xs classXoa" id="'.$dat->iddat.'" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>';
+            }
+            $string .='
+            </td>
+            </tr>
+            </tbody>';
+        }
+        return $string;
     }
 }

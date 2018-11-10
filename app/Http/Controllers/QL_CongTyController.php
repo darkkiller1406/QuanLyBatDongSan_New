@@ -48,7 +48,7 @@ class QL_CongTyController extends Controller
     		$taikhoan = TaiKhoan::where('ThuocCongTy', $congty->id)->get();
     		foreach ($taikhoan as $t) {
     			$user = TaiKhoan::find($t->id);
-    			$user->password = bcrypt('123456');
+    			$user->password = bcrypt('12345678x@X');
     			$user->save();
     		}
     		return redirect('page/quanlycongty')->with('thongbao', 'Bạn đã reset password thành công tài khoản thuộc công ty '.$congty->TenCongTy);

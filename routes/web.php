@@ -73,7 +73,7 @@ Route::any('timphuong','QL_DatController@timPhuong');
 
 Route::any('quanlytrangcanhan', 'QL_TaiKhoanController@trangcanhan')->name('view_trangcanhan');
 
-Route::any('kichhoat/{check}','QL_TaiKhoanController@postKichHoat');
+Route::any('kichhoat/{token}','QL_TaiKhoanController@postKichHoat');
 
 Route::any('capnhatmk','QL_TaiKhoanController@postCapNhatMK')->name('post_CapNhatMK');
 
@@ -85,6 +85,7 @@ Route::any('thuchiengiahan/{check}','QL_TaiKhoanController@thuchiengiahan');
 
 Route::any('checkunique','QL_TaiKhoanController@checkUnique');
 
+Route::any('guimail','QL_TaiKhoanController@guiMail');
 //reset password
 Route::group(['namespace' => 'Auth'],function(){
     // Password Reset Routes...
@@ -118,11 +119,11 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::any('suamk','QL_TaiKhoanController@postSuaMK')->name('post_SuaMK');
     //quản lý đất
     Route::get('quanlydat','QL_DatController@getView')->name('view_QLDAT');
+    Route::get('themlodat','QL_DatController@getViewThem');
     Route::post('themdat','QL_DatController@postThem')->name('post_ThemDAT');
     Route::post('suadat','QL_DatController@postSua')->name('post_SuaDAT');;
     Route::get('xoadat/{id}','QL_DatController@getXoa');
-    Route::get('xoatin/{id}','QL_DatController@getXoaTin');
-    Route::get('dangtin/{id}','QL_DatController@getDangTin');
+    Route::get('sualodat/{id}','QL_DatController@getViewSua');
     Route::any('timdat', 'QL_DatController@getTim');
     Route::any('locdat' , 'QL_DatController@getLoc')->name('post_Loc');
     //quản lý hợp đồng
@@ -136,14 +137,15 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::get('xoaycll/{id}','QL_YeuCauController@getXoaLL');
     Route::get('xoaycweb/{id}','QL_YeuCauController@getXoaWeb');
     Route::any('timyeucau', 'QL_YeuCauController@timYC')->name('TKYC');
-    Route::any('guimail','QL_YeuCauController@guiMail');
-    // Quan ly tin dang thue phong 
+    // Quan ly tin dang 
     Route::get('quanlytindang','QL_TinDangController@getView')->name('view_QLTD');
-    Route::get('xacnhantindang','QL_TinDangController@getView_XacNhan')->name('view_QLXNTD');
-    Route::get('tindaxoa','QL_TinDangController@getView_DaXoa')->name('view_QLTDX');
-    Route::any('timtindang', 'QL_TinDangController@timTD')->name('TKTD');
-    Route::post('xoatd','QL_TinDangController@getXoa');
-    Route::get('xacnhan/{id}','QL_TinDangController@getXacNhan');
+    Route::post('loctindang','QL_TinDangController@getLoc')->name('post_LocTin');
+    Route::get('xoatin/{id}','QL_TinDangController@getXoaTin');
+    Route::get('dangtin/{id}','QL_TinDangController@getDangTin');
+    Route::any('timtindang', 'QL_TinDangController@getTimTinDang');
+    //
+    Route::get('quanlyhoatdong','QL_HoatDongController@getView')->name('view_QLHDU');
+    Route::post('timhoatdong','QL_HoatDongController@timHDU')->name('timHDU');
     //
     Route::any('thongkedoanhthu','ThongKeController@getThongKeDoanhThu')->name('TKDT');
     Route::any('thongkegiaodich','ThongKeController@getThongKeGiaoDich')->name('TKGD');

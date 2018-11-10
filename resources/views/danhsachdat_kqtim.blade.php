@@ -57,8 +57,7 @@
                             <!-- Property Content -->
                             <div class="property-content">
                                 <h5>Đất quận {{$d->TenQuan}}</h5>
-                                <p class="location"><img src="img/icons/location.png" alt="">{{$d->TenPhuong}}
-                                    , {{$d->TenQuan}}</p>
+                                <p class="location"><img src="img/icons/location.png" alt="">{{$d->diaChiDat}}</p>
                                 <p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}
                                 </p>
                             </div>
@@ -68,19 +67,17 @@
                 @endif
             </div>
 
-<!--             <div class="row">
+            <div class="row">
                 <div class="col-12">
                     <div class="south-pagination d-flex justify-content-end">
                         <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link active" href="#">01</a></li>
-                                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                            </ul>
+                            @if(isset($kq[0]->iddat))
+                            {{ $kq->links() }}
+                            @endif
                         </nav>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </section>
     <!-- ##### Listing Content Wrapper Area End ##### -->

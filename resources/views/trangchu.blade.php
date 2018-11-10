@@ -87,6 +87,14 @@
             </div>
             @endforeach
         </div>
+        <div class="row">
+            <div class="col-md-5">
+            </div>
+            <!-- Submit -->
+            <div class="form-group">
+                <a href="danhsachdat" class="btn south-btn">Xem thêm</a>
+            </div>
+        </div>
     </div>
 </section>
 <!-- ##### Featured Properties Area End ##### -->
@@ -136,7 +144,7 @@
             </div>
             <!-- Submit -->
             <div class="form-group">
-                <button type="submit" class="btn south-btn btn-3">Xem thêm</button>
+                <a href="danhsachthanhvien" class="btn south-btn btn-3">Xem thêm</a>
             </div>
         </div>
     </div>

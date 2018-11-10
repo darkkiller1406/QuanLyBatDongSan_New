@@ -47,19 +47,15 @@
                 @endforeach
             </div>
 
-<!--             <div class="row">
+            <div class="row">
                 <div class="col-12">
                     <div class="south-pagination d-flex justify-content-end">
                         <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link active" href="#">01</a></li>
-                                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                            </ul>
+                            {{$congty->links()}}
                         </nav>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </section>
     <!-- ##### Listing Content Wrapper Area End ##### -->

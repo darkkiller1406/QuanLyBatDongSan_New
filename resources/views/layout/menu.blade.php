@@ -62,10 +62,16 @@
               <i class="fas fa-address-book"></i><span>Quản lý khách hàng</span>
             </a>
           </li>
+          @if(Auth::user()->Quyen == 1)
           <li class="sub-menu">
             <a href="{{route('view_QLTK')}}" class="{{ (\Request::route()->getName() == 'view_QLTK') ? 'active' : '' }}">
              <i class="fas fa-users"></i><span>Quản lý tài khoản</span>
            </a>
+         </li>
+         <li class="sub-menu">
+            <a href="{{route('view_QLHDU')}}" class="{{ (\Request::route()->getName() == 'view_QLHDU') ? 'active' : '' }}">
+              <i class="fas fa-clipboard-check"></i><span>Bản ghi hoạt động</span>
+            </a>
          </li>
          <li class="sub-menu">
           <a href="javascript:;" >
@@ -74,10 +80,10 @@
           </a>
           <ul class="sub">
             <li><a  href="{{route('TKDT')}}"><i class="fas fa-chart-line"></i>Thống kê doanh thu</a></li>
-            <li><a  href="{{route('TKGD')}}"><i class="fas fa-chart-area"></i>Thống kê giao dịch</a></li>
             <li><a  href="{{route('TKTK')}}"><i class="fas fa-chart-pie"></i>Thống kê tìm kiếm</a></li>
           </ul>
         </li>
+        @endif
         <li class="sub-menu">
           <a href="https://thongtinquyhoach.hochiminhcity.gov.vn/ban-do-quy-hoach" target="_blank">
            <i class="fas fa-clipboard-check"></i><span>Hỗ trợ kiểm tra đất</span>

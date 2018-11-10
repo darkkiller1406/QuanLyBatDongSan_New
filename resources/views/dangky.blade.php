@@ -2,7 +2,7 @@
 @extends('layout.master_ban')
 @section('content')
 <!-- ##### Breadcumb Area Start ##### -->
-<section class="breadcumb-area bg-img" style="background-image: url({{asset('img/bg-img/hero1.jpg')}});">>
+<section class="breadcumb-area bg-img" style="background-image: url({{asset('img/bg-img/hero1.jpg')}});">
   <div class="container h-100">
     <div class="row h-100 align-items-center">
       <div class="col-12">

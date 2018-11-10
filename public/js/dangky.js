@@ -252,9 +252,8 @@ $.ajaxSetup({
                 data: data,
                 processData: false, contentType: false,
                 async: true,
-                success:function(html){
-                  window.open(html, '_blank');
-                  location.reload();
+                success:function(data){
+                  window.location.href = data;
                 },
                 error : function() {
                   alert('Không kết nối được với máy chủ ! Vui lòng thử lại sau');

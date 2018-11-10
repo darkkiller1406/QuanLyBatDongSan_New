@@ -29,15 +29,21 @@
           <form method="post" action="{{route('TKYC')}}">
             {{csrf_field()}}
             <div class="form-group">
-              <div class="col-md-3 col-sm-1 control-label"></div>
-              <div class="col-md-5">
-                <div class="form-group">
+              <div class="col-md-4 col-sm-4 control-label"></div>
+              <div class="col-md-4">
+               <div id="custom-search-input">
+                <div class="input-group col-md-12">
+                  @if(isset($ngay))
+                  <input type="date" name="ngay" class="form-control" value="{{$ngay}}">
+                  @else
                   <input type="date" name="ngay" class="form-control" value="<?php echo date('Y-m-d') ?>">
+                  @endif
                 </div>
               </div>
-              <div class="col-md-1 col-sm-1 control-label"><button type="submit" class="btn btn-theme"><i class="fas fa-search"></i></button></div>
             </div>
-          </form>
+            <div class="col-md-3 col-sm-2 control-label"><button type="submit" class="btn btn-theme"><i class="fas fa-search"></i></button></div>
+          </div>
+        </form>
      <table id="dtable" class="table table-striped table-advance table-hover table-ed">
        <hr>
        <thead>
@@ -98,8 +104,6 @@
             data-idyc="{{$yc->id}}"
             data-kyhieudat = "{{$yc->dat->KyHieuLoDat}}"
             data-toggle="modal" data-target="#sua"><i class="fas fa-check-square"></i></button>
-             <button class="btn btn-warning btn-xs classXoa" data-tenkh="{{$yc->TenKhach}}" id="{{$yc->Email}}" onClick="send_Mail(this.id)"><i class="fas fa-envelope"></i></button>
-             <input type="hidden" id="name{{$yc->Email}}" value="{{$yc->TenKhach}}">
           <?php } ?>
         <?php } ?>
         <?php if(isset($yc->dat->KyHieuLoDat)){ ?>
@@ -115,7 +119,9 @@
 </div><!-- /content-panel -->
 </div><!-- /col-md-12 -->
 </div><!-- /row -->
-
+@if(!empty($yeucau->links()))
+{{ $yeucau->links() }}
+@endif
 </section><! --/wrapper -->
 </section><!-- /MAIN CONTENT -->
 
@@ -348,22 +354,6 @@
             location.href='xoaycll/'+id;
           }
         }
-        function send_Mail(clicked_id)
-        {
-          var name = document.getElementById("name"+clicked_id).value;
-          $.ajax({
-              type:'get',
-              url: '{{ url("page/guimail") }}',
-              data: {mail:clicked_id,name:name},
-              async: true,
-              beforeSend: function() {
-                alert('Mail đang được gửi, vui lòng đợi !');
-              },
-              success: function(data){
-                alert(data);
-              }
-            });
-        }
         $(document).ready(function(){
           $('#sotien').on('change',function(){
             if($('#sotien').val() <= 0)
@@ -378,7 +368,7 @@
           });
           $("#search").keyup(function() {
             $.ajax({
-              type:'get',
+              type:'post',
               url: '{{ url("page/timyc") }}',
               data: {name:$("#search").val()},
               async: true,

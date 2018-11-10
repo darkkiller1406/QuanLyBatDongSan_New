@@ -80,7 +80,7 @@ class TaiKhoan extends Model
 
   public function xoaKhongKichHoat() 
   {
-    $users = DB::select("SELECT * FROM users WHERE hour(TIMEDIFF(NOW(), updated_at)) >= 1 and LoaiTaiKhoan = 4");
+    $users = DB::select("SELECT * FROM users WHERE hour(TIMEDIFF(NOW(), updated_at)) >= 24 and LoaiTaiKhoan = 4");
     if(!empty($users)) {
       foreach ($users as $user) {
         DB::delete("DELETE FROM users WHERE id = ".$user->id);
