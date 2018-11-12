@@ -4,10 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password</title>
-
     <!-- Bootstrap core CSS -->
     <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
-
+    <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
     <!-- Custom styles for this template -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
     <link href="{{asset('css/style-responsive.css')}}" rel="stylesheet">

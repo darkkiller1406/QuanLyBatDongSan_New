@@ -52,7 +52,7 @@
           <p>{{number_format(($chitiet->DienTich)*($chitiet->DonGia))}} VNĐ</p>
         </div>
         <h5>Bán đất {{$chitiet->TenQuan($chitiet->Phuong)}}</h5>
-        <p class="location" style="margin-top: -5px;"><img src="../img/icons/location.png" alt="">{{$chitiet->DiaChi}}, {{$chitiet->phuong->TenPhuong}}, {{$chitiet->TenQuan($chitiet->Phuong)}}, {{$chitiet->TenThanhPho($chitiet->Phuong)}}</p>
+        <p class="location" style="margin-top: -5px;"><img src="../img/icons/location.png" alt="">{{$chitiet->DiaChi}}</p>
         <div class="row">
           <div class="col-sm-6 col-md-6 col-lg-6">
             <ul class="list-group list-group-flush">
@@ -96,15 +96,17 @@
                 <input type="text" class="form-control" id="realtor-name" name="ten" placeholder="Tên đầy đủ" required>
               </div>
               <div class="form-group">
-                <input type="email" class="form-control" id="realtor-number" name="email" placeholder="Email" required>
+                <input type="email" class="form-control" name="email" id="emailLL" placeholder="Email" required>
+                <div id="ktEmail" class="sub" style="font-size: 12px"></div>
               </div>
               <div class="form-group">
-                <input type="number" class="form-control" id="realtor-email" name="dt" id="dt" placeholder="Điện thoại liên lạc" required>
+                <input type="number" class="form-control" name="dt" id="sdt" placeholder="Điện thoại liên lạc" required>
+                <div id="ktSDT" class="sub" style="font-size: 12px"></div>
               </div>
               <div class="form-group">
-                <textarea class="form-control" id="realtor-message" cols="30" rows="10" name="noidung" placeholder="Yêu cầu" required></textarea>
+                <textarea class="form-control" id="realtor-message" cols="30" rows="10" name="noidung" placeholder="Yêu cầu"></textarea>
               </div>
-              <button type="submit" class="btn south-btn">Gửi</button>
+              <button type="submit" class="btn south-btn" id="submit">Gửi</button>
             </form>
           </div>
         </div>
@@ -176,7 +178,7 @@
                     <div class="property-content">
                         <?php $tenQuan = $d->TenQuan($d->Phuong) ?>
                         <h5>Đất quận {{$tenQuan}}</h5>
-                        <p class="location"><img src="../img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->phuong->TenPhuong}}, {{$tenQuan}}</p>
+                        <p class="location"><img src="../img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->DiaChi}}</p>
                         <p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}</p>
                     </div>
                   </a>
@@ -202,6 +204,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzlVX517mZWArHv4Dt3_JVG0aPmbSE5mE&libraries=places&callback=initMap" async defer></script>
     <script type="text/javascript">
         var checkMap = false;
+
         $("#change-map").click(function () {
             if (checkMap === false) {
                 checkMap = true;
@@ -220,7 +223,6 @@
       function callback(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
-            console.log(results[i]);
             createMarker(results[i]);
 
           }
@@ -327,7 +329,6 @@
             var a = new google.maps.LatLng(pos['lat'], pos['lng']);
             var distance = google.maps.geometry.spherical.computeDistanceBetween(a, b);
             distance = distance / 1000;
-            console.log(distance);
             directionsService.route({
                 origin: a,
                 destination: b,
@@ -375,15 +376,31 @@
     return flag;
   }
   $(document).ready(function(){
-    $('#dt').on('change',function(){
+    $('#sdt').on('change',function(){
       if (!checkPhoneNumber()) {
-        alert('Vui lòng nhập đúng định dạng số điện thoại');
-        document.getElementById("submit").disabled = true; 
+        document.getElementById("sdt").style.marginBottom = "0";
+        $('#ktSDT').html('*Hãy nhập SDT hợp lệ');
+        $("#submit").attr("disabled", true) 
       }
       else
       {
-       document.getElementById("submit").disabled = false; 
+        $('#ktSDT').html('');
+       $("#submit").removeAttr("disabled");
      }
+   });
+    $('#emailLL').on('change',function(){
+      var email = document.getElementById('emailLL'); 
+      var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/; 
+      if (!filter.test(email.value)) { 
+        document.getElementById("emailLL").style.marginBottom = "0";
+        $('#ktEmail').html('*Hãy nhập địa chỉ email hợp lệ');
+        $("#submit").attr("disabled", true) 
+      }
+      else
+      {
+        $("#submit").removeAttr("disabled");
+        $('#ktEmail').html('');
+      }
    });
     $('#tp').on('change',function(){
       if(tp){

@@ -206,9 +206,10 @@
        <div class="row">
         <div class="col-lg-12">
           <div class="form-panel">
-            <form class="form-horizontal style-form" method="post" action="{{route('post_ThemHD')}}">
+            <form class="form-horizontal style-form" method="post" enctype="multipart/form-data" action="{{route('post_ThemHD')}}">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
               <input type="hidden" name="iddat" id="iddat" value="">
+              <input type="hidden" name="idyc" id="idyc" value="">
               <div class="form-group">
                 <label class="col-sm-3 col-sm-3 control-label">Lô đất</label>
                 <div class="col-sm-9">
@@ -234,7 +235,14 @@
             <div class="form-group">
               <label class="col-sm-3 col-sm-3 control-label">Mã hợp đồng</label>
               <div class="col-sm-9">
-                <input type="number" name="maHopDong" id="maHopDong" class="form-control" required>
+                <input type="text" name="maHopDong" class="form-control" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 col-sm-3 control-label">File hợp đồng</label>
+              <div class="col-sm-9">
+                <input type="file" name="hopdong[]" accept=
+                "application/msword,text/plain, application/pdf" class="form-control" >
               </div>
             </div>
             <div class="col-md-5">
@@ -277,10 +285,6 @@
        if(trangthai == 2)
        {
          modal.find('.modal-body #trangthai').html('Đã hoàn thành');
-       }
-       if(trangthai == 3)
-       {
-         modal.find('.modal-body #trangthai').html('Đang đợi liên lạc');
        }
        if(loaiyc == 1)
        {

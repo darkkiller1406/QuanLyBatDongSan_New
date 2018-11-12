@@ -64,7 +64,7 @@
          <td>{{$hd->khachhang->HoVaTenDem}} {{$hd->khachhang->Ten}}</td>
                   <td><?php $date=date_create($hd->created_at);
           echo date_format($date,"d/m/Y H:i:s") ?></td>
-         <td></td>
+         <td>{{$hd->FileHopDong}}</td>
          <td>
           <button class="btn btn-danger btn-xs classXoa" idbd="{{$hd->id}}" id="{{$hd->id}}" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
         </td>

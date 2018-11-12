@@ -25,7 +25,7 @@
     <script src="{{asset('js/jquery.scrollTo.min.js')}}"></script>
     <script src="{{asset('js/jquery.nicescroll.js')}}" type="text/javascript"></script>
     <script src="{{asset('js/jquery.sparkline.js')}}"></script>
-    
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
     <title>@yield('title')</title>
     @yield('css')
   </head>

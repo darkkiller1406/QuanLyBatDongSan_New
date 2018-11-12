@@ -15,7 +15,7 @@ class AdminLogin
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::check())
+        if(Auth::check() && Auth::user()->LoaiTaiKhoan < 4)
             return $next($request);
         else
         {

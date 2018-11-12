@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\CongTy;
 use App\TaiKhoan;
 use Illuminate\Support\Facades\DB;
+use App\GioiThieu;
 class QL_CongTyController extends Controller
 {
     //
@@ -60,5 +61,46 @@ class QL_CongTyController extends Controller
     {
     	$congty = new CongTy;
     	echo $congty->timCongTy($request->name);
+    }
+
+    public function getViewGioiThieu() 
+    {
+        $gioithieu = GioiThieu::where('CongTy', Auth::user()->ThuocCongTy)->first();
+        if(!empty($gioithieu)) {
+            return view('page/gioithieucongty', ['gioithieu' => $gioithieu]);
+        }
+        return view('page/gioithieucongty');   
+    }
+
+    public function postThemGioiThieu(Request $request) 
+    {
+        $check = GioiThieu::where('CongTy', Auth::user()->ThuocCongTy)->get();
+        if(empty($check)) {
+            $gioithieu = new GioiThieu;
+            $gioithieu->TieuDe = $request->tieude;
+            $gioithieu->NoiDung = $request->noidung;
+            $gioithieu->CongTy = Auth::user()->ThuocCongTy;
+            $gioithieu->save();
+            $gioithieu_new = GioiThieu::where('CongTy', Auth::user()->ThuocCongTy)->get();
+            return view('page/gioithieu')->with('thongbao', 'Thêm thành công!');;
+        } else {
+            $gioithieu = GioiThieu::find($check[0]->id);
+            $gioithieu->TieuDe = $request->tieude;
+            $gioithieu->NoiDung = $request->noidung;
+            $gioithieu->CongTy = Auth::user()->ThuocCongTy;
+            $gioithieu->save();
+            $gioithieu_new = GioiThieu::where('CongTy', Auth::user()->ThuocCongTy)->get();
+            return redirect('page/gioithieu')->with('thongbao', 'Cập nhật thành công!');;
+        } 
+    }
+
+    public function getViewThanhVien($link) {
+        $congty = CongTy::where('link', $link)->first();
+        $gioithieu = GioiThieu::where('CongTy', $congty->id)->first();
+        if(!empty($gioithieu)) {
+            return view('thanhvien', ['congty'=>$congty, 'gioithieu'=>$gioithieu]);
+        }
+        return view('thanhvien', ['congty'=>$congty]);
+        
     }
 }

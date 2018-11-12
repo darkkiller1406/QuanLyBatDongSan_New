@@ -434,7 +434,7 @@
                         </tr>
                       </table>
                       <p>Cảm ơn bạn đã quan tâm và sử dụng dịch vụ của chúng tôi,
-                        <br>Đội ngũ LightZ Real Estate</p>
+                        <br>LightZ Real Estate Team</p>
                       <!-- Sub copy -->
                       <table class="body-sub">
                         <tr>

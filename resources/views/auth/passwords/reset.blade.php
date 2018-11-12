@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
   <title>Reset password</title>
-
   <!-- Bootstrap core CSS -->
   <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
 

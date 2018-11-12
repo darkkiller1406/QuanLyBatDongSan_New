@@ -26,7 +26,7 @@
                 <!-- Single Featured Property -->
 
                 <div class="col-12 col-md-6 col-xl-4">
-                    <a href="danhsachdat/{{$ct->Link}}">
+                    <a href="thanhvien/{{$ct->Link}}">
                         <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
                             <!-- Property Thumbnail -->
                             <div class="property-thumb">

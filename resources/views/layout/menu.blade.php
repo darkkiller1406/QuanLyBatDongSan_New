@@ -62,6 +62,11 @@
               <i class="fas fa-address-book"></i><span>Quản lý khách hàng</span>
             </a>
           </li>
+          <li class="sub-menu">
+            <a href="{{route('view_GTCT')}}" class="{{ (\Request::route()->getName() == 'view_GTCT') ? 'active' : '' }}" >
+              <i class="fas fa-info"></i><span>Giới thiệu về công ty</span>
+            </a>
+          </li>
           @if(Auth::user()->Quyen == 1)
           <li class="sub-menu">
             <a href="{{route('view_QLTK')}}" class="{{ (\Request::route()->getName() == 'view_QLTK') ? 'active' : '' }}">
@@ -70,7 +75,7 @@
          </li>
          <li class="sub-menu">
             <a href="{{route('view_QLHDU')}}" class="{{ (\Request::route()->getName() == 'view_QLHDU') ? 'active' : '' }}">
-              <i class="fas fa-clipboard-check"></i><span>Bản ghi hoạt động</span>
+              <i class="fas fa-clipboard-list"></i><span>Bản ghi hoạt động</span>
             </a>
          </li>
          <li class="sub-menu">

@@ -3,7 +3,7 @@
 @section('content')
 <section id="main-content">
   <section class="wrapper">
-    <h3>QUẢN LÝ HÓA ĐƠN</h3>
+    <h3>QUẢN LÝ HOẠT ĐỘNG</h3>
 
     <div class="row mt">
       <div class="col-md-12">

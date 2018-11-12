@@ -86,6 +86,8 @@ Route::any('thuchiengiahan/{check}','QL_TaiKhoanController@thuchiengiahan');
 Route::any('checkunique','QL_TaiKhoanController@checkUnique');
 
 Route::any('guimail','QL_TaiKhoanController@guiMail');
+
+Route::get('thanhvien/{link}', 'QL_CongTyController@getViewThanhVien');
 //reset password
 Route::group(['namespace' => 'Auth'],function(){
     // Password Reset Routes...
@@ -158,4 +160,8 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     Route::get('huykichhoat/{id}','QL_CongTyController@huyKichHoat');
     Route::get('resetpass/{id}','QL_CongTyController@resetPass');
     Route::post('timcongty', 'QL_CongTyController@timCongTy');
+    //
+    Route::get('gioithieu', 'QL_CongTyController@getViewGioiThieu')->name('view_GTCT');
+    Route::post('themgioithieu', 'QL_CongTyController@postThemGioiThieu')->name('post_ThemGioiThieu');
+    Route::post('upload', 'QL_CongTyController@uploadHinh')->name('uploadHinh');
  });

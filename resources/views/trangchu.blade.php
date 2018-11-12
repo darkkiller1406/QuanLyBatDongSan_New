@@ -79,7 +79,7 @@
                     <div class="property-content">
                         <?php $tenQuan = $d->TenQuan($d->Phuong) ?>
                         <h5>Đất quận {{$tenQuan}}</h5>
-                        <p class="location"><img src="img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->phuong->TenPhuong}}, {{$tenQuan}}</p>
+                        <p class="location"><img src="img/icons/location.png" alt="" style="margin-top: -10px;">{{$d->DiaChi}}</p>
                         <p><b>Diện tích:</b> {{$d->DienTich}} m2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hướng:</b> {{$d->Huong}}</p>
                     </div>
                     </a>
@@ -128,14 +128,15 @@
             @foreach ($congty as $ct)
             <!-- Single Featured Property -->
             <div class="col-12 col-md-6 col-xl-4">
+                <a href="thanhvien/{{$ct->Link}}">
                 <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
                     <!-- Property Thumbnail -->
-                    <a href="chitiet/{{$ct->id}}">
+                    
                     <div class="property-thumb">
                         <img src="<?php echo asset('img/logo/'.$ct->Logo) ?>" alt="" style="height: 250px; width: 100%">
                     </div>
-                    </a>
                 </div>
+                </a>
             </div>
             @endforeach
         </div>

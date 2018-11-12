@@ -19,7 +19,6 @@ class QL_YeuCauController extends Controller
         $khachhang = new KhachHang;
         $khachhang = KhachHang::where('ThuocCongTy', Auth::user()->ThuocCongTy)->get();
         $yeucau = YeuCau::where('sohuu', Auth::user()->ThuocCongTy)
-                 ->where('yeucau.created_at', 'like', '%'.date('Y-m-d').'%')
                  ->from('dat')
                  ->join('yeucau', 'id_dat', '=', 'dat.id')
                  ->paginate(15);

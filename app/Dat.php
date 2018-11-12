@@ -235,7 +235,7 @@ class Dat extends Model
 
     public function capnhat_trangthai($id)
     {
-        DB::update('update dat set TrangThai  = 1 where id='.$id);
+        DB::update('update dat set TrangThai  = 0 where id='.$id.' and TrangThai < 2');
     }
 
     public function topdat()
