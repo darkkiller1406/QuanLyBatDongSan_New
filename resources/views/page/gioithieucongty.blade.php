@@ -31,8 +31,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-1 col-sm-1 control-label">Nội dung</label>
-                                <div class="col-sm-11">
+                                <div class="col-sm-12">
                                     <textarea style="width: 100%; height: 500px"  type="text" class="form-control" name='noidung' id="noidung" required>
                                         @if(isset($gioithieu))
                                         {{$gioithieu->NoiDung}}

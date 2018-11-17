@@ -16,77 +16,89 @@ class QL_TaiKhoanController extends Controller
     //
     public function getView()
     {
-    	$taikhoan = TaiKhoan::where('ThuocCongTy', Auth::user()->ThuocCongTy)->paginate(15);
-    	return view('page.quanlytaikhoan', ['taikhoan' => $taikhoan]);
+        if(Auth::user()->Quyen == 1) {
+            $taikhoan = TaiKhoan::where('ThuocCongTy', Auth::user()->ThuocCongTy)->paginate(15);
+            return view('page.quanlytaikhoan', ['taikhoan' => $taikhoan]);
+        }
+    	return back();
     }
     public function getXoa($id)
     {
-    	$tk = TaiKhoan::find($id);
-        $email = $tk->email;
-    	$tk -> delete();
+        if(Auth::user()->Quyen == 1) {
+           $tk = TaiKhoan::find($id);
+           $email = $tk->email;
+           $tk -> delete();
 
-        activity()
-        ->useLog('2')
-        ->performedOn($tk)
-        ->causedBy(Auth::user()->id)
-        ->log('Xóa tài khoản '.$email);
+           activity()
+           ->useLog('2')
+           ->performedOn($tk)
+           ->causedBy(Auth::user()->id)
+           ->log('Xóa tài khoản '.$email);
 
-    	return redirect('page/quanlytaikhoan')->with('thongbao','Bạn đã xóa thành công!'); 
+           return redirect('page/quanlytaikhoan')->with('thongbao','Bạn đã xóa thành công!');
+        }
+        return back();
     }
     public function postThemTaiKhoan(Request $request)
     {
-    	$this->validate($request,[
-            'name'=> 'required',
-            'email'=>'required|email|unique:users,email',
-            'password'=> 'required',
-            'passwordAgain'=>'required|same:password'
-        ],[
-            'name.required'=> 'Bạn chưa nhập tên người dùng',
-            'name.min' => 'Tên người dùng phải có ít nhất 3 kí tự',
-            'email.required'=> 'Bạn chưa nhập email',
-            'email.email'=> 'Bạn chưa nhập đúng định dạng email',
-            'email.unique'=>'Email đã tồn tại',
-            'password.required'=> 'Bạn chưa nhập mật khẩu',
-            'passwordAgain.required' => 'Bạn chưa nhập lại mật khẩu',
-            'passwordAgain.same' => 'Mật khẩu nhập lại không khớp'
-        ]);
-        $username = TaiKhoan::where('name', $request->name)
-                    ->where('ThuocCongTy', Auth::user()->ThuocCongTy)
-                    ->first();
-        if(!empty($username)) {
-            return redirect('page/quanlytaikhoan')->with('canhbao','Tên đăng nhập đã có trong hệ thống');
-        }
-        if(Auth::user()->LoaiTaiKhoan == 2) {
-            $users = DB::table('users')
-                    ->where('ThuocCongTy', Auth::user()->ThuocCongTy)
-                    ->count();
-            if($users >= 3) {
-                return redirect('page/quanlytaikhoan')->with('canhbao','Bạn đang sử dụng tài khoản thường, vui lòng nâng cấp tài khoản để sử dụng nhiều người dùng hơn');
+        if(Auth::user()->Quyen == 1) {
+        	$this->validate($request,[
+                'name'=> 'required',
+                'email'=>'required|email|unique:users,email',
+                'password'=> 'required',
+                'passwordAgain'=>'required|same:password'
+            ],[
+                'name.required'=> 'Bạn chưa nhập tên người dùng',
+                'name.min' => 'Tên người dùng phải có ít nhất 3 kí tự',
+                'email.required'=> 'Bạn chưa nhập email',
+                'email.email'=> 'Bạn chưa nhập đúng định dạng email',
+                'email.unique'=>'Email đã tồn tại',
+                'password.required'=> 'Bạn chưa nhập mật khẩu',
+                'passwordAgain.required' => 'Bạn chưa nhập lại mật khẩu',
+                'passwordAgain.same' => 'Mật khẩu nhập lại không khớp'
+            ]);
+            $username = TaiKhoan::where('name', $request->name)
+                        ->where('ThuocCongTy', Auth::user()->ThuocCongTy)
+                        ->first();
+            if(!empty($username)) {
+                return redirect('page/quanlytaikhoan')->with('canhbao','Tên đăng nhập đã có trong hệ thống');
             }
+            if(Auth::user()->LoaiTaiKhoan == 2) {
+                $users = DB::table('users')
+                        ->where('ThuocCongTy', Auth::user()->ThuocCongTy)
+                        ->count();
+                if($users >= 3) {
+                    return redirect('page/quanlytaikhoan')->with('canhbao','Bạn đang sử dụng tài khoản thường, vui lòng nâng cấp tài khoản để sử dụng nhiều người dùng hơn');
+                }
+            }
+            $user = new User;
+            $user->name = $request->name; 
+            $user->email = $request->email;
+            $user->password = bcrypt($request->password);
+            $user->ThuocCongTy = Auth::user()->ThuocCongTy;
+            $user->LoaiTaiKhoan = Auth::user()->LoaiTaiKhoan;
+            $user->Quyen = 2; 
+            $user->save();
+
+            activity()
+            ->useLog('1')
+            ->performedOn($kh)
+            ->causedBy(Auth::user()->id)
+            ->log('Thêm tài khoản '.$request->email);
+
+            return redirect('page/quanlytaikhoan')->with('thongbao','Chúc mừng bạn đã đăng kí thành công!');
         }
-        $user = new User;
-        $user->name = $request->name; 
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->ThuocCongTy = Auth::user()->ThuocCongTy;
-        $user->LoaiTaiKhoan = Auth::user()->LoaiTaiKhoan;
-        $user->Quyen = 2; 
-        $user->save();
-
-        activity()
-        ->useLog('1')
-        ->performedOn($kh)
-        ->causedBy(Auth::user()->id)
-        ->log('Thêm tài khoản '.$request->email);
-
-        return redirect('page/quanlytaikhoan')->with('thongbao','Chúc mừng bạn đã đăng kí thành công!');
+        return back();
     }
     public function getReset($id)
     {
-    	$user = TaiKhoan::find($id);
-    	$user->password = bcrypt('12345678x@X');
-        $user->save();
-        return redirect('page/quanlytaikhoan')->with('thongbao','Thay đổi thông tin tài khoản thành công!');
+        if(Auth::user()->Quyen == 1) {
+        	$user = TaiKhoan::find($id);
+        	$user->password = bcrypt('12345678x@X');
+            $user->save();
+            return redirect('page/quanlytaikhoan')->with('thongbao','Thay đổi thông tin tài khoản thành công!');
+        }
+        return back();
     }
     public function getTim(Request $r)
     {
@@ -166,6 +178,13 @@ class QL_TaiKhoanController extends Controller
     public function postGiaHan(Request $request) 
     {
         if(isset(Auth::user()->id)) {
+            if (!empty($request->session()->get('thuocCongTy')) && ($request->session()->get('thoigian') < time())) {
+                $request->session()->forget('loaiTaiKhoan');
+                $request->session()->forget('thuocCongTy');
+                $request->session()->forget('thoigian');
+                $request->session()->forget('check');
+                $request->session()->forget('tien');
+            }
             if(empty($request->session()->get('thuocCongTy'))) {
                 $taikhoan = TaiKhoan::find(Auth::user()->id);
                 $now = (new \DateTime())->format('Y-m-d H:i:s');
@@ -193,28 +212,24 @@ class QL_TaiKhoanController extends Controller
                           $first_date = strtotime($taikhoan->NgayHetHan);
                           $second_date = strtotime($now);
                           $datediff = abs($first_date - $second_date);
-                          $tien = floor($datediff / (60*60*24))*60000 + 180000;
+                          $tien = floor($datediff / (60*60*24*30))*60000 + 180000;
                         }
                   }
               }
+              $thang = $request->thang;
+              $tien = $tien*$thang;
               $random = rand(10000,99999);
-              $url = "https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=NT".date('Ymdhis')."&price=".$tien."&return_url=".asset('thuchiengiahan/'.$random)."&comments=Gia hạn";
+              $url = "https://sandbox.nganluong.vn:8088/nl35/button_payment.php?receiver=minh.1406.nt@gmail.com&product_name=NT".date('Ymdhis')."&price=".$tien."&return_url=".asset('thuchiengiahan/'.$random)."&comments=Gia hạn".$thang.' tháng';
               echo "<script>window.open('".$url."', '_blank')</script>";
               session(['tien' => $tien]);
+              session(['thang' => $thang]);
               session(['loaiTaiKhoan' => $request->loaiTaiKhoan]);
               session(['thuocCongTy' => Auth::user()->ThuocCongTy]);
               $after_5_min = time() + 5*60;
               session(['check' =>$random]);
               session(['thoigian' =>$after_5_min]);
-          }
-          if (!empty($request->session()->get('thuocCongTy')) && ($request->session()->get('thoigian') < time())) {
-            $request->session()->forget('loaiTaiKhoan');
-            $request->session()->forget('thuocCongTy');
-            $request->session()->forget('thoigian');
-            $request->session()->forget('check');
-            $request->session()->forget('tien');
-        }
-        return view('giahan', ['ngayhethan' => Auth::user()->NgayHetHan, 'loaitaikhoan' => Auth::user()->LoaiTaiKhoan, 'canhbao' => 'Bạn đang thực hiện gia hạn, nếu chưa hoàn thành bạn sẽ mất 5 phút để thực hiện lại việc gia hạn']);
+            }
+            return view('giahan', ['ngayhethan' => Auth::user()->NgayHetHan, 'loaitaikhoan' => Auth::user()->LoaiTaiKhoan, 'canhbao' => 'Bạn đang thực hiện gia hạn, nếu chưa hoàn thành bạn sẽ mất 5 phút để thực hiện lại việc gia hạn']);
       }
       return redirect('trangchu');
     }
@@ -232,11 +247,11 @@ class QL_TaiKhoanController extends Controller
                 $now = (new \DateTime())->format('Y-m-d H:i:s');
                 $ngayhethan = $taikhoan->NgayHetHan;
                 if($ngayhethan < $now) {
-                    date_modify($now, "+30 days");
+                    date_modify($now, '+'.(30*$request->session()->get('thang')).' days');
                     $taikhoan->NgayHetHan = $now;
                 } else {
                     $ngayhethan = date_create($ngayhethan);
-                    date_modify($ngayhethan, "+30 days");
+                    date_modify($ngayhethan, '+'.(30*$request->session()->get('thang')).' days');
                     $taikhoan->NgayHetHan = $ngayhethan;
                 }
                 $taikhoan->save();
@@ -252,6 +267,7 @@ class QL_TaiKhoanController extends Controller
             $request->session()->forget('thoigian');
             $request->session()->forget('check');
             $request->session()->forget('tien');
+            $request->session()->forget('thang');
             if(isset(Auth::user()->id)) {
                 return redirect('giahan') -> with('thongbao', 'Gia hạn thành công');
             }

@@ -28,7 +28,7 @@
         <div class="container">
 
           <form class="form-login" method="POST" action="{{ route('password.reset') }}">
-            <h2 class="form-login-heading">Quên mật khẩu ?</h2>
+            <h2 class="form-login-heading">Reset Password</h2>
             <div class="login-wrap">
               {{ csrf_field() }}
              <input type="hidden" name="token" value="{{ $token }}">

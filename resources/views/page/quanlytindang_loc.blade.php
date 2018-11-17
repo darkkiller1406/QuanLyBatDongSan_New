@@ -95,7 +95,7 @@
      <td>{{$d->KyHieuLoDat}}</td>
      <td>{{number_format($d->DonGia)}} VND/m2</td>
      <td>{{number_format($d->Gia)}} VND</td>
-     <td>{{$d->diaChi}}, {{$d->TenPhuong}}, {{$d->TenQuan}}, {{$d->TenThanhPho}}</td>
+     <td>{{$d->diaChi}}</td>
      <td><?php 
        if ($d->TrangThai == 0) {
         echo 'Đang đăng bán';

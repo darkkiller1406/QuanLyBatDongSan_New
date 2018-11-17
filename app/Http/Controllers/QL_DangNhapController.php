@@ -10,8 +10,15 @@ class QL_DangNhapConTroller extends Controller
     //
     public function getView($id)
     {
-        $link = $id;
-    	return view('page.dangnhap', ['link' => $link]);
+        if(Auth::check()) {
+            if(Auth::user()->LoaiTaiKhoan == 0 && Auth::user()->Quyen == 0 && Auth::user()->ThuocCongTy == 0) {
+                return redirect('page/indexadmin');
+            }
+            return redirect('page/index');
+        } else {
+            $link = $id;
+            return view('page.dangnhap', ['link' => $link]);
+        }  
     }
     public function getViewReset() 
     {
@@ -54,7 +61,7 @@ class QL_DangNhapConTroller extends Controller
     { 
         $congty = CongTy::where('link', $r->link)->first();
         if(Auth::attempt(['name'=>$r->id,'password'=>$r->pass,'ThuocCongTy'=>$congty->id])) {
-            if (Auth::user()->LoaiTaiKhoan < 3) {
+            if (Auth::user()->LoaiTaiKhoan > 2) {
                 Auth::logout();
                 return 1;
             }

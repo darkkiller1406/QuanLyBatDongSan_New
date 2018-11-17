@@ -229,7 +229,7 @@
               <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">ĐTCĐ</label>
                 <div class="col-sm-10">
-                  <input type="text" name="dtcd" class="form-control" required>
+                  <input type="text" name="dtcd" class="form-control">
                 </div>
               </div>
               <div class="form-group">
@@ -305,7 +305,7 @@
               <div class="form-group">
                 <label class="col-sm-2  control-label">ĐTCĐ</label>
                 <div class="col-sm-10">
-                  <input type="text" id="dtcd" name="dtcd" class="form-control" required>
+                  <input type="text" id="dtcd" name="dtcd" class="form-control">
                 </div>
               </div>
               <div class="form-group">

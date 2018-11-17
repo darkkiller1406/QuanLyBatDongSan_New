@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\KhachHang;
+use App\HopDong;
 use Spatie\Activitylog\Models\Activity;
 class QL_KhachHangController extends Controller
 {
@@ -15,19 +16,33 @@ class QL_KhachHangController extends Controller
     }
     public function postThemKhachHang(Request $request)
     {
-        $this->validate($request,[
-            'email'=>'email|unique:KhachHang,Email',
-            'dtdd'=> 'required|digits_between:9,11',
-            'dtcd'=> 'required|digits_between:9,11',
-            'cmnd'=> 'required|digits:9'
-        ],[
-            'email.required'=> 'Bạn chưa nhập email',
-            'email.email'=> 'Bạn chưa nhập đúng định dạng email',
-            'cmnd.required' => 'Vui lòng nhập CMND',
-            'dtdd.digits_between'=>'Vui lòng nhập đúng dạng SĐT ',
-            'dtcd.digits_between'=>'Vui lòng nhập đúng dạng SĐT ',
-            'cmnd.digits'=>'Vui lòng nhập đúng dạng CMND'
-        ]);
+        if(isset($request->dtcd)) {
+            $this->validate($request,[
+                'email'=>'required|email',
+                'dtdd'=> 'required|digits_between:9,11',
+                'dtcd'=> 'required|digits_between:9,11',
+                'cmnd'=> 'required|digits:9'
+            ],[
+                'email.required'=> 'Bạn chưa nhập email',
+                'email.email'=> 'Bạn chưa nhập đúng định dạng email',
+                'cmnd.required' => 'Vui lòng nhập CMND',
+                'dtdd.digits_between'=>'Vui lòng nhập đúng dạng SĐT ',
+                'dtcd.digits_between'=>'Vui lòng nhập đúng dạng SĐT ',
+                'cmnd.digits'=>'Vui lòng nhập đúng dạng CMND'
+            ]);
+        } else {
+             $this->validate($request,[
+                'email'=>'required|email',
+                'dtdd'=> 'required|digits_between:9,11',
+                'cmnd'=> 'required|digits:9'
+            ],[
+                'email.required'=> 'Bạn chưa nhập email',
+                'email.email'=> 'Bạn chưa nhập đúng định dạng email',
+                'cmnd.required' => 'Vui lòng nhập CMND',
+                'dtdd.digits_between'=>'Vui lòng nhập đúng dạng SĐT ',
+                'cmnd.digits'=>'Vui lòng nhập đúng dạng CMND'
+            ]);
+        }
         
         $kh = new KhachHang;
         $m = new KhachHang;
@@ -53,7 +68,9 @@ class QL_KhachHangController extends Controller
         $kh->DiaChi = $request->diachi;
         $kh->Email = $request->email;
         $kh->DTDD = $request->dtdd;
-        $kh->DTCD = $request->dtcd;
+        if(isset($request->dtcd)) {
+            $kh->DTCD = $request->dtcd;
+        }
         $kh->XungHo = $request->xungho;
         $kh->ThuocCongTy = (Auth::user()->ThuocCongTy);
         $kh->save();
@@ -70,14 +87,19 @@ class QL_KhachHangController extends Controller
     public function getXoa($id)
     {
         $kh = KhachHang::find($id);
+        $hd = HopDong::where('ID_KhachHang_Mua', $id)->first();
+        if(!empty($hd)) {
+            return redirect('page/quanlykhachhang')->with('canhbao','Khách hàng đang có hợp đồng, không thể xóa !');
+        }
         $MaKhachHang = $kh->MaKhachHang;
+        $Ten =$kh->HoVaTenDem.' '.$kh->Ten;
         $kh -> delete();
 
         activity()
         ->useLog('2')
         ->performedOn($kh)
         ->causedBy(Auth::user()->id)
-        ->log('Xóa khách hàng '.$MaKhachHang);
+        ->log('Xóa khách hàng '.$MaKhachHang.' - '.$Ten);
 
         return redirect('page/quanlykhachhang')->with('thongbao','Bạn đã xóa thành công khách hàng !');
     }

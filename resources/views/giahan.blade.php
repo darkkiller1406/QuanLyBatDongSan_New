@@ -6,7 +6,7 @@
             <div class="row h-100 align-items-center">
                 <div class="col-12">
                     <div class="breadcumb-content">
-                        <h3 class="breadcumb-title">Lịch sử giao dịch</h3>
+                        <h3 class="breadcumb-title">Gia hạn tài khoản</h3>
                     </div>
                 </div>
             </div>
@@ -42,6 +42,13 @@
                                 <option value="1">Gói cơ bản</option>
                                 <option value="2">Gói nâng cao</option>
                                 @endif
+                            </select>
+                            <select class="form-control" id="thang" name="thang">
+                                <option value="1">1 tháng</option>
+                                <option value="2">2 tháng</option>
+                                <option value="3">3 tháng</option>
+                                <option value="4">4 tháng</option>
+                                <option value="5">5 tháng</option>
                             </select>
                             <div class="col-md-5">
                             </div>

@@ -129,5 +129,11 @@
     document.getElementById("ktDiaChiTruyCap").style.color = "green";
     $('#ktDiaChiTruyCap').html(temp + '/' + diachi);
   });
+  $('#emailCongTy').on('keyup', function () {
+    document.getElementById("emailCongTy").style.marginBottom = "0";
+    document.getElementById("ktEmailCongTy").style.marginBottom = "20px";
+    document.getElementById("ktEmailCongTy").style.color = "#D2691E";
+    $('#ktEmailCongTy').html('Chú ý: Sử dụng địa chỉ email thật để kích hoạt tài khoản.');
+  });
 </script>
 @endsection
