@@ -205,6 +205,7 @@ class QL_DatController extends Controller {
 		$dt = $r->dt;
 		$gia = $r->gia;
 		$huong = $r->huong;
+		$phuong = $r->phuong;
 		//$tp = $r->tp; || truong hop lam them nhieu thanh pho
 		$tp = 1;
 		$quan = $r->quan;
@@ -219,7 +220,7 @@ class QL_DatController extends Controller {
 		if(isset($r->congty)) {
 			if(isset($r->quan)) {
 				$dat = new Dat();
-				$kq = $dat->timdat_ban($quan, $tp, $gia, $dt, $huong, $r->congty);
+				$kq = $dat->timdat_ban($phuong, $quan, $tp, $gia, $dt, $huong, $r->congty);
 				session(['dat' =>$kq]);
 			}
 
@@ -238,7 +239,7 @@ class QL_DatController extends Controller {
 		} else {
 			if(isset($r->quan)) {
 				$dat = new Dat();
-				$kq = $dat->timdat_ban($quan, $tp, $gia, $dt, $huong);
+				$kq = $dat->timdat_ban($phuong, $quan, $tp, $gia, $dt, $huong);
 				session(['dat' =>$kq]);
 			}
 

@@ -23,7 +23,7 @@
                         <div class="row">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="congty" value="{{$idCongTy}}">
-                            <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <select class="form-control" id="quan" name="quan">
                                         <option value="0">Tất cả quận</option>
@@ -33,8 +33,14 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-3 col-lg-3">
+                                <div class="form-group" id="phuong">
+                                    <select class="form-control">
+                                        <option value="0">Tất cả phường</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 col-lg-2">
                                 <div class="form-group">
                                     <select class="form-control" id="dt" name="dt">
                                         <option value="0">Diện tích</option>
@@ -46,7 +52,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-2 col-lg-2">
                                 <div class="form-group">
                                     <select class="form-control" id="gia" name="gia">
                                         <option value="0">Khoảng giá</option>
@@ -58,7 +64,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-2 col-lg-2">
                                 <div class="form-group">
                                     <select class="form-control" id="huong" name="huong">
                                         <option value="A">Hướng đất</option>
@@ -91,3 +97,23 @@
     </div>
 </div>
 <!-- ##### Advance Search Area End ##### -->
+ @section('script')
+ <script type="text/javascript">
+           $('#quan').on('change', function () {
+            if (quan) {
+                $.ajax({
+                    type: 'get',
+                    url: '{{ url("timphuong") }}',
+                    data: {quan: $(this).val()},
+                    async: true,
+                    success: function (html) {
+                        console.log(html);
+                        $('#phuong').html(html);
+                    }
+                });
+            } else {
+                $('#phuong').html('<select class="form-control" name="phuong" id="phuong"><option value="0">Chọn quận</option></select>');
+            }
+        });
+ </script>
+ @endsection

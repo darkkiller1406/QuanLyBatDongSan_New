@@ -133,7 +133,7 @@ class Dat extends Model
         return $string;
     }
 
-    public function timdat_ban($quan,$tp,$gia,$dt,$huong,$congty = null)
+    public function timdat_ban($phuong, $quan, $tp, $gia, $dt, $huong, $congty = null)
     {
         //
         switch ($huong) {
@@ -216,9 +216,14 @@ class Dat extends Model
             $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = '.$tp.' and dat.SoHuu'.$congty.' and dat.TrangThai = 0');
             return $k;
         }
-        else
+        elseif($phuong == 0)
         {
             $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and quan.id = '.$quan. ' and dat.SoHuu'.$congty.' and dat.TrangThai = 0');
+            return $k;
+        }
+        else
+        {
+            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and quan.id = '.$quan. ' and dat.SoHuu'.$congty.' and dat.Phuong = '.$phuong.' and dat.TrangThai = 0');
             return $k;
         }
     }
