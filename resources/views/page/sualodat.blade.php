@@ -90,7 +90,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Đơn giá</label>
+                                <label class="col-sm-2 col-sm-2 control-label">Đơn giá mua</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="dongiamua" id="dongiamua" value="{{$dat->DonGiaMua}}" class="form-control"
+                                    required>
+                                </div>
+                                <label class="col-sm-1 control-label">VND/m2</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">Đơn giá bán</label>
                                 <div class="col-sm-9">
                                     <input type="number" name="dongia" id="dongiathem" value="{{$dat->DonGia}}" class="form-control"
                                     required>

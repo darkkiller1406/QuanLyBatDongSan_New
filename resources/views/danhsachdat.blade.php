@@ -113,28 +113,27 @@
     <!-- ##### Listing Content Wrapper Area End ##### -->
 @endsection
 @section('script')
-    <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $(document).ready(function () {
-            $('#tp').on('change', function () {
-                if (tp) {
-                    $.ajax({
-                        type: 'get',
-                        url: '{{ url("timquan") }}',
-                        data: {tp: $(this).val()},
-                        async: true,
-                        success: function (html) {
-                            $('#quan').html(html);
-                        }
-                    });
-                } else {
-                    $('#quan').html('<option value="0">Chọn thành phố</option>');
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $('#quan').on('change', function () {
+        if (quan) {
+            $.ajax({
+                type: 'get',
+                url: '{{ url("timphuong") }}',
+                data: {quan: $(this).val()},
+                async: true,
+                success: function (html) {
+                    console.log(html);
+                    $('#phuong').html(html);
                 }
             });
-        });
-    </script>
+        } else {
+            $('#phuong').html('<select class="form-control" name="phuong" id="phuong"><option value="0">Chọn quận</option></select>');
+        }
+    });
+</script>
 @endsection

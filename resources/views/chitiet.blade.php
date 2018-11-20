@@ -200,11 +200,9 @@
 <!-- ##### Listings Content Area End ##### -->
 @endsection
 @section('script')
-
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzlVX517mZWArHv4Dt3_JVG0aPmbSE5mE&libraries=places&callback=initMap" async defer></script>
     <script type="text/javascript">
         var checkMap = false;
-
         $("#change-map").click(function () {
             if (checkMap === false) {
                 checkMap = true;
@@ -266,8 +264,7 @@
                 var arrlatlng = $('#pos').val();
                 var vitri = $('#vitri').val();
                 arrlatlng = arrlatlng.split(";");
-
-                var pyrmont = {lat: 10.782843, lng: 106.67134699999997};
+                var pyrmont = {lat: Number(arrlatlng[0]), lng: Number(arrlatlng[1])};
 
                 map2 = new google.maps.Map(document.getElementById('map'), {
                   center: pyrmont,
@@ -418,5 +415,24 @@
       }
     });
   });
+
 </script>
+  <script type="text/javascript">
+           $('#quan').on('change', function () {
+            if (quan) {
+                $.ajax({
+                    type: 'get',
+                    url: '{{ url("timphuong") }}',
+                    data: {quan: $(this).val()},
+                    async: true,
+                    success: function (html) {
+                        console.log(html);
+                        $('#phuong').html(html);
+                    }
+                });
+            } else {
+                $('#phuong').html('<select class="form-control" name="phuong" id="phuong"><option value="0">Chọn quận</option></select>');
+            }
+        });
+ </script>
 @endsection

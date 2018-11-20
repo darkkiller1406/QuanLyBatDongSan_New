@@ -76,7 +76,9 @@
              <th>Lô đất</th>
              <th>Tên khách hàng mua</th>
              <th>Ngày lập</th>
-             <th>Giá đất</th>
+             <th>Giá mua</th>
+             <th>Giá bán</th>
+             <th>Doanh thu</th>
            </tr>
          </thead>
          <tbody>
@@ -89,11 +91,18 @@
            <td>{{$hd->HoVaTenDem}} {{$hd->Ten}}</td>
          <td><?php $date=date_create($hd->ngaylap);
          echo date_format($date,"d/m/Y H:i:s") ?></td>
-         <td>{{number_format($hd->Gia)}} VNĐ</td>
+         <?php 
+            $dt = ($hd->Dai) * ($hd->Rong) + (0.5 * ($hd->NoHau) * ($hd->Dai));
+            $giacu = $dt * ($hd->DonGiaMua);
+            $doanhthu = ($hd->Gia) - $giacu;
+          ?>
+          <td>{{number_format($giacu)}} VNĐ</td>
+          <td>{{number_format($hd->Gia)}} VNĐ</td>
+          <td>{{number_format($doanhthu)}} VNĐ</td>
           </tr>
-          <?php $tong = $tong + ($hd->Gia) ?>
+          <?php $tong = $tong + ($doanhthu) ?>
           @endforeach
-          <td colspan="5" style="font-weight: bold;text-align: right;">Tổng doanh thu:</td>
+          <td colspan="7" style="font-weight: bold;text-align: right;">Tổng doanh thu:</td>
           <td colspan="1" style="font-weight: bold;font-style: italic;">{{number_format($tong)}}VNĐ</td>
         </tbody>
     

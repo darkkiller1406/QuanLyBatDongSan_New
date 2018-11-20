@@ -64,6 +64,7 @@ class QL_DatController extends Controller {
 			$dat->Dai = $request->dai;
 			$dat->Rong = $request->rong;
 			$dat->DonGia = $request->dongia;
+			$dat->DonGiaMua = $request->dongiamua;
 			$dat->NoHau = $request->nohau;
 			$dat->DienTich = $dt;
 			$dat->Huong = $request->huong;
@@ -158,6 +159,7 @@ class QL_DatController extends Controller {
 			$dat->Rong = $request->rong;
 			$dat->DonGia = $request->dongia;
 			$dat->NoHau = $request->nohau;
+			$dat->DonGiaMua = $request->dongiamua;
 			$dat->DienTich = $dt;
 			$dat->Huong = $request->huong;
 			$dat->GhiChu = $request->ghichu;

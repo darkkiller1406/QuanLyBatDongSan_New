@@ -151,4 +151,25 @@
     </div>
 </section>
 <!-- ##### Featured Properties Area End ##### -->
+
+@endsection
+@section('script')
+  <script type="text/javascript">
+           $('#quan').on('change', function () {
+            if (quan) {
+                $.ajax({
+                    type: 'get',
+                    url: '{{ url("timphuong") }}',
+                    data: {quan: $(this).val()},
+                    async: true,
+                    success: function (html) {
+                        console.log(html);
+                        $('#phuong').html(html);
+                    }
+                });
+            } else {
+                $('#phuong').html('<select class="form-control" name="phuong" id="phuong"><option value="0">Chọn quận</option></select>');
+            }
+        });
+ </script>
 @endsection
