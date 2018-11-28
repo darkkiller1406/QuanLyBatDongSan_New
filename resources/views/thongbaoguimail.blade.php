@@ -24,7 +24,7 @@
 				@endif
 				<div class="container">
 					<div class="row">
-						<h5>Mail kích hoạt đã được gửi vào email của bạ. Vui lòng check email để kích hoạt tài khoản. Nếu bạn chưa nhận được mail, click vào <a href="{{asset('guimail')}}">ĐÂY</a> để gửi lại mail.</h5>
+						<h5>Mail kích hoạt đã được gửi vào email của bạn. Vui lòng check email để kích hoạt tài khoản. Nếu bạn chưa nhận được mail, click vào <a href="{{asset('guimail')}}">ĐÂY</a> để gửi lại mail.</h5>
 					</div>
 				</div>
 			</section>

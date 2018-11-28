@@ -21,16 +21,22 @@ class QL_YeuCauController extends Controller
         $yeucau = YeuCau::where('sohuu', Auth::user()->ThuocCongTy)
                  ->from('dat')
                  ->join('yeucau', 'id_dat', '=', 'dat.id')
+                 ->where('TrangThai', 1)
+                 ->groupBy('yeucau.id_dat')       
                  ->paginate(15);
+        //$yeucau = YeuCau::groupBy('id_dat')->from('yeucau')->paginate(15);
     	return view('page.quanlyyeucau', ['khachhang' => $khachhang, 'yeucau' => $yeucau]);
     }
     public function getXoa($id)
     {
     	$yc = YeuCau::find($id);
         $MaYeuCau = $yc->MaYeuCau;
+        $yeucau = YeuCau::where('id_dat', $yc->id_dat)->get();
         $d = Dat::find($yc->id_dat);
-        $d->capnhat_trangthai($d->id);
-
+        if(count($yeucau) == 1) {
+            $d->capnhat_trangthai($d->id);
+        }
+        
         $yc -> delete();
 
         activity()
@@ -117,7 +123,8 @@ class QL_YeuCauController extends Controller
                  ->where('yeucau.created_at', 'like', '%'.$r->ngay.'%')
                  ->from('dat')
                  ->join('yeucau', 'id_dat', '=', 'dat.id')
-                 ->paginate(15);;
+                 ->groupBy('yeucau.id_dat')
+                 ->paginate(15);
         return view('page.quanlyyeucau', ['khachhang' => $khachhang, 'yeucau' => $yeucau, 'ngay' => $r->ngay]);
     }
 }

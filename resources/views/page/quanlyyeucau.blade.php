@@ -100,7 +100,12 @@
           <?php if ($yc->dat->TrangThai == 1){ ?>
             <button class="btn btn-success btn-xs"
             data-iddat = "{{$yc->dat->id}}"
-            data-gia = "{{number_format($yc->dat->Gia)}}"
+            <?php 
+              $dt = ($yc->Dai) * ($yc->Rong) + (0.5 * ($yc->NoHau) * ($yc->Dai));
+              $giacu = $dt * ($yc->DonGiaMua);  
+            ?>
+            data-gia = "{{$yc->Gia}}"
+            data-giacu = "{{$giacu}}"
             data-idyc="{{$yc->id}}"
             data-kyhieudat = "{{$yc->dat->KyHieuLoDat}}"
             data-toggle="modal" data-target="#sua"><i class="fas fa-check-square"></i></button>
@@ -210,6 +215,7 @@
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
               <input type="hidden" name="iddat" id="iddat" value="">
               <input type="hidden" name="idyc" id="idyc" value="">
+              <input type="hidden" name="giamua" id="giamua" value="">
               <div class="form-group">
                 <label class="col-sm-3 col-sm-3 control-label">Lô đất</label>
                 <div class="col-sm-9">
@@ -217,9 +223,9 @@
                 </div>
               </div>
              <div class="form-group">
-              <label class="col-sm-3 col-sm-3 control-label">Giá lô đất</label>
+              <label class="col-sm-3 col-sm-3 control-label">Giá bán lô đất</label>
               <div class="col-sm-9">
-                <label class=" control-label" id="gia"></label>
+                <input class="form-control" id="gia" name="gia" type="number">
               </div>
             </div>
             <div class="form-group">
@@ -264,6 +270,7 @@
 <script src="{{asset('js/common-scripts.js')}}"></script>
 <script type="text/javascript">
       // chi tiết
+      var giamua;
       $('#chitiet').on('show.bs.modal', function (event) {
         console.log('open');
         var button = $(event.relatedTarget) // Button that triggered the modal
@@ -307,6 +314,7 @@
         console.log('open');
         var button = $(event.relatedTarget) // Button that triggered the modal
         var idyc = button.data('idyc')
+        var giamua = button.data('giacu')
         var gia = button.data('gia')
         var iddat = button.data('iddat')
         var kyhieudat = button.data('kyhieudat')
@@ -314,9 +322,9 @@
         if(trangthai == 1)
         {
          modal.find('.modal-body #trangthai').html('Đang xử lý');
-       }
-       if(trangthai == 2)
-       {
+        }
+        if(trangthai == 2)
+        {
          modal.find('.modal-body #trangthai').html('Đã hoàn thành');
        }
        if(trangthai == 3)
@@ -332,7 +340,8 @@
         modal.find('.modal-body #loaiyc').html('Yêu cầu liên lạc');
       }
       modal.find('.modal-body #idyc').val(idyc);
-      modal.find('.modal-body #gia').html(gia);
+      modal.find('.modal-body #gia').val(gia);
+      modal.find('.modal-body #giamua').val(giamua);
       modal.find('.modal-body #iddat').val(iddat);
       modal.find('.modal-body #kyhieudat').html(kyhieudat);
     })
@@ -359,6 +368,13 @@
           }
         }
         $(document).ready(function(){
+          $('#gia').on('change',function() {
+            var giaban = Number($('#gia').val());
+            var giamua = Number($('#giamua').val())
+            if( giaban < giamua ) {
+              $('#gia').val($('#giamua').val());
+            }
+          });
           $('#sotien').on('change',function(){
             if($('#sotien').val() <= 0)
             {

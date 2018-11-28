@@ -74,8 +74,12 @@ class QL_HopDongController extends Controller
         $hd->ID_KhachHang_Mua = $request->khmua;
         $d = Dat::find($request->iddat);
         $d->TrangThai = 2;
-        $yc = YeuCau::find($request->idyc);
-        $yc->delete();
+        $d->Gia = $request->gia;
+        $d->DonGia = ($request->gia)/(($d->Dai) * ($d->Rong) + (0.5 * ($d->NoHau) * ($d->Dai)));
+        $yeucau = YeuCau::where('id_dat', $request->iddat)->get();
+        foreach ($yeucau as $yc) {
+            $yc->delete();
+        }
         $d->save();
         $hd->save();
 

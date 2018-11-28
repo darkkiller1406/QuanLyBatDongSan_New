@@ -125,7 +125,7 @@
             </div>
         </div>
         <div class="row">
-            @foreach ($congty as $ct)
+            @foreach ($menuCongTy as $ct)
             <!-- Single Featured Property -->
             <div class="col-12 col-md-6 col-xl-4">
                 <a href="thanhvien/{{$ct->Link}}">

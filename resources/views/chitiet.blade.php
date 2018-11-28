@@ -81,11 +81,10 @@
       </div>
     </div>
   </div>
-   <div class="col-12 col-md-6 col-lg-4">
+   <div class="col-12 col-md-6 col-lg-4">  
     <div class="contact-realtor-wrapper">
-        <?php if($chitiet->TrangThai ==0 ) { ?>
         <div class="realtor-info">
-          <div class="realtor---info" style="margin-bottom: -20px;">
+          <div class="realtor---info" style="margin-bottom: -20px;">   
           <h2>Gửi yêu cầu</h2>
           </div>
           <div class="realtor--contact-form">
@@ -110,15 +109,9 @@
             </form>
           </div>
         </div>
-        <?php } elseif($chitiet->TrangThai ==1 ){ ?>
-          <div class="alert alert-warning" style="font-size: 2em;text-align: center;">
-            Đang giao dịch
-          </div>
-        <?php } else {?>   
-          <div class="alert alert-danger" style="font-size: 2em;text-align: center;">
-            Đã bán
-          </div> 
-        <?php }?>     
+              <?php if($chitiet->TrangThai ==1 ){ ?>
+        <div class="alert alert-warning" style="font-size: 15px">Lô đát hiện đang được giao dịch, nếu lô đất giao dịch không thành công chúng tôi sẽ xử lý yêu cầu của bạn.</div>
+      <?php } ?>
         @if(count($errors) > 0)
         <div class="alert alert-danger" style="font-size: 0.9em;text-align: center;">
           @foreach($errors->all() as $err)
