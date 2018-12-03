@@ -36,9 +36,11 @@ class QL_DangNhapConTroller extends Controller
         $congty = CongTy::where('link', $r->link)->first();
         if(Auth::attempt(['name'=>$r->id,'password'=>$r->pass,'ThuocCongTy'=>$congty->id])){   
             if (Auth::user()->LoaiTaiKhoan == 4) {
+                Auth::logout();
                 return redirect('page/dangnhap/'.$r->link)->with('thongbao','Tài khoản chưa kích hoạt');
             }
             if (Auth::user()->LoaiTaiKhoan == 3) {
+                Auth::logout();
                 return redirect('page/dangnhap/'.$r->link)->with('thongbao','Tài khoản đã hết hạn');
             }
             if (Auth::user()->LoaiTaiKhoan == 0 && Auth::user()->Quyen == 0) {

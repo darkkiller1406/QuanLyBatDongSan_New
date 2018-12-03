@@ -201,14 +201,14 @@ class Dat extends Model
         }
         if (is_null($congty)) {
             $congty = '> 0';
-            $from = 'Dat,Phuong,ThanhPho,Quan';
+            $from = 'dat, phuong, thanhpho, quan';
         } else {
             $congty = '= '.$congty.' and congty.id = dat.SoHuu';
-            $from = 'Dat,Phuong,ThanhPho,Quan,CongTy';
+            $from = 'dat, phuong, thanhPho, quan, congty';
         }
         if($tp == 0)
         {
-            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and dat.SoHuu'.$congty.' and dat.TrangThai = 0');
+            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = thanhpho.id and dat.SoHuu'.$congty.' and dat.TrangThai = 0');
             return $k;
         }
         elseif($quan == 0)
@@ -218,12 +218,12 @@ class Dat extends Model
         }
         elseif($phuong == 0)
         {
-            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and quan.id = '.$quan. ' and dat.SoHuu'.$congty.' and dat.TrangThai = 0');
+            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = thanhpho.id and quan.id = '.$quan. ' and dat.SoHuu'.$congty.' and dat.TrangThai = 0');
             return $k;
         }
         else
         {
-            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = ThanhPho.id and quan.id = '.$quan. ' and dat.SoHuu'.$congty.' and dat.Phuong = '.$phuong.' and dat.TrangThai = 0');
+            $k = DB::select('select *, dat.id as iddat, dat.DiaChi as diaChiDat from '.$from.' where '.$dt.' and '.$gia.' and Huong like "%'.$huong.'%" and quan.id = phuong.ThuocQuan and dat.Phuong = phuong.id and quan.ThuocThanhPho = thanhpho.id and quan.id = '.$quan. ' and dat.SoHuu'.$congty.' and dat.Phuong = '.$phuong.' and dat.TrangThai = 0');
             return $k;
         }
     }
@@ -287,12 +287,12 @@ class Dat extends Model
         }
         if($quan == 0)
         {
-            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi, dat.created_at as ngaytao, dat.updated_at as ngaycapnhat from Dat,Phuong,ThanhPho,Quan,CongTy where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and quan.ThuocThanhPho = 1 and dat.SoHuu = congty.id and '.$trangthai.' and '.$thang.' and dat.SoHuu = '.$congty);
+            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi, dat.created_at as ngaytao, dat.updated_at as ngaycapnhat from dat, phuong, thanhPho, quan, congty where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and quan.ThuocThanhPho = 1 and dat.SoHuu = congty.id and '.$trangthai.' and '.$thang.' and dat.SoHuu = '.$congty);
             return $k;
         }
         else
         {
-            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi, dat.created_at as ngaytao, dat.updated_at as ngaycapnhat from Dat,Phuong,ThanhPho,Quan,CongTy where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and dat.SoHuu = congty.id and quan.ThuocThanhPho = 1 and '.$trangthai.' and quan.id= '.$quan.' and '.$thang.' and dat.SoHuu = '.$congty);
+            $k = DB::select('select *, dat.id as iddat, thanhpho.id as idThanhPho, quan.id as idQuan, dat.Diachi as diaChi, dat.created_at as ngaytao, dat.updated_at as ngaycapnhat from dat, phuong, thanhpho, quan, congty where '.$gia.' and phuong.id = dat.Phuong and quan.id = phuong.ThuocQuan and dat.SoHuu = congty.id and quan.ThuocThanhPho = 1 and '.$trangthai.' and quan.id= '.$quan.' and '.$thang.' and dat.SoHuu = '.$congty);
             return $k;
         }
     }

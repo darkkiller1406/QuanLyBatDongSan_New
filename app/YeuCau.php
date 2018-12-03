@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class YeuCau extends Model
 {
     //
-    protected $table = 'YeuCau';
+    protected $table = 'yeucau';
     public function timmax()
     {
-    	$k = DB::select('select MAX(id) as Ma from YeuCau');
+    	$k = DB::select('select MAX(id) as Ma from yeucau');
     	return $k;
     }
     public function dat()

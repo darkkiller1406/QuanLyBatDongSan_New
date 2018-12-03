@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 class Quan extends Model
 {
     //
-    protected $table = 'Quan';
+    protected $table = 'quan';
     public function timquan($id)
     {
         if($id != 0) {

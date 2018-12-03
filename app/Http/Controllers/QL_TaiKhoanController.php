@@ -377,30 +377,43 @@ class QL_TaiKhoanController extends Controller
     public function guiMail(Request $request)
     {
         if ($request->session()->get('email')) {
+            if (!empty($request->session()->get('count')) &&  $request->session()->get('count') > 5) {
+                $request->session()->forget('thoigian');
+                $request->session()->forget('email');
+                $request->session()->forget('count');
+                return redirect('trangchu');
+            }
             $mail = $request->session()->get('email');
             $name = $request->session()->get('ten');
             // return $mail;
             $this->mail = $mail;
             $after_5_min = time() + 5*60;
+
             if(!empty($request->session()->get('thoigian')) && $request->session()->get('thoigian') < time()) {
                 Mail::send('mail', array('name'=>$name, 'token'=>$request->session()->get('token')), function($message){
-                    $message->from('minh.1406.nt@gmail.com', 'LightZ Real Estate');
+                    $message->from('service@lightzrealestate.com', 'LightZ Real Estate');
                     $message->to($this->mail)->subject('Đăng ký tài khoản LightZ Real Estate');
                 });
-                session(['thoigian' =>$after_5_min]);
+                session(['thoigian' => $after_5_min] );
+                $count = $request->session()->get('count') + 1;
+                session(['count' => $count ]);
                 return view('thongbaoguimail');
             } 
+
             if(empty($request->session()->get('thoigian'))) {
                 Mail::send('mail', array('name'=>$name, 'token'=>$request->session()->get('token')), function($message){
-                    $message->from('minh.1406.nt@gmail.com', 'LightZ Real Estate');
+                    $message->from('service@lightzrealestate.com', 'LightZ Real Estate');
                     $message->to($this->mail)->subject('Đăng ký tài khoản LightZ Real Estate');
                 });
-                session(['thoigian' =>$after_5_min]);
+                session(['thoigian' => $after_5_min ]);
+                session(['count' => 1 ]);
                 return view('thongbaoguimail');
             }
+
             if(!empty($request->session()->get('thoigian')) && $request->session()->get('thoigian') > time()) {
                 return view('thongbaoguimail', ['canhbao' => "Bạn vừa gửi mail, vui lòng thử lại sau 5 phút"]);
             } 
+
         } else {
             return redirect('trangchu');
         }

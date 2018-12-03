@@ -284,7 +284,7 @@ class QL_DatController extends Controller {
 	public function getView_DSDat_CTy($link) {
 		$dat = new Dat();
 		$dat = Dat::where('Link', $link )
-				->from('CongTy')
+				->from('congty')
 				->join('dat', 'SoHuu', '=', 'congty.id')
 				->where('TrangThai', '=', '0')
 				->paginate(15);
