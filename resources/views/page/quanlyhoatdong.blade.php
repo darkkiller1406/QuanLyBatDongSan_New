@@ -76,7 +76,7 @@
          @if ($hd->log_name == 5)
          <td>Hủy đăng tin</td>
          @endif
-         <td>{{$hd->email}}</td>
+         <td>{{$hd->name}}</td>
          <td>{{$hd->description}}</td>
          <td>
            <?php

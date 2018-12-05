@@ -113,6 +113,7 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     //quản lý tài khoản
     Route::get('quanlytaikhoan','QL_TaiKhoanController@getView')->name('view_QLTK');
     Route::post('themtaikhoan','QL_TaiKhoanController@postThemTaiKhoan')->name('post_ThemTK');
+    Route::post('suataikhoan','QL_TaiKhoanController@postSuaTaiKhoan')->name('post_SuaTK');
     Route::get('resettk/{id}','QL_TaiKhoanController@getReset');
     Route::get('xoatk/{id}','QL_TaiKhoanController@getXoa');
     Route::any('timtk', 'QL_TaiKhoanController@getTim');

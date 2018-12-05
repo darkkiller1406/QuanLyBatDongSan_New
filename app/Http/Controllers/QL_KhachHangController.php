@@ -76,10 +76,9 @@ class QL_KhachHangController extends Controller
         $kh->save();
 
         activity()
-        ->useLog('3')
+        ->useLog('1')
         ->performedOn($kh)
         ->causedBy(Auth::user()->id)
-        ->withProperties($fieldChange)
         ->log('Thêm khách hàng '.$MaKhachHang);
 
        return redirect('page/quanlykhachhang')->with('thongbao','Thêm thành công khách hàng mới !');

@@ -197,9 +197,9 @@ async defer></script>
                 $('#phuong-add').html('<select class="form-control" name="phuong" id="phuong-add"><option value="0">Chọn quận</option></select>');
             }
         });
-        $('#dongia').on('change', function () {
-            if ($('#dongia').val() <= 0) {
-                $('#dongia').val('1');
+        $('#dongiamua').on('change', function () {
+            if ($('#dongiamua').val() <= 0) {
+                $('#dongiamua').val('1');
             }
         });
         $('#rong').on('change', function () {
@@ -218,7 +218,29 @@ async defer></script>
                 $('#nohau').val('0');
             }
         });
-
+        $('#dongiathem').on('change', function () {
+            if ($('#dongiathem').val() <= 0) {
+                $('#dongiathem').val('1');
+            }
+            if ($('#dongiathem').val() < $('#dongiamua').val()) {
+                $('#dongiathem').val($('#dongiamua').val());
+            }
+        });
+        $('#daithem').on('change', function () {
+            if ($('#daithem').val() <= 0) {
+                $('#daithem').val('1');
+            }
+        });
+        $('#nohauthem').on('change', function () {
+            if ($('#nohauthem').val() < 0) {
+                $('#nohauthem').val('0');
+            }
+        });
+        $('#rongthem').on('change', function () {
+            if ($('#rongthem').val() <= 0) {
+                $('#rongthem').val('1');
+            }
+        });
         $("#search").keyup(function () {
             $.ajax({
                 type: 'get',

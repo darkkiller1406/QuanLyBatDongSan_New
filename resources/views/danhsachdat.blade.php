@@ -22,19 +22,6 @@
     @include('layout.search')
     @endif
     <!-- ##### Advance Search Area End ##### -->
-    <?php
-    function convertMoney($money)
-    {
-        if (strlen($money) < 10) {
-            $value = " triệu";
-        } else {
-            $value = " tỷ";
-        }
-        $money = substr($money, 0, 1) . '.' . substr($money, 1, 3);
-        $money = round($money, 2);
-        return $money . $value;
-    }
-    ?>
     <!-- ##### Listing Content Wrapper Area Start ##### -->
     <section class="listings-content-wrapper section-padding-100">
         <div class="container">
@@ -71,7 +58,7 @@
                                     <p>
                                             <?php
                                             $money = number_format(($d->DienTich) * ($d->DonGia));
-                                            echo convertMoney($money);
+                                            echo $money;
                                             ?>
                                             VNĐ</p>
                                 </div>

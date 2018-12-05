@@ -12,6 +12,9 @@ class ChiTietController extends Controller
     public function getView($id)
     {
         $chitiet = Dat::find($id);
+        if($chitiet->TrangThai == 2) {
+            return redirect('trangchu');
+        }
         $t = new Dat();
         $t->tangluotxem($id);
         $dat = Dat::where('Phuong', $chitiet->Phuong)->take(3)->get();

@@ -15,7 +15,7 @@ class ThongKeController extends Controller
            $year=date('Y');
            if(isset($request->thang)) {$month = $request->thang;$year = $request->nam;}
            $ThongKe = new ThongKe();
-           $thongkedoanhthu= $ThongKe->getdoanhthu($month,$year);
+           $thongkedoanhthu= $ThongKe->getdoanhthu($month,$year, Auth::user()->ThuocCongTy);
            return view('page/thongkedoanhthu',['thongkedoanhthu'=>$thongkedoanhthu, 'month'=>$month,'year'=>$year]);
         }
         return back();

@@ -38,8 +38,13 @@ class TaiKhoan extends Model
       $string.=  '<td>';
       $string.= '<button class="btn btn-warning btn-xs classReset" idrs="{{$tk->id}}" id="'.$tk->idtk.'" onClick="reset_click(this.id)"><i class="fas fa-redo"></i></button>
       ';
-      $string.= '<button class="btn btn-danger btn-xs classXoa" idbd="'.$tk->idtk.'" id="'.$tk->idtk.'" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
-      </td>
+      $string.= '<button class="btn btn-primary btn-xs"
+                  data-id="'.$tk->id.'"
+                  data-name='.$tk->name.'"
+                  data-email="'.$tk->emai.'"
+                  data-toggle="modal" data-target="#suanv"><i class="fas fa-edit"></i></button>';
+      $string.= '<button class="btn btn-danger btn-xs classXoa" idbd="'.$tk->idtk.'" id="'.$tk->idtk.'" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>';
+      $string.= '</td>
       </tr>
       </tbody>';
     }
@@ -99,5 +104,10 @@ class TaiKhoan extends Model
       }
       DB::delete("DELETE FROM congty WHERE id = ".$users[0]->ThuocCongTy);
     }
+  }
+
+  public function getIdByToken($token) 
+  {
+    return DB::table('users')->where('remember_token', $token)->value('id');
   }
 }

@@ -45,7 +45,7 @@ class QL_TaiKhoanController extends Controller
         	$this->validate($request,[
                 'name'=> 'required',
                 'email'=>'required|email|unique:users,email',
-                'password'=> 'required',
+                'password'=> 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
                 'passwordAgain'=>'required|same:password'
             ],[
                 'name.required'=> 'Bạn chưa nhập tên người dùng',
@@ -55,7 +55,9 @@ class QL_TaiKhoanController extends Controller
                 'email.unique'=>'Email đã tồn tại',
                 'password.required'=> 'Bạn chưa nhập mật khẩu',
                 'passwordAgain.required' => 'Bạn chưa nhập lại mật khẩu',
-                'passwordAgain.same' => 'Mật khẩu nhập lại không khớp'
+                'passwordAgain.same' => 'Mật khẩu nhập lại không khớp',
+                'password.min' => 'Password phải lớn hơn 6 kí tự',
+                'password.regex' => 'Password phải có chứa A-Z, a-z, 0-9'
             ]);
             $username = TaiKhoan::where('name', $request->name)
                         ->where('ThuocCongTy', Auth::user()->ThuocCongTy)
@@ -82,9 +84,55 @@ class QL_TaiKhoanController extends Controller
 
             activity()
             ->useLog('1')
-            ->performedOn($kh)
+            ->performedOn($user)
             ->causedBy(Auth::user()->id)
-            ->log('Thêm tài khoản '.$request->email);
+            ->log('Thêm tài khoản '.$request->name);
+
+            return redirect('page/quanlytaikhoan')->with('thongbao','Chúc mừng bạn đã đăng kí thành công!');
+        }
+        return back();
+    }
+    public function postSuaTaiKhoan(Request $request)
+    {
+        if(Auth::user()->Quyen == 1) {
+        	$this->validate($request,[
+                'name'=> 'required',
+                'email'=>'required|email',
+            ],[
+                'name.required'=> 'Bạn chưa nhập tên người dùng',
+                'name.min' => 'Tên người dùng phải có ít nhất 3 kí tự',
+                'email.required'=> 'Bạn chưa nhập email',
+                'email.email'=> 'Bạn chưa nhập đúng định dạng email',
+            ]);
+            $username = TaiKhoan::where('name', $request->name)
+                        ->where('ThuocCongTy', Auth::user()->ThuocCongTy)
+                        ->first();
+            if(!empty($username)) {
+                return redirect('page/quanlytaikhoan')->with('canhbao','Tên đăng nhập đã có trong hệ thống');
+            }
+            $user = User::find($request->id);
+            $user_old = User::find($request->id);
+            $user->name = $request->name; 
+            $user->email = $request->email;
+            $user->save();
+
+            $arrays = array('name', 'email');
+            $user_new = User::find($request->id);
+            $change = false;
+            $fieldChange = [];
+            foreach ($arrays as $array) {
+                if ($user_old->$array != $user_new->$array) {
+                    $fieldChange[$array] =  $user_new->$array;
+                    $change = true;
+                }
+            }
+
+            activity()
+            ->useLog('3')
+            ->performedOn($user)
+            ->causedBy(Auth::user()->id)
+            ->withProperties($fieldChange)
+            ->log('Cập nhật tài khoản '.$request->name);
 
             return redirect('page/quanlytaikhoan')->with('thongbao','Chúc mừng bạn đã đăng kí thành công!');
         }
@@ -148,21 +196,17 @@ class QL_TaiKhoanController extends Controller
     }
     public function postKichHoat($check, Request $request)
     {
-        if(!empty($request->session()->get('id')) && $check == $request->session()->get('token')) {
-            $taikhoan = TaiKhoan::where('ThuocCongTy', $request->session()->get('id'))->get();
-            $idTaiKhoan = $taikhoan[0]->id;
-            $taikhoan = TaiKhoan::find($idTaiKhoan);
+        $idTaiKhoan = new TaiKhoan;
+        if(!empty($idTaiKhoan->getIdByToken($check))) {
+            $taikhoan = TaiKhoan::find($idTaiKhoan->getIdByToken($check));
             $ngayhethan = $taikhoan->NgayHetHan;
             $now = (new \DateTime())->format('Y-m-d H:i:s');
             $ngayhethan = date_create($now);
             date_modify($ngayhethan, "+30 days");
             $taikhoan->NgayHetHan = $ngayhethan;
-            $taikhoan->LoaiTaiKhoan = $request->session()->get('loaiTaiKhoan');
+            $taikhoan->LoaiTaiKhoan = substr($check, 0, 1);
             $taikhoan->save();
-            $congty = CongTy::where('id', $request->session()->get('id'))->get();
-            $request->session()->forget('id');
-            $request->session()->forget('loaiTaiKhoan');
-            $request->session()->forget('email');
+            $congty = CongTy::where('id', $taikhoan->ThuocCongTy)->get();
             return view('dangkythanhcong',['congty'=>$congty]);
         } else {
             return redirect('trangchu');
@@ -283,7 +327,7 @@ class QL_TaiKhoanController extends Controller
     public function postDK(Request $request)
     {
          $this->validate($request,[
-            'username'=> 'required|min:3',
+            'username'=> 'required|min:3|unique:users,name',
             'email'=>'required|email|unique:users,email',
             'password'=> 'required|between:6,20',
             'passwordAgain'=> 'required|same:password',
@@ -294,6 +338,7 @@ class QL_TaiKhoanController extends Controller
         ],[
             'username.required'=> 'Bạn chưa nhập tên người dùng',
             'username.min' => 'Tên người dùng phải có ít nhất 3 kí tự',
+            'username.unique'=> 'Username đã tồn tại',
             'email.required'=> 'Bạn chưa nhập email',
             'email.email'=> 'Bạn chưa nhập đúng định dạng email',
             'email.unique'=> 'Email đã tồn tại',
@@ -326,6 +371,9 @@ class QL_TaiKhoanController extends Controller
         $congty->save();
 
         //thêm người dùng
+        
+        $random = rand(10000,99999);
+        $token = ($request->loaiTaiKhoan).($request->header('X-CSRF-TOKEN')).$random;
         $user = new User;
         $user->name = $request->username; 
         $user->email = $request->email;
@@ -335,9 +383,9 @@ class QL_TaiKhoanController extends Controller
         $user->ThuocCongTy = $congty->getIdByCreatedAt($now);
         $user->LoaiTaiKhoan = 4;
         $user->NgayHetHan = $now;
+        $user->remember_token = $token;
         $user->save();
-        $random = rand(10000,99999);
-        $token = ($request->header('X-CSRF-TOKEN')).$random;
+        
         // create session
         $congty = CongTy::find($user->ThuocCongTy);
         $tien = $request->tien;

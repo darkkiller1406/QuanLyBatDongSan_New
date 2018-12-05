@@ -66,6 +66,11 @@
          <td></td>
          <td>
           <button class="btn btn-warning btn-xs classReset" idrs="{{$tk->id}}" id="{{$tk->id}}" onClick="reset_click(this.id)" data-toggle="tooltip" data-placement="top" title="Reset password"><i class="fas fa-redo"></i></button>
+          <button class="btn btn-primary btn-xs"
+            data-id="{{$tk->id}}"
+            data-name="{{$tk->name}}"
+            data-email="{{$tk->email}}"
+            data-toggle="modal" data-target="#suanv"><i class="fas fa-edit"></i></button>
           <button class="btn btn-danger btn-xs classXoa" idbd="{{$tk->id}}" id="{{$tk->id}}" onClick="reply_click(this.id)"><i class="fas fa-trash"></i></button>
         </td>
       </tr>
@@ -122,7 +127,46 @@
               </div>
               <div class="col-md-6">
               </div>
-              <button type="submit" id="submitbtn" name="submitbtn" class="btn btn-primary" >Thêm</button>
+              <button type="submit" name="submitbtn" class="btn btn-primary" >Thêm</button>
+            </form>
+          </div>
+        </div><!-- col-lg-12-->       
+      </div><!-- /row -->
+    </div>
+  </div>
+</div>
+</div>              
+</div><!-- /showback -->
+<div class="modal fade" id="suanv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">SỬA TÀI KHOẢN</h4>
+      </div>
+      <div class="modal-body">
+       <!-- BASIC FORM ELELEMNTS -->
+       <div class="row">
+        <div class="col-lg-12">
+          <div class="form-panel">
+            <form class="form-horizontal style-form" method="post" action="{{route('post_SuaTK')}}">
+              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="id" id='id' value="">
+              <div class="form-group">
+                <label class="col-sm-2 col-sm-2 control-label">ID tài khoản</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id='name' name='name' required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 col-sm-2 control-label">Email</label>
+                <div class="col-sm-10">
+                  <input type="email" name="email" id='email' class="form-control" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+              </div>
+              <button type="submit" name="submitbtn" class="btn btn-primary" >CẬP NHẬT</button>
             </form>
           </div>
         </div><!-- col-lg-12-->       
@@ -174,5 +218,16 @@
       });
     });
   });
+  $('#suanv').on('show.bs.modal', function (event) {
+        console.log('opensua');
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id')
+        var name = button.data('name') // Extract info from data-* attributes
+        var email = button.data('email')
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #email').val(email);
+        modal.find('.modal-body #name').val(name);
+      })
 </script>
 @endsection
