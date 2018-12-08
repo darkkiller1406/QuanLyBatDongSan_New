@@ -42,7 +42,7 @@ class QL_TinDangController extends Controller
         ->useLog('4')
         ->performedOn($dat)
         ->causedBy(Auth::user()->id)
-        ->withProperties(['TrangThai' => '1'])
+        ->withProperties(['TrangThai' => 'Đang đăng'])
         ->log('Đăng tin bán đất');
 
         return redirect('page/quanlydat')->with('thongbao', 'Bạn đã đăng tin thành công!');

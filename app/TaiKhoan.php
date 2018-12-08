@@ -96,14 +96,24 @@ class TaiKhoan extends Model
 
   public function updateLoaiTaiKhoan()
   {
-   DB::update("UPDATE users SET LoaiTaiKhoan = 3 WHERE NOW() >= NGAYHETHAN and LoaiTaiKhoan > 0 and LoaiTaiKhoan < 4");
-   $users = DB::select("SELECT * FROM users WHERE hour(DATEDIFF(NOW(), updated_at)) > 365 and LoaiTaiKhoan = 3");
+   DB::update("UPDATE users SET LoaiTaiKhoan = 3 WHERE NOW() >= NgayHetHan and LoaiTaiKhoan > 0 and LoaiTaiKhoan < 4");
+   $users = DB::select("SELECT * FROM users WHERE DATEDIFF(NOW(), NgayHetHan) > 365 and LoaiTaiKhoan = 3");
     if(!empty($users)) {
       foreach ($users as $user) {
         DB::delete("DELETE FROM users WHERE id = ".$user->id);
       }
       DB::delete("DELETE FROM congty WHERE id = ".$users[0]->ThuocCongTy);
     }
+  }
+
+  public function getCongTyKhongHoatDong()
+  {
+    $users = DB::select("SELECT * FROM users WHERE DATEDIFF(NOW(), NgayHetHan) > 365 and LoaiTaiKhoan = 3");
+    if(!empty($users)) {
+      $congty = CongTy::where('id', $users[0]->ThuocCongTy)->first();
+      return $congty->TenCongTy;
+    }
+    return null;
   }
 
   public function getIdByToken($token) 

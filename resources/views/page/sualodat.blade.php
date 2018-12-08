@@ -144,6 +144,27 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">Thửa số</label>
+                                <div class="col-sm-10">
+                                    <input type="number" name="thuaso" id="thuaso" class="form-control"
+                                    value="{{$dat->ThuaSo}}" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">Tờ bản đồ số</label>
+                                <div class="col-sm-10">
+                                    <input type="number" name="tobando" id="tobando" class="form-control" value="{{$dat->ToBanDo}}"
+                                    required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">Giấy chứng nhận quyền sử dụng đất số</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="giaychungnhan" id="giaychungnhan" class="form-control" value="{{$dat->GiayChungNhan}}"
+                                    required>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-sm-2 col-sm-2 control-label">Mô tả</label>
                                 <div class="col-sm-10">
                                     <textarea type="textarea" name="ghichu" value="{{$dat->GhiChu}}" class="form-control"></textarea>

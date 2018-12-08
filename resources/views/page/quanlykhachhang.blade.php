@@ -68,7 +68,6 @@
        <td>
         <button class="btn btn-success btn-xs" 
         data-makh="{{$kh->MaKhachHang}}"
-        data-xungho="{{$kh->XungHo}}"
         data-hokh="{{$kh->HoVaTenDem}}"
         data-tenkh="{{$kh->Ten}}"
         data-cmnd="{{$kh->CMND}}"
@@ -76,22 +75,31 @@
         data-email="{{$kh->Email}}"
         data-dtdd="{{$kh->DTDD}}"
         data-dtcd="{{$kh->DTCD}}"
+        data-noicap="{{$kh->NoiCap}}"
         data-ngaytao='
         <?php $date=date_create($kh->created_at);
         echo date_format($date,"d/m/Y H:i:s") ?>'
         data-ngaycapnhat='
         <?php $date=date_create($kh->updated_at);
         echo date_format($date,"d/m/Y H:i:s") ?>'
+        data-ngaysinh='
+        <?php $date=date_create($kh->NgaySinh);
+        echo date_format($date,"d/m/Y") ?>'
+        data-ngaycap='
+        <?php $date=date_create($kh->NgayCap);
+        echo date_format($date,"d/m/Y") ?>'
         data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
         <button class="btn btn-primary btn-xs"
         data-idkh="{{$kh->id}}"
         data-makh="{{$kh->MaKhachHang}}"
-        data-xungho="{{$kh->XungHo}}"
         data-hokh="{{$kh->HoVaTenDem}}"
         data-tenkh="{{$kh->Ten}}"
         data-cmnd="{{$kh->CMND}}"
         data-diachi="{{$kh->DiaChi}}"
         data-email="{{$kh->Email}}"
+        data-ngaysinh="{{$kh->NgaySinh}}"
+        data-ngaycap="{{$kh->NgayCap}}"
+        data-noicap="{{$kh->NoiCap}}"
         data-dtdd="{{$kh->DTDD}}"
         data-dtcd="{{$kh->DTCD}}"
         data-toggle="modal" data-target="#suanv"><i class="fas fa-edit"></i></button>
@@ -140,12 +148,20 @@
                 <td id="tenkh"></td>
               </tr>
               <tr>
-                <td>Xưng hô</td>
-                <td id="xungho"></td>
+                <td>Ngày sinh</td>
+                <td id="ngaysinh"></td>
               </tr>
               <tr>
                 <td>CMND</td>
                 <td id="cmnd"></td>
+              </tr>
+              <tr>
+                <td>Ngày cấp</td>
+                <td id="ngaycap"></td>
+              </tr>
+              <tr>
+                <td>Nơi cấp</td>
+                <td id="noicap"></td>
               </tr>
               <tr>
                 <td>Địa chỉ</td>
@@ -209,15 +225,27 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 col-sm-2 control-label">Xưng hô</label>
+                <label class="col-sm-2 control-label">Ngày sinh</label>
                 <div class="col-sm-10">
-                  <input type="text" name="xungho" class="form-control" required>
+                  <input type="date" id="ngaysinh-add" name="ngaysinh" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 col-sm-2 control-label">CMND</label>
                 <div class="col-sm-10">
                   <input type="text" name="cmnd" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Ngày cấp</label>
+                <div class="col-sm-10">
+                  <input type="date" id="ngaycap-add" name="ngaycap" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Nơi cấp</label>
+                <div class="col-sm-10">
+                  <input type="text" id="noicap-add" name="noicap" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
@@ -285,15 +313,27 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">Xưng hô</label>
+                <label class="col-sm-2 control-label">Ngày sinh</label>
                 <div class="col-sm-10">
-                  <input type="text" id="xungho" name="xungho" class="form-control" required>
+                  <input type="date" id="ngaysinh-edit" name="ngaysinh" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">CMND</label>
                 <div class="col-sm-10">
                   <input type="text" id="cmnd" name="cmnd" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Ngày cấp</label>
+                <div class="col-sm-10">
+                  <input type="date" id="ngaycap-edit" name="ngaycap" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Nơi cấp</label>
+                <div class="col-sm-10">
+                  <input type="text" id="noicap-edit" name="noicap" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
@@ -344,26 +384,30 @@
         var makh = button.data('makh') // Extract info from data-* attributes
         var hokh = button.data('hokh')
         var tenkh = button.data('tenkh')
-        var xungho = button.data('xungho')
         var cmnd = button.data('cmnd')
         var diachi = button.data('diachi')
         var email = button.data('email')
         var dtdd = button.data('dtdd')
         var dtcd = button.data('dtcd')
+        var ngaysinh = button.data('ngaysinh')
+        var ngaycap = button.data('ngaycap')
         var created_at = button.data('ngaytao')
         var updated_at = button.data('ngaycapnhat')
+        var noicap = button.data('noicap')
         var modal = $(this)
         modal.find('.modal-body #makh').html(makh);
         modal.find('.modal-body #hokh').html(hokh);
         modal.find('.modal-body #tenkh').html(tenkh);
-        modal.find('.modal-body #xungho').html(xungho);
         modal.find('.modal-body #email').html(email);
         modal.find('.modal-body #cmnd').html(cmnd);
         modal.find('.modal-body #diachi').html(diachi);
         modal.find('.modal-body #dtdd').html(dtdd);
         modal.find('.modal-body #dtcd').html(dtcd);
+        modal.find('.modal-body #ngaysinh').html(ngaysinh);
+        modal.find('.modal-body #ngaycap').html(ngaycap);
         modal.find('.modal-body #created_at').html(created_at);
         modal.find('.modal-body #updated_at').html(updated_at);
+        modal.find('.modal-body #noicap').html(noicap)
       })
         // sua
         $('#suanv').on('show.bs.modal', function (event) {
@@ -373,25 +417,29 @@
         var makh = button.data('makh') // Extract info from data-* attributes
         var hokh = button.data('hokh')
         var tenkh = button.data('tenkh')
-        var xungho = button.data('xungho')
         var cmnd = button.data('cmnd')
         var diachi = button.data('diachi')
         var email = button.data('email')
         var dtdd = button.data('dtdd')
         var dtcd = button.data('dtcd')
+        var ngaysinh = button.data('ngaysinh')
+        var ngaycap = button.data('ngaycap')
         var created_at = button.data('ngaytao')
         var updated_at = button.data('ngaycapnhat')
+        var noicap = button.data('noicap')
         var modal = $(this)
         modal.find('.modal-body #idkh').val(idkh);
         modal.find('.modal-body #makh').html(makh);
         modal.find('.modal-body #hokh').val(hokh);
         modal.find('.modal-body #tenkh').val(tenkh);
-        modal.find('.modal-body #xungho').val(xungho);
         modal.find('.modal-body #email').val(email);
         modal.find('.modal-body #cmnd').val(cmnd);
         modal.find('.modal-body #diachi').val(diachi);
         modal.find('.modal-body #dtdd-edit').val(dtdd);
         modal.find('.modal-body #dtcd').val(dtcd);
+        modal.find('.modal-body #ngaysinh-edit').val(ngaysinh);
+        modal.find('.modal-body #ngaycap-edit').val(ngaycap);
+        modal.find('.modal-body #noicap-edit').val(noicap);
       })
         /// ajax
         $.ajaxSetup({
@@ -426,7 +474,70 @@
         }
         $(document).ready(function(){
           $("#submitbtn-add").hide();
-          $("#submitbtn-edit").hide();
+          $("#ngaysinh-add").change(function() {
+              var namhientai = new Date();
+              var namsinh = new Date($("#ngaysinh-add").val());
+              if( (namhientai.getFullYear() - namsinh.getFullYear()) < 18 ) {
+                var namSinh =  namhientai.getFullYear() - 18;
+                $("#ngaysinh-add").val(namSinh + '-01-01');
+              }
+              if($("#ngaycap-add").val() != '') {
+                var namcap = new Date($("#ngaycap-add").val());
+                var namsinh = new Date($("#ngaysinh-add").val());
+                var now = new Date();
+                if( (namcap.getFullYear() - namsinh.getFullYear()) < 14 ) {
+                  var namCap =  namcap.getFullYear() + 14;
+                  $("#ngaycap-add").val(namCap + '-01-01');
+                }
+                if(ngaycap > now) {
+                document.getElementById("ngaycap-add").valueAsDate = new Date();
+                }
+              }
+          });
+          $("#ngaycap-add").change(function() {
+              var ngaycap = new Date($("#ngaycap-add").val());
+              var ngaysinh = new Date($("#ngaysinh-add").val());
+              var now = new Date();
+              if( (ngaycap.getFullYear() - ngaysinh.getFullYear()) < 14 ) {
+                var namCap =  ngaysinh.getFullYear() + 14;
+                $("#ngaycap-add").val(namCap + '-01-01');
+              }
+              if(ngaycap > now) {
+                document.getElementById("ngaycap-add").valueAsDate = new Date();
+              }
+          });
+          $("#ngaysinh-edit").change(function() {
+              var namhientai = new Date();
+              var namsinh = new Date($("#ngaysinh-edit").val());
+              if( (namhientai.getFullYear() - namsinh.getFullYear()) < 18 ) {
+                var namSinh =  namhientai.getFullYear() - 18;
+                $("#ngaysinh-edit").val(namSinh + '-01-01');
+              }
+              if($("#ngaycap-edit").val() != '') {
+                var namcap = new Date($("#ngaycap-edit").val());
+                var namsinh = new Date($("#ngaysinh-edit").val());
+                var now = new Date();
+                if( (namcap.getFullYear() - namsinh.getFullYear()) < 14 ) {
+                  var namCap =  namcap.getFullYear() + 14;
+                  $("#ngaycap-edit").val(namCap + '-01-01');
+                }
+                if(ngaycap > now) {
+                document.getElementById("ngaycap-edit").valueAsDate = new Date();
+                }
+              }
+          });
+          $("#ngaycap-edit").change(function() {
+              var ngaycap = new Date($("#ngaycap-edit").val());
+              var ngaysinh = new Date($("#ngaysinh-edit").val());
+              var now = new Date();
+              if( (ngaycap.getFullYear() - ngaysinh.getFullYear()) < 14 ) {
+                var namCap =  ngaysinh.getFullYear() + 14;
+                $("#ngaycap-edit").val(namCap + '-01-01');
+              }
+              if(ngaycap > now) {
+                document.getElementById("ngaycap-edit").valueAsDate = new Date();
+              }
+          });
           $("#search").keyup(function() {
             $.ajax({
               type:'get',
@@ -438,6 +549,7 @@
               }
             });
           });
+          $()
           $('#dtdd-add').keyup('change', function () {
               if(checkPhoneNumber($('#dtdd-add').val())) {
                  $("#submitbtn-add").show();

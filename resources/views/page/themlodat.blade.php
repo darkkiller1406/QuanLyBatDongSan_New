@@ -9,6 +9,24 @@
         <div class="row mt">
             <div class="col-md-12">
                 <div class="content-panel">
+                        @if(count($errors) > 0)
+                        <div class="alert alert-danger" style="font-size: 0.9em;text-align: center;margin-top: 20px;">
+                            @foreach($errors->all() as $err)
+                            {{ $err }}<br>
+                            @endforeach
+                        </div>
+                        @endif
+
+                        @if(session('thongbao'))
+                        <div class="alert alert-success" style="font-size: 0.9em;text-align: center;margin-top: 20px;">
+                            {{ session('thongbao') }}
+                        </div>
+                        @endif
+                        @if(session('canhbao'))
+                        <div class="alert alert-danger" style="font-size: 0.9em;text-align: center;margin-top: 20px;">
+                          {{ session('canhbao') }}
+                      </div>
+                      @endif
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-panel">
@@ -124,6 +142,27 @@
                                         <option value="Tây-Nam">Tây-Nam</option>
                                         <option value="Tây-Bắc">Tây-Bắc</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">Thửa số</label>
+                                <div class="col-sm-10">
+                                    <input type="number" name="thuaso" id="thuaso" class="form-control"
+                                    required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">Tờ bản đồ số</label>
+                                <div class="col-sm-10">
+                                    <input type="number" name="tobando" id="tobando" class="form-control"
+                                    required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">Giấy chứng nhận quyền sử dụng đất số</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="giaychungnhan" id="giaychungnhan" class="form-control"
+                                    required>
                                 </div>
                             </div>
                             <div class="form-group">

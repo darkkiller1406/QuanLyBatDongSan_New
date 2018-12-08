@@ -98,17 +98,7 @@
         data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
         <?php if(isset($yc->dat->TrangThai)){ ?>
           <?php if ($yc->dat->TrangThai == 1){ ?>
-            <button class="btn btn-success btn-xs"
-            data-iddat = "{{$yc->dat->id}}"
-            <?php 
-              $dt = ($yc->Dai) * ($yc->Rong) + (0.5 * ($yc->NoHau) * ($yc->Dai));
-              $giacu = $dt * ($yc->DonGiaMua);  
-            ?>
-            data-gia = "{{$yc->Gia}}"
-            data-giacu = "{{$giacu}}"
-            data-idyc="{{$yc->id}}"
-            data-kyhieudat = "{{$yc->dat->KyHieuLoDat}}"
-            data-toggle="modal" data-target="#sua"><i class="fas fa-check-square"></i></button>
+            <a href="themhopdong/{{$yc->id}}" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="top" title="Lập hợp đồng"><i class="fas fa-check-square"></i></a>
           <?php } ?>
         <?php } ?>
         <?php if(isset($yc->dat->KyHieuLoDat)){ ?>
@@ -196,74 +186,8 @@
 </div>
 </div>              
 </div><!-- /showback -->
+
 </section>
-<!-- Modal Sửa -->
-<?php if(isset($yc->dat->KyHieuLoDat)) { ?>  
-<div class="modal fade" id="sua" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">XÁC NHẬN MUA/BÁN</h4>
-      </div>
-      <div class="modal-body">
-       <!-- BASIC FORM ELELEMNTS -->
-       <div class="row">
-        <div class="col-lg-12">
-          <div class="form-panel">
-            <form class="form-horizontal style-form" method="post" enctype="multipart/form-data" action="{{route('post_ThemHD')}}">
-              <input type="hidden" name="_token" value="{{ csrf_token() }}">
-              <input type="hidden" name="iddat" id="iddat" value="">
-              <input type="hidden" name="idyc" id="idyc" value="">
-              <input type="hidden" name="giamua" id="giamua" value="">
-              <div class="form-group">
-                <label class="col-sm-3 col-sm-3 control-label">Lô đất</label>
-                <div class="col-sm-9">
-                  <label class=" control-label" id="kyhieudat"></label>
-                </div>
-              </div>
-             <div class="form-group">
-              <label class="col-sm-3 col-sm-3 control-label">Giá bán lô đất</label>
-              <div class="col-sm-9">
-                <input class="form-control" id="gia" name="gia" type="number">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-3 col-sm-3 control-label">Tên khách hàng mua</label>
-              <div class="col-sm-9">
-                <select class="form-control" name="khmua" id="khmua">
-                  @foreach ($khachhang as $kh)
-                    <option value="{{$kh->id}}">{{$kh->HoVaTenDem}} {{$kh->Ten}}</option>
-                  @endforeach
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-3 col-sm-3 control-label">Mã hợp đồng</label>
-              <div class="col-sm-9">
-                <input type="text" name="maHopDong" class="form-control" >
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-3 col-sm-3 control-label">File hợp đồng</label>
-              <div class="col-sm-9">
-                <input type="file" name="hopdong[]" accept=
-                "application/msword,text/plain, application/pdf" class="form-control" >
-              </div>
-            </div>
-            <div class="col-md-5">
-            </div>
-            <button type="submit" id="submitbtn" name="submitbtn" class="btn btn-primary" >Xác nhận</button>
-          </form>
-        </div>
-      </div><!-- col-lg-12-->       
-    </div><!-- /row -->
-  </div>
-</div>
-</div>
-</div>              
-</div><!-- /showback -->
-<?php } ?>
 @endsection
 @section('script')
 <!-- js placed at the end of the document so the pages load faster -->
@@ -309,41 +233,6 @@
       modal.find('.modal-body #nd').html(nd);
       modal.find('.modal-body #created_at').html(created_at);
       modal.find('.modal-body #updated_at').html(updated_at);
-    })
-    $('#sua').on('show.bs.modal', function (event) {
-        console.log('open');
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var idyc = button.data('idyc')
-        var giamua = button.data('giacu')
-        var gia = button.data('gia')
-        var iddat = button.data('iddat')
-        var kyhieudat = button.data('kyhieudat')
-        var modal = $(this)
-        if(trangthai == 1)
-        {
-         modal.find('.modal-body #trangthai').html('Đang xử lý');
-        }
-        if(trangthai == 2)
-        {
-         modal.find('.modal-body #trangthai').html('Đã hoàn thành');
-       }
-       if(trangthai == 3)
-       {
-         modal.find('.modal-body #trangthai').html('Đang đợi liên lạc');
-       }
-       if(loaiyc == 1)
-       {
-        modal.find('.modal-body #loaiyc').html('Yêu cầu mua đất');
-      }
-      else
-      {
-        modal.find('.modal-body #loaiyc').html('Yêu cầu liên lạc');
-      }
-      modal.find('.modal-body #idyc').val(idyc);
-      modal.find('.modal-body #gia').val(gia);
-      modal.find('.modal-body #giamua').val(giamua);
-      modal.find('.modal-body #iddat').val(iddat);
-      modal.find('.modal-body #kyhieudat').html(kyhieudat);
     })
         /// ajax
         $.ajaxSetup({

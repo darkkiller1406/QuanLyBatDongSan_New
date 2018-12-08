@@ -104,12 +104,6 @@ class QL_TaiKhoanController extends Controller
                 'email.required'=> 'Bạn chưa nhập email',
                 'email.email'=> 'Bạn chưa nhập đúng định dạng email',
             ]);
-            $username = TaiKhoan::where('name', $request->name)
-                        ->where('ThuocCongTy', Auth::user()->ThuocCongTy)
-                        ->first();
-            if(!empty($username)) {
-                return redirect('page/quanlytaikhoan')->with('canhbao','Tên đăng nhập đã có trong hệ thống');
-            }
             $user = User::find($request->id);
             $user_old = User::find($request->id);
             $user->name = $request->name; 
@@ -122,7 +116,7 @@ class QL_TaiKhoanController extends Controller
             $fieldChange = [];
             foreach ($arrays as $array) {
                 if ($user_old->$array != $user_new->$array) {
-                    $fieldChange[$array] =  $user_new->$array;
+                    $fieldChange[$array] =  $user_old->$array.'->'.$user_new->$array;
                     $change = true;
                 }
             }
@@ -134,7 +128,7 @@ class QL_TaiKhoanController extends Controller
             ->withProperties($fieldChange)
             ->log('Cập nhật tài khoản '.$request->name);
 
-            return redirect('page/quanlytaikhoan')->with('thongbao','Chúc mừng bạn đã đăng kí thành công!');
+            return redirect('page/quanlytaikhoan')->with('thongbao','Cập nhật thành công!');
         }
         return back();
     }

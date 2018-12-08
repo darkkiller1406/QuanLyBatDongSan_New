@@ -74,7 +74,7 @@ class QL_CongTyController extends Controller
 
     public function postThemGioiThieu(Request $request) 
     {
-        $check = GioiThieu::where('CongTy', Auth::user()->ThuocCongTy)->get();
+        $check = GioiThieu::where('CongTy', Auth::user()->ThuocCongTy)->first();
         if(empty($check)) {
             $gioithieu = new GioiThieu;
             $gioithieu->TieuDe = $request->tieude;
@@ -82,15 +82,29 @@ class QL_CongTyController extends Controller
             $gioithieu->CongTy = Auth::user()->ThuocCongTy;
             $gioithieu->save();
             $gioithieu_new = GioiThieu::where('CongTy', Auth::user()->ThuocCongTy)->get();
-            return view('page/gioithieu')->with('thongbao', 'Thêm thành công!');;
+
+            activity()
+            ->useLog('1')
+            ->performedOn($gioithieu)
+            ->causedBy(Auth::user()->id)
+            ->log('thêm thông tin giới thiệu công ty ');
+
+            return view('page/gioithieucongty', ['thongbao' => 'Thêm thành công!', 'gioithieu' => $gioithieu]);
         } else {
-            $gioithieu = GioiThieu::find($check[0]->id);
+            $gioithieu = GioiThieu::find($check->id);
             $gioithieu->TieuDe = $request->tieude;
             $gioithieu->NoiDung = $request->noidung;
             $gioithieu->CongTy = Auth::user()->ThuocCongTy;
             $gioithieu->save();
             $gioithieu_new = GioiThieu::where('CongTy', Auth::user()->ThuocCongTy)->get();
-            return redirect('page/gioithieu')->with('thongbao', 'Cập nhật thành công!');;
+
+            activity()
+            ->useLog('3')
+            ->performedOn($gioithieu)
+            ->causedBy(Auth::user()->id)
+            ->log('cập nhật thông tin giới thiệu công ty ');
+
+            return view('page/gioithieucongty', ['thongbao' => 'Cập nhật thành công!', 'gioithieu' => $gioithieu]);
         } 
     }
 

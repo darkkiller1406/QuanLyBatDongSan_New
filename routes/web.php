@@ -132,8 +132,14 @@ Route::group(['prefix' => 'page','middleware'=>'Adminlogin'], function() {
     //quản lý hợp đồng
     Route::get('quanlyhopdong','QL_HopDongController@getView')->name('view_QLHD');
     Route::post('themhd','QL_HopDongController@postThem')->name('post_ThemHD');
+    Route::post('xacnhan','QL_HopDongController@postXacNhan')->name('post_XacNhanHD');
+    Route::post('suahd','QL_HopDongController@postSua')->name('post_SuaHD');
     Route::get('xoahd/{id}','QL_HopDongController@getXoa');
     Route::any('timhd', 'QL_HopDongController@getTim');
+    Route::get('themhopdong/{id}','QL_HopDongController@getThem');
+    Route::get('suahopdong/{id}','QL_HopDongController@getSua');
+    Route::get('uploadmauhopdong', 'QL_HopDongController@getUpLoad');
+    Route::post('uploadmauhopdong', 'QL_HopDongController@postUpLoad')->name('uploadHD');
     //Quan ly yeu cau
     Route::get('quanlyyeucau','QL_YeuCauController@getView')->name('view_QLYC');
     Route::get('xoayc/{id}','QL_YeuCauController@getXoa');

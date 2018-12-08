@@ -21,7 +21,13 @@ class QL_KhachHangController extends Controller
                 'email'=>'required|email',
                 'dtdd'=> 'required|digits_between:9,11',
                 'dtcd'=> 'required|digits_between:9,11',
-                'cmnd'=> 'required|digits:9'
+                'cmnd'=> 'required|digits:9',
+                'noicap' => 'required',
+                'ngaysinh' => 'required',
+                'ngaycap' => 'required',
+                'diachi' => 'required',
+                'hokh' => 'required',
+                'tenkh' => 'required'
             ],[
                 'email.required'=> 'Bạn chưa nhập email',
                 'email.email'=> 'Bạn chưa nhập đúng định dạng email',
@@ -65,13 +71,15 @@ class QL_KhachHangController extends Controller
         $kh->HoVaTenDem = $request->hokh;
         $kh->Ten = $request->tenkh;
         $kh->CMND = $request->cmnd;
+        $kh->NgaySinh = $request->ngaysinh;
+        $kh->NoiCap = $request->noicap;
         $kh->DiaChi = $request->diachi;
         $kh->Email = $request->email;
+        $kh->NgayCap = $request->ngaycap;
         $kh->DTDD = $request->dtdd;
         if(isset($request->dtcd)) {
             $kh->DTCD = $request->dtcd;
         }
-        $kh->XungHo = $request->xungho;
         $kh->ThuocCongTy = (Auth::user()->ThuocCongTy);
         $kh->save();
 
@@ -105,10 +113,16 @@ class QL_KhachHangController extends Controller
     public function postSuaKhachHang(Request $request)
     {
         $this->validate($request,[
-            'email'=>'email',
+            'email'=>'required|email',
             'dtdd'=> 'required|digits_between:9,11',
-            'dtcd'=> 'digits_between:9,11',
-            'cmnd'=> 'digits:9'
+            'dtcd'=> 'required|digits_between:9,11',
+            'cmnd'=> 'required|digits:9',
+            'noicap' => 'required',
+            'ngaysinh' => 'required',
+            'ngaycap' => 'required',
+            'diachi' => 'required',
+            'hokh' => 'required',
+            'tenkh' => 'required'
         ],[
             'email.required'=> 'Bạn chưa nhập email',
             'email.email'=> 'Bạn chưa nhập đúng định dạng email',
@@ -122,21 +136,23 @@ class QL_KhachHangController extends Controller
         $kh->Ten = $request->tenkh;
         $kh->CMND = $request->cmnd;
         $kh->DiaChi = $request->diachi;
+        $kh->NgayCap = $request->ngaycap;
+        $kh->NoiCap = $request->noicap;
         $kh->Email = $request->email;
+        $kh->NgaySinh = $request->ngaysinh;
         $kh->DTDD = $request->dtdd;
         $kh->DTCD = $request->dtcd;
-        $kh->XungHo = $request->xungho;
         $kh->save();
 
         $kh_new = KhachHang::find($request->id);
-        $arrays = array('HoVaTenDem', 'Ten', 'CMND', 'DiaChi', 'Email', 'DTDD', 'DTCD', 'XungHo');
+        $arrays = array('HoVaTenDem', 'Ten', 'CMND', 'NgayCap', 'DiaChi', 'Email', 'DTDD', 'DTCD', 'NgaySinh', 'NoiCap');
 
             // check field change
         $change = false;
         $fieldChange = [];
         foreach ($arrays as $array) {
             if ($kh_old->$array != $kh_new->$array) {
-                $fieldChange[$array] =  $kh_new->$array;
+                $fieldChange[$array] =  $kh_old->$array.'->'.$kh_new->$array;
                 $change = true;
             }
         }

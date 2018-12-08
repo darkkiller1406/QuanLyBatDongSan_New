@@ -27,9 +27,33 @@ class QL_DatController extends Controller {
 
 	public function postThem(Request $request) {
 		$this->validate($request, [
-			'mald' => 'unique:dat,KyHieuLoDat',
-			'diachi' => 'required'
+			'mald' => 'unique:dat,KyHieuLoDat|required',
+			'diachi' => 'required|required',
+			'thuaso' => 'unique:dat,ThuaSo|digits_between:1,8|required|min:1',
+			'tobando' => 'unique:dat,ToBanDo|digits_between:1,8|required|min:1',
+			'giaychungnhan' => 'unique:dat,GiayChungNhan|max:8|min:8|required',
+			'diachi' => 'required',
+			'dai' => 'numeric|min:1|required',
+			'rong' => 'numeric|min:1|required',
+			'dongia' => 'numeric|min:1|required',
+			'nohau' => 'numeric|min:0|required',
+			'dongiamua' => 'required'
 		], [
+			'mald.unique' => 'Ký hiệu lô đất đã tồn tại',
+			'diachi.required' => 'Bạn cần nhập địa chỉ của lô đất',
+			'thuaso.unique' => 'Thửa số đã tồn tại',
+			'thuaso.digits_between' => 'Vui lòng nhập đúng định dạng thửa số',
+			'thuaso.min' => 'Vui lòng nhập đúng định dạng thửa số',
+			'tobando.unique' => 'Tờ bản đồ  số đã tồn tại',
+			'tobando.digits_between' => 'Vui lòng nhập đúng định dạng tờ bản đồ số',
+			'tobando.min' => 'Vui lòng nhập đúng định dạng tờ bản đồ số',
+			'giaychungnhan.unique' => 'Giấy chứng nhận số đã tồn tại',
+			'giaychungnhan.max' => 'Vui lòng nhập đúng định dạng giấy chứng nhận',
+			'giaychungnhan.max' => 'Vui lòng nhập đúng định dạng giấy chứng nhận',
+			'dai.min' => 'Độ dài lô đất phải lớn hơn 0',
+			'rong.min' => 'Độ rộng lô đất phải lớn hơn 0',
+			'dongia.min' => 'Đơn giá lô đất phải lớn hơn 0',
+			'nohau.min' => 'Độ nở hậu lô đất phải lớn hơn hoặc bằng 0',
 			'mald.unique' => 'Ký hiệu lô đất đã tồn tại',
 			'diachi.required' => 'Bạn cần nhập địa chỉ của lô đất'
 		]);
@@ -64,6 +88,9 @@ class QL_DatController extends Controller {
 			$dat->Dai = $request->dai;
 			$dat->Rong = $request->rong;
 			$dat->DonGia = $request->dongia;
+			$dat->ThuaSo = $request->thuaso;
+			$dat->ToBanDo = $request->tobando;
+			$dat->GiayChungNhan = $request->giaychungnhan;
 			$dat->DonGiaMua = $request->dongiamua;
 			$dat->NoHau = $request->nohau;
 			$dat->DienTich = $dt;
@@ -106,15 +133,27 @@ class QL_DatController extends Controller {
 
 	public function postSua(Request $request) {
 		$this->validate($request, [
+			'mald' => 'required',
+			'diachi' => 'required|required',
+			'thuaso' => 'digits_between:1,8|min:1|required',
+			'tobando' => 'digits_between:1,8|min:1|required',
+			'giaychungnhan' => 'max:8|min:8|required',
 			'diachi' => 'required',
-			'dai' => 'numeric|min:1',
-			'rong' => 'numeric|min:1',
-			'dongia' => 'numeric|min:1',
-			'nohau' => 'numeric|min:0'
+			'dai' => 'numeric|min:1|required',
+			'rong' => 'numeric|min:1|required',
+			'dongia' => 'numeric|min:1|required',
+			'nohau' => 'numeric|min:0|required',
+			'dongiamua' => 'required'
 		], [
 			'dai.min' => 'Độ dài lô đất phải lớn hơn 0',
 			'rong.min' => 'Độ rộng lô đất phải lớn hơn 0',
 			'dongia.min' => 'Đơn giá lô đất phải lớn hơn 0',
+			'giaychungnhan.max' => 'Vui lòng nhập đúng định dạng giấy chứng nhận',
+			'giaychungnhan.max' => 'Vui lòng nhập đúng định dạng giấy chứng nhận',
+			'thuaso.digits_between' => 'Vui lòng nhập đúng định dạng thửa số',
+			'thuaso.min' => 'Vui lòng nhập đúng định dạng thửa số',
+			'tobando.digits_between' => 'Vui lòng nhập đúng định dạng tờ bản đồ số',
+			'tobando.min' => 'Vui lòng nhập đúng định dạng tờ bản đồ số',
 			'nohau.min' => 'Độ nở hậu lô đất phải lớn hơn hoặc bằng 0',
 			'mald.unique' => 'Ký hiệu lô đất đã tồn tại',
 			'diachi.required' => 'Bạn cần nhập địa chỉ của lô đất'
@@ -154,6 +193,9 @@ class QL_DatController extends Controller {
 			$dat->Phuong = $request->phuong;
 			//$dat->ThanhPho = $request->tp;
 			$dat->Gia = $gia;
+			$dat->ThuaSo = $request->thuaso;
+			$dat->ToBanDo = $request->tobando;
+			$dat->GiayChungNhan = $request->giaychungnhan;
 			$dat->Dai = $request->dai;
 			$dat->Map = $request->map;
 			$dat->Rong = $request->rong;
@@ -172,7 +214,7 @@ class QL_DatController extends Controller {
 			$fieldChange = [];
 			foreach ($arrays as $array) {
 				if ($dat_old->$array != $dat_new->$array) {
-					$fieldChange[$array] =  $dat_new->$array;
+					$fieldChange[$array] =  $dat_old->$array.'->'.$dat_new->$array;
 					$change = true;
 				}
 			}

@@ -48,7 +48,6 @@ class KhachHang extends Model
             $string.= 'data-hokh="'.$kh->HoVaTenDem.'"';
             $string.= 'data-tenkh="'.$kh->Ten.'"';
             $string.= 'data-cmnd="'.$kh->CMND.'"';
-            $string.= 'data-xungho="'.$kh->XungHo.'"';
             $string.= 'data-diachi="'.$kh->dckh.'"';
             $string.= 'data-email="'.$kh->Email.'"';
             $string.= 'data-dtdd="'.$kh->DTDD.'"';
@@ -57,6 +56,11 @@ class KhachHang extends Model
             .date_format(date_create($kh->created_at),"d/m/Y H:i:s").'"';
             $string.= 'data-ngaycapnhat="'
             .date_format(date_create($kh->updated_at),"d/m/Y H:i:s").'"';
+            $string.= 'data-noicap="'.$kh->NoiCap.'"';
+            $string.= 'data-ngaysinh="'
+            .date_format(date_create($kh->NgaySinh),"d/m/Y").'"';
+            $string.= 'data-ngaycap="'
+            .date_format(date_create($kh->NgayCap),"d/m/Y").'"';
             $string.= 'data-toggle="modal" data-target="#chitiet"><i class="fas fa-info"></i></button>
             ';
             $string.= '<button class="btn btn-primary btn-xs"';
@@ -65,11 +69,13 @@ class KhachHang extends Model
             $string.= 'data-hokh="'.$kh->HoVaTenDem.'"';
             $string.= 'data-tenkh="'.$kh->Ten.'"';
             $string.= 'data-cmnd="'.$kh->CMND.'"';
-            $string.= 'data-xungho="'.$kh->XungHo.'"';
             $string.= 'data-diachi="'.$kh->dckh.'"';
             $string.= 'data-email="'.$kh->Email.'"';
             $string.= 'data-dtdd="'.$kh->DTDD.'"';
             $string.= 'data-dtcd="'.$kh->DTCD.'"';
+            $string.= 'data-ngaysinh="'.$kh->NgaySinh.'"';
+            $string.= 'data-ngaycap="'.$kh->NgayCap.'"';
+            $string.= 'data-noicap="'.$kh->NoiCap.'"';
             $string.= 'data-ngaytao="'
             .date_format(date_create($kh->created_at),"d/m/Y H:i:s").'"';
             $string.= 'data-ngaycapnhat="'

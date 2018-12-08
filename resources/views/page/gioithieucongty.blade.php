@@ -10,12 +10,6 @@
                 <div class="content-panel">
                 <div class="row">
                     <div class="col-lg-12">
-                        @if(session('thongbao'))
-                        <div class="alert alert-success"
-                        style="font-size: 0.9em;text-align: center;margin-top: 20px;">
-                        {{ session('thongbao') }}
-                        </div>
-                        @endif
                         <div class="form-panel">
                             <form id="upload" class="form-horizontal style-form" method="post"
                             action="{{route('post_ThemGioiThieu')}}" enctype="multipart/form-data">

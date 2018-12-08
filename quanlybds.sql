@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 20, 2018 lúc 01:47 PM
+-- Thời gian đã tạo: Th12 08, 2018 lúc 06:21 AM
 -- Phiên bản máy phục vụ: 10.1.34-MariaDB
 -- Phiên bản PHP: 7.2.8
 
@@ -78,7 +78,16 @@ INSERT INTO `activity_log` (`id`, `log_name`, `description`, `subject_id`, `subj
 (30, '1', 'Thêm lô đất LK123Test', 11, 'App\\Dat', 1, 'App\\User', '[]', '2018-11-20 12:02:53', '2018-11-20 12:02:53'),
 (31, '4', 'Đăng tin bán đất', 11, 'App\\Dat', 1, 'App\\User', '{\"TrangThai\":\"1\"}', '2018-11-20 12:07:32', '2018-11-20 12:07:32'),
 (32, '1', 'Thêm hợp đồng 123', 1, 'App\\HopDong', 1, 'App\\User', '[]', '2018-11-20 12:41:15', '2018-11-20 12:41:15'),
-(33, '2', 'Xóa yêu cầu mua đất - LK07', 2, 'App\\YeuCau', 1, 'App\\User', '[]', '2018-11-20 12:46:49', '2018-11-20 12:46:49');
+(33, '2', 'Xóa yêu cầu mua đất - LK07', 2, 'App\\YeuCau', 1, 'App\\User', '[]', '2018-11-20 12:46:49', '2018-11-20 12:46:49'),
+(34, '3', 'cập nhật thông tin khách hàng KH001', 1, 'App\\KhachHang', 1, 'App\\User', '{\"DTDD\":\"0569885811\"}', '2018-12-05 09:55:10', '2018-12-05 09:55:10'),
+(35, '3', 'cập nhật thông tin khách hàng KH001', 1, 'App\\KhachHang', 1, 'App\\User', '{\"NoiCap\":\"TP. H\\u1ed3 Ch\\u00ed Minh\"}', '2018-12-06 03:06:56', '2018-12-06 03:06:56'),
+(36, '3', 'cập nhật thông tin khách hàng KH005', 5, 'App\\KhachHang', 1, 'App\\User', '{\"HoVaTenDem\":\"Nguy\\u1ec5n Quang\",\"Ten\":\"Huy\"}', '2018-12-06 03:28:21', '2018-12-06 03:28:21'),
+(37, '2', 'Xóa khách hàng KH004 - Nguyễn Công Minh', 6, 'App\\KhachHang', 1, 'App\\User', '[]', '2018-12-06 03:28:25', '2018-12-06 03:28:25'),
+(38, '1', 'Thêm hợp đồng ', 1, 'App\\HopDong', 1, 'App\\User', '[]', '2018-12-07 02:46:44', '2018-12-07 02:46:44'),
+(39, '1', 'Thêm hợp đồng ', 3, 'App\\HopDong', 1, 'App\\User', '[]', '2018-12-07 02:57:16', '2018-12-07 02:57:16'),
+(42, '3', 'Sửa hợp đồng 123', 3, 'App\\HopDong', 1, 'App\\User', '{\"TienDatCoc\":\"60000000->70000000\"}', '2018-12-07 03:28:18', '2018-12-07 03:28:18'),
+(43, '2', 'Xóa hợp đồng 13232', 8, 'App\\HopDong', 1, 'App\\User', '[]', '2018-12-07 09:46:30', '2018-12-07 09:46:30'),
+(44, '1', 'Thêm hợp đồng ', 9, 'App\\HopDong', 1, 'App\\User', '[]', '2018-12-08 02:23:27', '2018-12-08 02:23:27');
 
 -- --------------------------------------------------------
 
@@ -104,7 +113,7 @@ CREATE TABLE `congty` (
 
 INSERT INTO `congty` (`id`, `TenCongTy`, `Link`, `Logo`, `DiaChi`, `SDT`, `Email`, `created_at`, `updated_at`) VALUES
 (0, 'admin', 'admin', NULL, 'admin', '0569885811', 'minh.1406.nt@gmail.com', '2018-11-07 00:00:00', '2018-11-09 10:14:36'),
-(7, 'LightZ Real Estate', 'test', 'logo_test.jpg', 'test', '01869885811', 'kisivodanh1406@gmail.com', '2018-11-01 14:54:34', '2018-11-09 10:15:16'),
+(7, 'LightZ Real Estate', 'test', 'logo_test.jpg', 'test', '01869885811', 'kisivodanh1402@gmail.com', '2018-11-01 14:54:34', '2018-12-08 04:15:59'),
 (12, 'New Real Estate', 'test2', 'logo_test2.jpg', '212 phương sài', '0569885812', 'minh.1402.nt@gmail.com', '2018-11-03 12:28:41', '2018-11-08 03:21:35'),
 (13, 'HCMGroup', 'test3', 'logo_test3.jpg', 'test3', '0569885813', 'test3@gmail.com', '2018-11-03 12:31:11', '2018-11-08 03:21:38');
 
@@ -117,12 +126,15 @@ INSERT INTO `congty` (`id`, `TenCongTy`, `Link`, `Logo`, `DiaChi`, `SDT`, `Email
 CREATE TABLE `dat` (
   `id` int(11) NOT NULL,
   `KyHieuLoDat` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `Rong` int(11) NOT NULL,
-  `Dai` int(11) NOT NULL,
-  `NoHau` int(11) NOT NULL,
-  `DienTich` int(11) NOT NULL,
+  `ThuaSo` varchar(11) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `ToBanDo` varchar(11) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `GiayChungNhan` varchar(8) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Rong` float NOT NULL,
+  `Dai` float NOT NULL,
+  `NoHau` float NOT NULL,
+  `DienTich` float NOT NULL,
   `DonGiaMua` double NOT NULL,
-  `DonGia` int(11) NOT NULL,
+  `DonGia` double NOT NULL,
   `Gia` double NOT NULL,
   `SoHuu` int(11) DEFAULT NULL,
   `TrangThai` int(11) NOT NULL,
@@ -141,16 +153,15 @@ CREATE TABLE `dat` (
 -- Đang đổ dữ liệu cho bảng `dat`
 --
 
-INSERT INTO `dat` (`id`, `KyHieuLoDat`, `Rong`, `Dai`, `NoHau`, `DienTich`, `DonGiaMua`, `DonGia`, `Gia`, `SoHuu`, `TrangThai`, `Huong`, `DiaChi`, `Map`, `Phuong`, `HinhAnh`, `GhiChu`, `LuotXem`, `created_at`, `updated_at`) VALUES
-(1, 'LK06', 6, 10, 0, 60, 50000000, 60000000, 3600000000, 7, 0, 'Đông', '133/R/111 Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.778888;106.66861100000006', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', NULL, 82, '2018-05-24 07:42:00', '2018-11-20 12:45:15'),
-(3, 'LK07', 5, 18, 0, 90, 10000000, 20000000, 1800000000, 7, 0, 'Đông', '99/79/16 Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.781330293476772;106.67061248308107', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', NULL, 188, '2018-08-07 10:07:54', '2018-11-20 12:46:15'),
-(4, 'LK08', 4, 20, 0, 80, 10000000, 15000000, 1200000000, 12, 0, 'Đông', '169/24/92B Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.782621; 106.6716778', 14, 'LK06_1.jpg;LK06_2.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 85, '2018-08-07 10:07:54', '2018-11-20 11:55:25'),
-(5, 'LK09', 5, 18, 0, 90, 12000000, 22000000, 1980000000, 7, 0, 'Đông', '243 Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.778719367329806;106.66776342195135', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', NULL, 97, '2018-08-07 10:07:54', '2018-11-20 11:55:32'),
-(6, 'LK10', 4, 20, 0, 80, 10000000, 15000000, 1200000000, 12, 0, 'Đông', '169/24/92B Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.782621; 106.6716778', 14, 'LK06_1.jpg;LK06_2.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 79, '2018-08-07 10:07:54', '2018-11-20 11:55:40'),
-(8, 'LK11', 10, 120, 0, 1200, 4000000, 6230250, 7476300000, 7, 0, 'Đông', '219/9/6 Trần Văn Đang, Phường 11, Quận 3, Hồ Chí Minh', '10.785647548506581;106.67138350950927', 13, '123_1.jpg;', NULL, 8, '2018-10-20 05:44:55', '2018-11-20 11:59:26'),
-(9, 'LK05', 5, 15, 0, 75, 15000000, 20000000, 1500000000, 7, 3, 'Đông', '163 Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.7805346;106.66898170000002', 14, 'LK05_1.jpg;', NULL, 0, '2018-11-10 08:41:25', '2018-11-20 11:55:56'),
-(10, 'New', 5, 10, 0, 50, 10000000, 12000000, 600000000, 7, 0, 'Nam', '236B/1A Đường Lê Văn Sỹ, Phường 1, Tân Bình, Hồ Chí Minh', '10.79616;106.66695700000002', 141, 'New_1.jpg;', NULL, 1, '2018-11-20 04:53:58', '2018-11-20 11:56:02'),
-(11, 'LK123Test', 5, 15, 2, 90, 100, 120, 10800, 7, 2, 'Đông', '51/10/9 Cao Thắng, Phường 3, Quận 3, Hồ Chí Minh', '10.770076391507425;106.68116079496758', 7, 'LK123Test_1.jpg;', NULL, 24, '2018-11-20 12:02:53', '2018-11-20 12:41:15');
+INSERT INTO `dat` (`id`, `KyHieuLoDat`, `ThuaSo`, `ToBanDo`, `GiayChungNhan`, `Rong`, `Dai`, `NoHau`, `DienTich`, `DonGiaMua`, `DonGia`, `Gia`, `SoHuu`, `TrangThai`, `Huong`, `DiaChi`, `Map`, `Phuong`, `HinhAnh`, `GhiChu`, `LuotXem`, `created_at`, `updated_at`) VALUES
+(1, 'LK06', '511', '01', 'BR588862', 6, 10, 0, 60, 50000000, 60000000, 3600000000, 7, 1, 'Đông', '133/R/111 Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.778888;106.66861100000006', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', NULL, 87, '2018-05-24 07:42:00', '2018-12-08 03:26:10'),
+(3, 'LK07', '513', '02', 'BR588863', 5, 18, 0, 90, 10000000, 20000000, 1800000000, 7, 0, 'Đông', '99/79/16 Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.781330293476772;106.67061248308107', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', NULL, 190, '2018-08-07 10:07:54', '2018-12-08 03:25:31'),
+(4, 'LK08', '514', '04', 'BR588864', 4, 20, 0, 80, 10000000, 15000000, 1200000000, 12, 0, 'Đông', '169/24/92B Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.782621; 106.6716778', 14, 'LK06_1.jpg;LK06_2.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 87, '2018-08-07 10:07:54', '2018-12-08 03:25:35'),
+(5, 'LK09', '515', '05', 'BR588865', 5, 18, 0, 90, 12000000, 22000000, 1980000000, 7, 2, 'Đông', '243 Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.778719367329806;106.66776342195135', 14, 'LK05_1.jpg;LK05_2.jpg;LK05_3.jpg;', NULL, 99, '2018-08-07 10:07:54', '2018-12-08 05:19:05'),
+(6, 'LK10', '516', '06', 'BR588866', 4, 20, 0, 80, 10000000, 15000000, 1200000000, 12, 0, 'Đông', '169/24/92B Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.782621; 106.6716778', 14, 'LK06_1.jpg;LK06_2.jpg;', 'Lô đất năm sau Trung tâm thương mại, khu dân cư quanh đông đúc, gần trường đại học, mặt tiền đường rộng 8m, cơ sở hạ tầng hoàn thiện. Rất thuận tiện việc mua bán , kinh doanh. \r\nDiện tích: 60m2( 5x12) \r\nThương lượng chính chủ, không tiếp cò', 79, '2018-08-07 10:07:54', '2018-12-05 09:43:10'),
+(8, 'LK11', '517', '07', 'BR588868', 10, 120, 0, 1200, 4000000, 6230250, 7476300000, 7, 0, 'Đông', '219/9/6 Trần Văn Đang, Phường 11, Quận 3, Hồ Chí Minh', '10.785647548506581;106.67138350950927', 13, '123_1.jpg;', NULL, 8, '2018-10-20 05:44:55', '2018-12-05 09:43:16'),
+(9, 'LK05', '518', '08', 'BR588869', 5, 15, 0, 75, 15000000, 20000000, 1500000000, 7, 3, 'Đông', '163 Tô Hiến Thành, Phường 13, Quận 10, Hồ Chí Minh', '10.7805346;106.66898170000002', 14, 'LK05_1.jpg;', NULL, 0, '2018-11-10 08:41:25', '2018-12-05 09:43:20'),
+(10, 'New', '519', '09', 'BR588870', 5, 10, 0, 50, 10000000, 12000000, 600000000, 7, 0, 'Nam', '236B/1A Đường Lê Văn Sỹ, Phường 1, Tân Bình, Hồ Chí Minh', '10.79616;106.66695700000002', 141, 'New_1.jpg;', NULL, 1, '2018-11-20 04:53:58', '2018-12-05 09:43:26');
 
 -- --------------------------------------------------------
 
@@ -174,7 +185,8 @@ CREATE TABLE `gioithieu` (
 INSERT INTO `gioithieu` (`id`, `TieuDe`, `NoiDung`, `CongTy`, `created_at`, `updated_at`) VALUES
 (5, 'Bất động sản LightZ Real Estate - Tổ ấm trong mơ', '<figure class=\"easyimage easyimage-side\"><img alt=\"\" sizes=\"100vw\" src=\"https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg\" srcset=\"https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_210 210w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_420 420w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_630 630w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_840 840w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1050 1050w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1260 1260w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1470 1470w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1680 1680w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1890 1890w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_2048 2048w\" width=\"2048\" />\r\n<figcaption></figcaption>\r\n</figure>\r\n\r\n<p>Với hơn 15 năm kinh nghiệm l&agrave;m nghề k&yacute; gửi nh&agrave; đất, C&ocirc;ng ty cổ phần bất động sản LightZ Real Estate đ&atilde; c&oacute; hơn 2.375 kh&aacute;ch h&agrave;ng đ&atilde; v&agrave; đang sữ dụng dịch vụ k&yacute; gửi của ch&uacute;ng t&ocirc;i v&agrave; tất cả kh&aacute;ch h&agrave;ng điều h&agrave;i l&ograve;ng về phong c&aacute;ch phục vụ cũng như sự hiệu quả của việc k&yacute; gửi mang lại.<br />\r\nHiện nay, C&ocirc;ng ty ch&uacute;ng t&ocirc;i c&oacute; rất nhiều Kh&aacute;ch h&agrave;ng c&oacute; nhu cầu t&igrave;m Mua &amp; B&aacute;n : Đất nền, Đất thổ cư, Đất nền dự &aacute;n, Đất x&acirc;y dựng nh&agrave; xưởng, Nh&agrave; kho, Nh&agrave; xưởng, Nh&agrave; cho thu&ecirc;, Văn ph&ograve;ng cho thu&ecirc;, Mặt bằng cho thu&ecirc;, Nh&agrave; cấp 4, Nh&agrave; trọ, Nh&agrave; nghỉ, Kh&aacute;ch sạn, Resort&hellip;tại c&aacute;c quận trong TP. Hồ Ch&iacute; Minh cũng như c&aacute;c khu vực l&acirc;n cận. Ngo&agrave;i ra LightZ Real Estate c&ograve;n tư vấn đầu tư, hỗ trợ ph&aacute;p l&yacute;, đo vẽ, thiết kế, x&acirc;y dựng, hợp thức h&oacute;a nh&agrave; đất cho kh&aacute;ch h&agrave;ng.</p>\r\n\r\n<p>Light Estate l&agrave; c&ocirc;ng ty chuy&ecirc;n nghiệp trong lĩnh vực m&ocirc;i giới bất động sản, ch&uacute;ng t&ocirc;i l&agrave;m việc tr&ecirc;n tinh thần hợp t&aacute;c l&acirc;u d&agrave;i v&agrave; minh bạch gi&uacute;p Người B&aacute;n nhanh ch&oacute;ng b&aacute;n được bất động sản theo gi&aacute; m&igrave;nh mong muốn thỏa thuận trực tiếp với Người Mua tr&ecirc;n phạm vi To&agrave;n Cầu m&agrave; kh&ocirc;ng bị m&ocirc;i giới tự do đẩy gi&aacute; qu&aacute; cao dẫn đến kh&oacute; b&aacute;n, thậm ch&iacute; kh&ocirc;ng thể b&aacute;n được.<br />\r\nNhằm cung ứng một giải ph&aacute;p hiệu quả cho nhu cầu n&agrave;y, LightZ Real Estate đ&atilde; ph&aacute;t triển dịch vụ K&Yacute; GỬI NH&Agrave; ĐẤT để gi&uacute;p người b&aacute;n nh&agrave;, cho thu&ecirc; bất động sản một c&aacute;ch NHANH CH&Oacute;NG v&agrave; HIỆU QUẢ NHẤT.</p>\r\n\r\n<p>Kh&ocirc;ng k&ecirc; gi&aacute; b&aacute;n - Mua b&aacute;n Ch&iacute;nh Chủ - Ph&aacute;p l&yacute; ho&agrave;n thiện.</p>', 7, '2018-11-11 12:05:20', '2018-11-11 12:58:42'),
 (8, 'Bất động sản LightZ Real Estate - Tổ ấm trong mơ', '<figure class=\"easyimage easyimage-side\"><img alt=\"\" sizes=\"100vw\" src=\"https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg\" srcset=\"https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_210 210w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_420 420w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_630 630w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_840 840w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1050 1050w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1260 1260w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1470 1470w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1680 1680w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1890 1890w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_2048 2048w\" width=\"2048\" />\r\n<figcaption></figcaption>\r\n</figure>\r\n\r\n<p>Với hơn 15 năm kinh nghiệm l&agrave;m nghề k&yacute; gửi nh&agrave; đất, C&ocirc;ng ty cổ phần bất động sản LightZ Real Estate đ&atilde; c&oacute; hơn 2.375 kh&aacute;ch h&agrave;ng đ&atilde; v&agrave; đang sữ dụng dịch vụ k&yacute; gửi của ch&uacute;ng t&ocirc;i v&agrave; tất cả kh&aacute;ch h&agrave;ng điều h&agrave;i l&ograve;ng về phong c&aacute;ch phục vụ cũng như sự hiệu quả của việc k&yacute; gửi mang lại.<br />\r\nHiện nay, C&ocirc;ng ty ch&uacute;ng t&ocirc;i c&oacute; rất nhiều Kh&aacute;ch h&agrave;ng c&oacute; nhu cầu t&igrave;m Mua &amp; B&aacute;n : Đất nền, Đất thổ cư, Đất nền dự &aacute;n, Đất x&acirc;y dựng nh&agrave; xưởng, Nh&agrave; kho, Nh&agrave; xưởng, Nh&agrave; cho thu&ecirc;, Văn ph&ograve;ng cho thu&ecirc;, Mặt bằng cho thu&ecirc;, Nh&agrave; cấp 4, Nh&agrave; trọ, Nh&agrave; nghỉ, Kh&aacute;ch sạn, Resort&hellip;tại c&aacute;c quận trong TP. Hồ Ch&iacute; Minh cũng như c&aacute;c khu vực l&acirc;n cận. Ngo&agrave;i ra LightZ Real Estate c&ograve;n tư vấn đầu tư, hỗ trợ ph&aacute;p l&yacute;, đo vẽ, thiết kế, x&acirc;y dựng, hợp thức h&oacute;a nh&agrave; đất cho kh&aacute;ch h&agrave;ng.</p>\r\n\r\n<p>Light Estate l&agrave; c&ocirc;ng ty chuy&ecirc;n nghiệp trong lĩnh vực m&ocirc;i giới bất động sản, ch&uacute;ng t&ocirc;i l&agrave;m việc tr&ecirc;n tinh thần hợp t&aacute;c l&acirc;u d&agrave;i v&agrave; minh bạch gi&uacute;p Người B&aacute;n nhanh ch&oacute;ng b&aacute;n được bất động sản theo gi&aacute; m&igrave;nh mong muốn thỏa thuận trực tiếp với Người Mua tr&ecirc;n phạm vi To&agrave;n Cầu m&agrave; kh&ocirc;ng bị m&ocirc;i giới tự do đẩy gi&aacute; qu&aacute; cao dẫn đến kh&oacute; b&aacute;n, thậm ch&iacute; kh&ocirc;ng thể b&aacute;n được.<br />\r\nNhằm cung ứng một giải ph&aacute;p hiệu quả cho nhu cầu n&agrave;y, LightZ Real Estate đ&atilde; ph&aacute;t triển dịch vụ K&Yacute; GỬI NH&Agrave; ĐẤT để gi&uacute;p người b&aacute;n nh&agrave;, cho thu&ecirc; bất động sản một c&aacute;ch NHANH CH&Oacute;NG v&agrave; HIỆU QUẢ NHẤT.</p>\r\n\r\n<p>Kh&ocirc;ng k&ecirc; gi&aacute; b&aacute;n - Mua b&aacute;n Ch&iacute;nh Chủ - Ph&aacute;p l&yacute; ho&agrave;n thiện.</p>', 12, '2018-11-11 12:05:20', '2018-11-11 13:25:39'),
-(9, 'Bất động sản LightZ Real Estate - Tổ ấm trong mơ', '<figure class=\"easyimage easyimage-side\"><img alt=\"\" sizes=\"100vw\" src=\"https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg\" srcset=\"https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_210 210w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_420 420w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_630 630w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_840 840w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1050 1050w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1260 1260w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1470 1470w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1680 1680w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1890 1890w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_2048 2048w\" width=\"2048\" />\r\n<figcaption></figcaption>\r\n</figure>\r\n\r\n<p>Với hơn 15 năm kinh nghiệm l&agrave;m nghề k&yacute; gửi nh&agrave; đất, C&ocirc;ng ty cổ phần bất động sản LightZ Real Estate đ&atilde; c&oacute; hơn 2.375 kh&aacute;ch h&agrave;ng đ&atilde; v&agrave; đang sữ dụng dịch vụ k&yacute; gửi của ch&uacute;ng t&ocirc;i v&agrave; tất cả kh&aacute;ch h&agrave;ng điều h&agrave;i l&ograve;ng về phong c&aacute;ch phục vụ cũng như sự hiệu quả của việc k&yacute; gửi mang lại.<br />\r\nHiện nay, C&ocirc;ng ty ch&uacute;ng t&ocirc;i c&oacute; rất nhiều Kh&aacute;ch h&agrave;ng c&oacute; nhu cầu t&igrave;m Mua &amp; B&aacute;n : Đất nền, Đất thổ cư, Đất nền dự &aacute;n, Đất x&acirc;y dựng nh&agrave; xưởng, Nh&agrave; kho, Nh&agrave; xưởng, Nh&agrave; cho thu&ecirc;, Văn ph&ograve;ng cho thu&ecirc;, Mặt bằng cho thu&ecirc;, Nh&agrave; cấp 4, Nh&agrave; trọ, Nh&agrave; nghỉ, Kh&aacute;ch sạn, Resort&hellip;tại c&aacute;c quận trong TP. Hồ Ch&iacute; Minh cũng như c&aacute;c khu vực l&acirc;n cận. Ngo&agrave;i ra LightZ Real Estate c&ograve;n tư vấn đầu tư, hỗ trợ ph&aacute;p l&yacute;, đo vẽ, thiết kế, x&acirc;y dựng, hợp thức h&oacute;a nh&agrave; đất cho kh&aacute;ch h&agrave;ng.</p>\r\n\r\n<p>Light Estate l&agrave; c&ocirc;ng ty chuy&ecirc;n nghiệp trong lĩnh vực m&ocirc;i giới bất động sản, ch&uacute;ng t&ocirc;i l&agrave;m việc tr&ecirc;n tinh thần hợp t&aacute;c l&acirc;u d&agrave;i v&agrave; minh bạch gi&uacute;p Người B&aacute;n nhanh ch&oacute;ng b&aacute;n được bất động sản theo gi&aacute; m&igrave;nh mong muốn thỏa thuận trực tiếp với Người Mua tr&ecirc;n phạm vi To&agrave;n Cầu m&agrave; kh&ocirc;ng bị m&ocirc;i giới tự do đẩy gi&aacute; qu&aacute; cao dẫn đến kh&oacute; b&aacute;n, thậm ch&iacute; kh&ocirc;ng thể b&aacute;n được.<br />\r\nNhằm cung ứng một giải ph&aacute;p hiệu quả cho nhu cầu n&agrave;y, LightZ Real Estate đ&atilde; ph&aacute;t triển dịch vụ K&Yacute; GỬI NH&Agrave; ĐẤT để gi&uacute;p người b&aacute;n nh&agrave;, cho thu&ecirc; bất động sản một c&aacute;ch NHANH CH&Oacute;NG v&agrave; HIỆU QUẢ NHẤT.</p>\r\n\r\n<p>Kh&ocirc;ng k&ecirc; gi&aacute; b&aacute;n - Mua b&aacute;n Ch&iacute;nh Chủ - Ph&aacute;p l&yacute; ho&agrave;n thiện.</p>', 13, '2018-11-11 12:05:20', '2018-11-11 13:25:39');
+(9, 'Bất động sản LightZ Real Estate - Tổ ấm trong mơ', '<figure class=\"easyimage easyimage-side\"><img alt=\"\" sizes=\"100vw\" src=\"https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg\" srcset=\"https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_210 210w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_420 420w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_630 630w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_840 840w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1050 1050w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1260 1260w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1470 1470w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1680 1680w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_1890 1890w, https://35769.cdn.cke-cs.com/VrXBfVZddj4iO7wgd9UY/images/6e37c6cc457f2350394da2452963a380fb20ea3fa14e1a16_1.jpg/w_2048 2048w\" width=\"2048\" />\r\n<figcaption></figcaption>\r\n</figure>\r\n\r\n<p>Với hơn 15 năm kinh nghiệm l&agrave;m nghề k&yacute; gửi nh&agrave; đất, C&ocirc;ng ty cổ phần bất động sản LightZ Real Estate đ&atilde; c&oacute; hơn 2.375 kh&aacute;ch h&agrave;ng đ&atilde; v&agrave; đang sữ dụng dịch vụ k&yacute; gửi của ch&uacute;ng t&ocirc;i v&agrave; tất cả kh&aacute;ch h&agrave;ng điều h&agrave;i l&ograve;ng về phong c&aacute;ch phục vụ cũng như sự hiệu quả của việc k&yacute; gửi mang lại.<br />\r\nHiện nay, C&ocirc;ng ty ch&uacute;ng t&ocirc;i c&oacute; rất nhiều Kh&aacute;ch h&agrave;ng c&oacute; nhu cầu t&igrave;m Mua &amp; B&aacute;n : Đất nền, Đất thổ cư, Đất nền dự &aacute;n, Đất x&acirc;y dựng nh&agrave; xưởng, Nh&agrave; kho, Nh&agrave; xưởng, Nh&agrave; cho thu&ecirc;, Văn ph&ograve;ng cho thu&ecirc;, Mặt bằng cho thu&ecirc;, Nh&agrave; cấp 4, Nh&agrave; trọ, Nh&agrave; nghỉ, Kh&aacute;ch sạn, Resort&hellip;tại c&aacute;c quận trong TP. Hồ Ch&iacute; Minh cũng như c&aacute;c khu vực l&acirc;n cận. Ngo&agrave;i ra LightZ Real Estate c&ograve;n tư vấn đầu tư, hỗ trợ ph&aacute;p l&yacute;, đo vẽ, thiết kế, x&acirc;y dựng, hợp thức h&oacute;a nh&agrave; đất cho kh&aacute;ch h&agrave;ng.</p>\r\n\r\n<p>Light Estate l&agrave; c&ocirc;ng ty chuy&ecirc;n nghiệp trong lĩnh vực m&ocirc;i giới bất động sản, ch&uacute;ng t&ocirc;i l&agrave;m việc tr&ecirc;n tinh thần hợp t&aacute;c l&acirc;u d&agrave;i v&agrave; minh bạch gi&uacute;p Người B&aacute;n nhanh ch&oacute;ng b&aacute;n được bất động sản theo gi&aacute; m&igrave;nh mong muốn thỏa thuận trực tiếp với Người Mua tr&ecirc;n phạm vi To&agrave;n Cầu m&agrave; kh&ocirc;ng bị m&ocirc;i giới tự do đẩy gi&aacute; qu&aacute; cao dẫn đến kh&oacute; b&aacute;n, thậm ch&iacute; kh&ocirc;ng thể b&aacute;n được.<br />\r\nNhằm cung ứng một giải ph&aacute;p hiệu quả cho nhu cầu n&agrave;y, LightZ Real Estate đ&atilde; ph&aacute;t triển dịch vụ K&Yacute; GỬI NH&Agrave; ĐẤT để gi&uacute;p người b&aacute;n nh&agrave;, cho thu&ecirc; bất động sản một c&aacute;ch NHANH CH&Oacute;NG v&agrave; HIỆU QUẢ NHẤT.</p>\r\n\r\n<p>Kh&ocirc;ng k&ecirc; gi&aacute; b&aacute;n - Mua b&aacute;n Ch&iacute;nh Chủ - Ph&aacute;p l&yacute; ho&agrave;n thiện.</p>', 13, '2018-11-11 12:05:20', '2018-11-11 13:25:39'),
+(10, 'Hello', '<p>&nbsp;</p>\r\n\r\n<p>test1231231232131</p>', 19, '2018-12-08 11:56:34', '2018-12-08 12:03:46');
 
 -- --------------------------------------------------------
 
@@ -187,7 +199,13 @@ CREATE TABLE `hopdong` (
   `MaHopDong` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `ID_Dat` int(11) NOT NULL,
   `ID_KhachHang_Mua` int(11) NOT NULL,
+  `TienDatCoc` int(20) NOT NULL,
+  `Gia` double NOT NULL,
+  `PhuongThucThanhToan` int(11) NOT NULL,
+  `NgayThanhToan` date NOT NULL,
   `FileHopDong` varchar(100) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `TrangThai` int(11) NOT NULL,
+  `NguoiLap` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
@@ -196,8 +214,9 @@ CREATE TABLE `hopdong` (
 -- Đang đổ dữ liệu cho bảng `hopdong`
 --
 
-INSERT INTO `hopdong` (`id`, `MaHopDong`, `ID_Dat`, `ID_KhachHang_Mua`, `FileHopDong`, `created_at`, `updated_at`) VALUES
-(1, '123', 11, 1, NULL, '2018-11-20 12:41:15', '2018-11-20 12:41:15');
+INSERT INTO `hopdong` (`id`, `MaHopDong`, `ID_Dat`, `ID_KhachHang_Mua`, `TienDatCoc`, `Gia`, `PhuongThucThanhToan`, `NgayThanhToan`, `FileHopDong`, `TrangThai`, `NguoiLap`, `created_at`, `updated_at`) VALUES
+(3, '123', 5, 1, 70000000, 1980000000, 1, '2018-12-08', 'HopDongLightZ Real Estate/HopDong_123.docx', 1, 1, '2018-12-07 02:57:16', '2018-12-07 06:49:55'),
+(13, '123123', 1, 1, 360000000, 3600000000, 1, '2018-12-10', 'HopDong/LightZRealEstate/HopDong_123123.docx', 1, 1, '2018-12-08 03:34:40', '2018-12-08 03:35:40');
 
 -- --------------------------------------------------------
 
@@ -208,12 +227,14 @@ INSERT INTO `hopdong` (`id`, `MaHopDong`, `ID_Dat`, `ID_KhachHang_Mua`, `FileHop
 CREATE TABLE `khachhang` (
   `id` int(11) NOT NULL,
   `MaKhachHang` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `XungHo` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `HoVaTenDem` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Ten` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `NgaySinh` date NOT NULL,
   `DTDD` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `DTCD` varchar(20) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `CMND` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `NgayCap` date NOT NULL,
+  `NoiCap` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `DiaChi` varchar(200) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Email` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `ThuocCongTy` int(11) NOT NULL,
@@ -225,12 +246,11 @@ CREATE TABLE `khachhang` (
 -- Đang đổ dữ liệu cho bảng `khachhang`
 --
 
-INSERT INTO `khachhang` (`id`, `MaKhachHang`, `XungHo`, `HoVaTenDem`, `Ten`, `DTDD`, `DTCD`, `CMND`, `DiaChi`, `Email`, `ThuocCongTy`, `created_at`, `updated_at`) VALUES
-(1, 'KH001', 'Ông', 'Nguyễn Công', 'Minh', '01869885811', '02583812656', '225582114', '163/24/92B Tô Hiến Thành, P13, Q10', 'minh.1406@gmail.com', 7, '2018-05-21 04:50:13', '2018-11-02 04:46:41'),
-(3, 'KH002', 'Ông', 'Nguyễn Quang', 'Huy', '0905456781', '02583812654', '22552119', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1406@yahoo.com', 12, '2018-05-21 09:04:31', '2018-11-09 07:38:17'),
-(4, 'KH004', 'Bà', 'Trà', 'Giang', '0905456789', '02583812657', '22552118', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1407@yahoo.com', 7, '2018-05-21 09:47:00', '2018-11-05 06:46:55'),
-(5, 'KH005', 'ông', 'Nguyễn Công', 'Minh', '0905456733', '02583812122', '225522118', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1423@yahoo.com', 7, '2018-06-28 06:31:04', '2018-11-05 06:46:58'),
-(6, 'KH004', 'ông', 'Nguyễn Công', 'Minh', '123456781', '123456781', '225582114', '212 Phương Sài', 'minh.1406.nt@gmail.com', 7, '2018-11-02 07:38:55', '2018-11-02 07:41:46');
+INSERT INTO `khachhang` (`id`, `MaKhachHang`, `HoVaTenDem`, `Ten`, `NgaySinh`, `DTDD`, `DTCD`, `CMND`, `NgayCap`, `NoiCap`, `DiaChi`, `Email`, `ThuocCongTy`, `created_at`, `updated_at`) VALUES
+(1, 'KH001', 'Nguyễn Công', 'Minh', '1996-06-14', '0569885811', '02583812656', '225582114', '2012-04-14', 'TP. Hồ Chí Minh', '163/24/92B Tô Hiến Thành, P13, Q10', 'minh.1406@gmail.com', 7, '2018-05-21 04:50:13', '2018-12-06 03:06:56'),
+(3, 'KH002', 'Nguyễn Quang', 'Huy', '1996-06-14', '0905456781', '02583812654', '22552119', '2012-04-14', 'Nha Trang', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1406@yahoo.com', 12, '2018-05-21 09:04:31', '2018-12-06 02:55:35'),
+(4, 'KH004', 'Trà', 'Giang', '1996-06-14', '0905456789', '02583812657', '22552118', '2012-04-14', 'TP. Hồ Chí Minh', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1407@yahoo.com', 7, '2018-05-21 09:47:00', '2018-12-06 02:55:42'),
+(5, 'KH005', 'Nguyễn Quang', 'Huy', '1996-06-14', '0905456733', '02583812122', '225522118', '2012-04-14', 'TP. Hồ Chí Minh', '163/24/92B Tô Hiến Thành, P13, Q10', 'darkkiller1423@yahoo.com', 7, '2018-06-28 06:31:04', '2018-12-06 03:28:21');
 
 -- --------------------------------------------------------
 
@@ -653,10 +673,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`, `Quyen`, `Ten`, `ThuocCongTy`, `LoaiTaiKhoan`, `NgayHetHan`) VALUES
 (0, 'admin', 'minh.1406.nt@gmail.com', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', 'XSdJOQQYZb5wGkWsjFjuoHLr0nAeg7Qagv7ojGICu45eiY3KllGvSeit2KdJ', '2018-05-21 09:03:26', '2018-11-07 08:29:37', 0, 'Admin', 0, 0, '2020-01-29 00:00:00'),
-(1, 'congminh', 'kisivodanh1406@gmail.com', '$2y$10$mY9k0CwUBAsJtc7dbrmCHOVJ5yIV.xKCgPKFzDeDE0FWql6tNru5y', 'S0mwJIAon5Dtm5sL7qvicapK0Re43RexLO5kMQL2yaImoDoCDHd8Q5TDkrHU', '2018-05-21 09:20:52', '2018-11-20 12:15:59', 1, 'Công Minh', 7, 1, '2019-01-29 00:00:00'),
-(2, 'congminh123', 'test@gmail.com', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', NULL, '2018-11-01 07:54:34', '2018-11-11 06:29:32', 1, 'Nguyễn Công Minh', 12, 1, '2018-12-03 00:00:00'),
-(3, 'admin', 'test4@gmail.com', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', 'LVWUFqKsCfuiS5Bd0x64B6eLEEG4Cu6SN3VjYPqEOU7EEiIddWcfnLqAEt9r', '2018-11-04 08:19:01', '2018-11-07 03:38:35', 1, 'Nguyễn Công Minh', 13, 1, '2018-12-29 00:00:00'),
-(4, 'test4', 'test5@gmail.com', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', NULL, NULL, '2018-11-10 04:05:30', 2, 'test4', 7, 1, '2019-01-29 00:00:00');
+(1, 'congminh', 'kisivodanh1402@gmail.com', '$2y$10$mY9k0CwUBAsJtc7dbrmCHOVJ5yIV.xKCgPKFzDeDE0FWql6tNru5y', 'S6Scy4qNACcXEs1t22ZfZZ9ltN31vckt8odMEYwR9ELBfC9wUrBiyPiyLWSD', '2018-05-21 09:20:52', '2018-12-08 04:16:04', 1, 'Công Minh', 7, 1, '2019-01-29 00:00:00'),
+(2, 'congminh123', 'test@gmail.com', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', NULL, '2018-11-01 07:54:34', '2018-12-05 08:55:39', 1, 'Nguyễn Công Minh', 12, 3, '2018-12-03 00:00:00'),
+(3, 'admin', 'test4@gmail.com', '$2y$10$licDAaU1z3WI.akCBnytmeo59Uw4wj6puHqdW9UFM7tp5bAIPQzm6', 'LVWUFqKsCfuiS5Bd0x64B6eLEEG4Cu6SN3VjYPqEOU7EEiIddWcfnLqAEt9r', '2018-11-04 08:19:01', '2018-11-07 03:38:35', 1, 'Nguyễn Công Minh', 13, 1, '2018-12-29 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -682,7 +701,7 @@ CREATE TABLE `yeucau` (
 --
 
 INSERT INTO `yeucau` (`id`, `MaYeuCau`, `TenKhach`, `Email`, `DienThoai`, `LoaiYeuCau`, `NoiDung`, `id_dat`, `created_at`, `updated_at`) VALUES
-(3, 'YC003', 'Nguyễn Công Minh', 'darkkiller1406@yahoo.com', '0905456789', 1, '123', 4, '2018-10-28 07:51:20', '2018-10-28 07:51:20');
+(7, 'YC001', 'minh', 'minh.1406.nt@gmail.com', '0569885811', 1, NULL, 1, '2018-12-08 03:26:09', '2018-12-08 03:26:09');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -721,7 +740,8 @@ ALTER TABLE `gioithieu`
 ALTER TABLE `hopdong`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ID_Dat` (`ID_Dat`),
-  ADD KEY `ID_KhachHang` (`ID_KhachHang_Mua`);
+  ADD KEY `ID_KhachHang` (`ID_KhachHang_Mua`),
+  ADD KEY `NguoiLap` (`NguoiLap`);
 
 --
 -- Chỉ mục cho bảng `khachhang`
@@ -786,31 +806,31 @@ ALTER TABLE `yeucau`
 -- AUTO_INCREMENT cho bảng `activity_log`
 --
 ALTER TABLE `activity_log`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT cho bảng `congty`
 --
 ALTER TABLE `congty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT cho bảng `dat`
 --
 ALTER TABLE `dat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `gioithieu`
 --
 ALTER TABLE `gioithieu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `hopdong`
 --
 ALTER TABLE `hopdong`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT cho bảng `khachhang`
@@ -852,13 +872,13 @@ ALTER TABLE `thongketimkiem`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `yeucau`
 --
 ALTER TABLE `yeucau`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -868,14 +888,14 @@ ALTER TABLE `yeucau`
 -- Các ràng buộc cho bảng `activity_log`
 --
 ALTER TABLE `activity_log`
-  ADD CONSTRAINT `activity_log_ibfk_1` FOREIGN KEY (`causer_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `activity_log_ibfk_1` FOREIGN KEY (`causer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `dat`
 --
 ALTER TABLE `dat`
   ADD CONSTRAINT `dat_ibfk_5` FOREIGN KEY (`Phuong`) REFERENCES `phuong` (`id`),
-  ADD CONSTRAINT `dat_ibfk_6` FOREIGN KEY (`SoHuu`) REFERENCES `congty` (`id`);
+  ADD CONSTRAINT `dat_ibfk_6` FOREIGN KEY (`SoHuu`) REFERENCES `congty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `hopdong`
